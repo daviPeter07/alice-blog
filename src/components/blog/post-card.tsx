@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
+import { formatDate } from "@/helpers/date";
 
 export interface PostCardProps {
   slug:          string;
@@ -14,13 +15,6 @@ export interface PostCardProps {
   commentsCount: number;
   index?:        number;
 }
-
-const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("pt-BR", {
-    day:   "numeric",
-    month: "long",
-    year:  "numeric",
-  }).format(date);
 
 export function PostCard({
   slug,

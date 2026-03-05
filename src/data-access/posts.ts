@@ -30,6 +30,17 @@ export async function getPostBySlug(
   return post as PostWithRelations;
 }
 
+export async function getPublishedPostSlugs(): Promise<{ slug: string }[]> {
+  "use cache";
+  cacheTag("posts:list");
+
+  return prisma.post.findMany({
+    where: { status: "PUBLISHED" },
+    select: { slug: true },
+    orderBy: { publishedAt: "desc" },
+  });
+}
+
 export async function getRecentPosts(limit = 10) {
   "use cache";
 

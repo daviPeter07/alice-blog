@@ -3,29 +3,21 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
 
-import { getPostBySlug } from "@/data-access/posts";
+import { getPostBySlug, getPublishedPostSlugs } from "@/data-access/posts";
 import { postSlugParamsSchema } from "@/lib/schemas/post.schema";
 import { Badge } from "@/components/ui/badge";
 import { CommentSection } from "@/components/blog/comment-section";
+import { formatDate } from "@/helpers/date";
+import { getInitials } from "@/helpers/author";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return [
-    { slug: "o-peso-da-liberdade" },
-    { slug: "solidao-em-rede" },
-    { slug: "o-que-lembramos-quando-esquecemos" },
-  ];
+export async function generateStaticParams() {
+  const slugs = await getPublishedPostSlugs();
+  return slugs.map(({ slug }) => ({ slug }));
 }
-
-const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("pt-BR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
 
 export async function generateMetadata({
   params,
@@ -86,7 +78,7 @@ async function PostContent({ slug }: { slug: string }) {
             />
           ) : (
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-brown/20 text-sm font-medium text-brand-brown">
-              {post.author.name?.[0]?.toUpperCase() ?? "?"}
+              {getInitials(post.author.name ?? "") || "?"}
             </div>
           )}
 

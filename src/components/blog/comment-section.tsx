@@ -3,36 +3,20 @@
 import { useActionState, useOptimistic, startTransition, useRef } from "react";
 import { createComment } from "@/actions/comments";
 import type { ActionResult, CommentWithReplies } from "@/lib/types";
+import { formatDate } from "@/helpers/date";
+import { getInitials, avatarHue } from "@/helpers/author";
 
 interface CommentSectionProps {
-  postId:          string;
+  postId: string;
   initialComments: CommentWithReplies[];
 }
 
 type OptimisticComment = CommentWithReplies & { pending?: boolean };
 
-const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("pt-BR", {
-    day:   "numeric",
-    month: "long",
-    year:  "numeric",
-  }).format(date);
-
-const getInitials = (name: string) =>
-  name
-    .split(" ")
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-
-const avatarHue = (name: string) => {
-  let h = 0;
-  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % 360;
-  return h;
-};
-
-export function CommentSection({ postId, initialComments }: CommentSectionProps) {
+export function CommentSection({
+  postId,
+  initialComments,
+}: CommentSectionProps) {
   const formRef = useRef<HTMLFormElement>(null);
 
   const [state, formAction, isPending] = useActionState<
@@ -47,20 +31,20 @@ export function CommentSection({ postId, initialComments }: CommentSectionProps)
 
   const handleSubmit = (formData: FormData) => {
     const authorName = (formData.get("authorName") as string) || "Você";
-    const body       = (formData.get("body") as string) || "";
+    const body = (formData.get("body") as string) || "";
 
     startTransition(() => {
       addOptimisticComment({
-        id:          `optimistic-${Date.now()}`,
+        id: `optimistic-${Date.now()}`,
         postId,
-        parentId:    null,
+        parentId: null,
         authorName,
         authorEmail: "",
-        approved:    false,
+        approved: false,
         body,
-        createdAt:   new Date(),
-        replies:     [],
-        pending:     true,
+        createdAt: new Date(),
+        replies: [],
+        pending: true,
       });
     });
 
@@ -107,9 +91,7 @@ export function CommentSection({ postId, initialComments }: CommentSectionProps)
 
         {/* Erro geral */}
         {state?.success === false && !state.fieldErrors && (
-          <p className="font-ui text-sm text-destructive mb-4">
-            {state.error}
-          </p>
+          <p className="font-ui text-sm text-destructive mb-4">{state.error}</p>
         )}
 
         <form ref={formRef} action={handleSubmit} className="space-y-4">
@@ -121,7 +103,11 @@ export function CommentSection({ postId, initialComments }: CommentSectionProps)
               label="Nome"
               name="authorName"
               placeholder="Seu nome"
-              error={state?.success === false ? state.fieldErrors?.authorName?.[0] : undefined}
+              error={
+                state?.success === false
+                  ? state.fieldErrors?.authorName?.[0]
+                  : undefined
+              }
               required
             />
             <Field
@@ -129,7 +115,11 @@ export function CommentSection({ postId, initialComments }: CommentSectionProps)
               name="authorEmail"
               type="email"
               placeholder="seu@email.com"
-              error={state?.success === false ? state.fieldErrors?.authorEmail?.[0] : undefined}
+              error={
+                state?.success === false
+                  ? state.fieldErrors?.authorEmail?.[0]
+                  : undefined
+              }
               required
             />
           </div>
@@ -196,12 +186,12 @@ function Field({
   error,
   required,
 }: {
-  label:       string;
-  name:        string;
-  type?:       string;
+  label: string;
+  name: string;
+  type?: string;
   placeholder: string;
-  error?:      string;
-  required?:   boolean;
+  error?: string;
+  required?: boolean;
 }) {
   return (
     <div>
@@ -235,11 +225,11 @@ function CommentItem({
   comment,
   allComments,
 }: {
-  comment:     OptimisticComment;
+  comment: OptimisticComment;
   allComments: OptimisticComment[];
 }) {
   const replies = allComments.filter((c) => c.parentId === comment.id);
-  const hue     = avatarHue(comment.authorName);
+  const hue = avatarHue(comment.authorName);
 
   return (
     <li
