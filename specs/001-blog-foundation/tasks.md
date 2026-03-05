@@ -36,15 +36,15 @@
 
 **⚠️ CRÍTICO**: Nenhuma user story pode começar antes desta fase estar completa.
 
-- [ ] T008 Criar `prisma/schema.prisma` com enums `Role` e `PostStatus` e modelos `User`, `Post`, `Comment` (self-relation replies via `parentId`), `Like` (@@unique([postId, fingerprint])) com todos os `@@map` em snake_case conforme `data-model.md`
-- [ ] T009 Executar `pnpm prisma migrate dev --name init` para gerar a migration inicial e o Prisma Client
-- [ ] T010 Criar `src/lib/prisma.ts` com singleton do PrismaClient (guard `globalThis.__prisma` para hot-reload do Next.js)
-- [ ] T011 [P] Criar `src/lib/types.ts` com o tipo `ActionResult<T>`, `PostWithRelations`, `CommentWithReplies` e `PostSummary` conforme `contracts/server-actions.md`
-- [ ] T012 [P] Criar `src/lib/schemas/comment.schema.ts` com `createCommentSchema` (postId cuid, parentId opcional, authorName min2/max100, authorEmail email, body min3/max5000) conforme `data-model.md`
-- [ ] T013 [P] Criar `src/lib/schemas/like.schema.ts` com `toggleLikeSchema` (postId cuid) conforme `data-model.md`
-- [ ] T014 [P] Criar `src/lib/schemas/post.schema.ts` com `postSlugParamsSchema` (slug min1/max200, regex `^[a-z0-9-]+$`) conforme `data-model.md`
-- [ ] T015 Criar `prisma/seed.ts` com 1 User ADMIN (`alice@aliceblog.dev`), 1 Post PUBLISHED (`slug: "hello-world"`) e 1 Comment de exemplo; adicionar `"prisma": { "seed": "tsx prisma/seed.ts" }` ao `package.json`
-- [ ] T016 Executar `pnpm prisma db seed` para popular o banco e verificar dados via `pnpm prisma studio`
+- [x] T008 Criar `prisma/schema.prisma` com enums `Role` e `PostStatus` e modelos `User`, `Post`, `Comment` (self-relation replies via `parentId`), `Like` (@@unique([postId, fingerprint])) com todos os `@@map` em snake_case conforme `data-model.md`
+- [ ] T009 Executar `pnpm prisma migrate dev --name init` para gerar a migration inicial e o Prisma Client ⚠️ REQUER DOCKER
+- [x] T010 Criar `src/lib/prisma.ts` com singleton do PrismaClient (guard `globalThis.__prisma` para hot-reload do Next.js)
+- [x] T011 [P] Criar `src/lib/types.ts` com o tipo `ActionResult<T>`, `PostWithRelations`, `CommentWithReplies` e `PostSummary` conforme `contracts/server-actions.md`
+- [x] T012 [P] Criar `src/lib/schemas/comment.schema.ts` com `createCommentSchema` (postId cuid, parentId opcional, authorName min2/max100, authorEmail email, body min3/max5000) conforme `data-model.md`
+- [x] T013 [P] Criar `src/lib/schemas/like.schema.ts` com `toggleLikeSchema` (postId cuid) conforme `data-model.md`
+- [x] T014 [P] Criar `src/lib/schemas/post.schema.ts` com `postSlugParamsSchema` (slug min1/max200, regex `^[a-z0-9-]+$`) conforme `data-model.md`
+- [x] T015 Criar `prisma/seed.ts` com 1 User ADMIN (`alice@aliceblog.dev`), 1 Post PUBLISHED (`slug: "hello-world"`) e 1 Comment de exemplo; adicionar `"prisma": { "seed": "tsx prisma/seed.ts" }` ao `package.json`
+- [ ] T016 Executar `pnpm prisma db seed` para popular o banco e verificar dados via `pnpm prisma studio` ⚠️ REQUER DOCKER
 
 **Checkpoint**: Foundation pronta — implementação das user stories pode começar em paralelo.
 
