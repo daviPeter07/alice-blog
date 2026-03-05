@@ -20,13 +20,13 @@
 
 **Purpose**: Configuração do projeto e dependências base.
 
-- [ ] T001 Configurar `docker-compose.yml` com serviço PostgreSQL 16 (usuário: alice, senha: alice, db: alice_blog_dev, porta: 5432)
-- [ ] T002 Criar `.env.example` com `DATABASE_URL="postgresql://alice:alice@localhost:5432/alice_blog_dev"`
-- [ ] T003 [P] Instalar dependências adicionais: `pnpm add uuid`; `pnpm add -D @types/uuid`
-- [ ] T004 [P] Instalar Prisma: `pnpm add @prisma/client`; `pnpm add -D prisma`; executar `pnpm prisma init --datasource-provider postgresql`
-- [ ] T005 [P] Adicionar scripts ao `package.json`: `"typecheck": "tsc --noEmit"`, `"prisma": "prisma"`, `"db:seed": "tsx prisma/seed.ts"`
-- [ ] T006 Verificar `tsconfig.json` — confirmar `"strict": true` e adicionar paths `"@/*": ["./src/*"]` se ausente
-- [ ] T007 [P] Configurar `next.config.ts` com `reactCompiler: true` e habilitar `"use cache"` experimental
+- [x] T001 Configurar `docker-compose.yml` com serviço PostgreSQL 16 (usuário: alice, senha: alice, db: alice_blog_dev, porta: 5432)
+- [x] T002 Criar `.env.example` com `DATABASE_URL="postgresql://alice:alice@localhost:5432/alice_blog_dev"`
+- [x] T003 [P] Instalar dependências adicionais: `pnpm add uuid`; `pnpm add -D @types/uuid`
+- [x] T004 [P] Instalar Prisma: `pnpm add @prisma/client`; `pnpm add -D prisma`; executar `pnpm prisma init --datasource-provider postgresql`
+- [x] T005 [P] Adicionar scripts ao `package.json`: `"typecheck": "tsc --noEmit"`, `"prisma": "prisma"`, `"db:seed": "tsx prisma/seed.ts"`
+- [x] T006 Verificar `tsconfig.json` — confirmar `"strict": true` e adicionar paths `"@/*": ["./src/*"]` se ausente
+- [x] T007 [P] Configurar `next.config.ts` com `reactCompiler: true` e habilitar `"use cache"` experimental
 
 ---
 
