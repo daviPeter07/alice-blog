@@ -1,4 +1,4 @@
-import type { Comment, Post, User } from "@/generated/prisma";
+import type { Comment, Post, User } from "@/generated/prisma/client";
 
 // Discriminated union returned by every Server Action.
 // Keeps client-side narrowing type-safe without exposing Zod internals.

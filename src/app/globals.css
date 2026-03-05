@@ -1,26 +1,139 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* -------------------------------------------------------------------------
+   shadcn/ui design tokens — new-york, Tailwind v4
+   ------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background:             oklch(1 0 0);
+  --foreground:             oklch(0.145 0 0);
+  --card:                   oklch(1 0 0);
+  --card-foreground:        oklch(0.145 0 0);
+  --popover:                oklch(1 0 0);
+  --popover-foreground:     oklch(0.145 0 0);
+  --primary:                oklch(0.205 0 0);
+  --primary-foreground:     oklch(0.985 0 0);
+  --secondary:              oklch(0.97 0 0);
+  --secondary-foreground:   oklch(0.205 0 0);
+  --muted:                  oklch(0.97 0 0);
+  --muted-foreground:       oklch(0.556 0 0);
+  --accent:                 oklch(0.97 0 0);
+  --accent-foreground:      oklch(0.205 0 0);
+  --destructive:            oklch(0.577 0.245 27.325);
+  --border:                 oklch(0.922 0 0);
+  --input:                  oklch(0.922 0 0);
+  --ring:                   oklch(0.708 0 0);
+  --radius:                 0.625rem;
+
+  /* Brand tokens — Alice Blog */
+  --brand-brown:            #5D4037;
+  --brand-green:            #1B3022;
+  --cloud-dancer:           #F0EEE9;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* shadcn tokens */
+  --color-background:          var(--background);
+  --color-foreground:          var(--foreground);
+  --color-card:                var(--card);
+  --color-card-foreground:     var(--card-foreground);
+  --color-popover:             var(--popover);
+  --color-popover-foreground:  var(--popover-foreground);
+  --color-primary:             var(--primary);
+  --color-primary-foreground:  var(--primary-foreground);
+  --color-secondary:           var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:               var(--muted);
+  --color-muted-foreground:    var(--muted-foreground);
+  --color-accent:              var(--accent);
+  --color-accent-foreground:   var(--accent-foreground);
+  --color-destructive:         var(--destructive);
+  --color-border:              var(--border);
+  --color-input:               var(--input);
+  --color-ring:                var(--ring);
+  --radius-sm:                 calc(var(--radius) - 4px);
+  --radius-md:                 calc(var(--radius) - 2px);
+  --radius-lg:                 var(--radius);
+  --radius-xl:                 calc(var(--radius) + 4px);
+
+  /* Brand tokens */
+  --color-brand-brown:   var(--brand-brown);
+  --color-brand-green:   var(--brand-green);
+  --color-cloud-dancer:  var(--cloud-dancer);
+
+  /* Typography */
+  --font-body: var(--font-lora);
+  --font-ui:   var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* -------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------- */
+body {
+  background-color: var(--cloud-dancer);
+  color:            var(--foreground);
+  font-family:      var(--font-body), Georgia, serif;
+  line-height:      1.75;
+}
+
+/* -------------------------------------------------------------------------
+   Animations
+   ------------------------------------------------------------------------- */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease both;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* -------------------------------------------------------------------------
+   Prose — estilo de leitura para o corpo do post
+   ------------------------------------------------------------------------- */
+.prose-alice {
+  font-family:   var(--font-body), Georgia, serif;
+  font-size:     1.125rem;
+  line-height:   1.85;
+  color:         var(--foreground);
+}
+
+.prose-alice p {
+  margin-bottom: 1.5rem;
+}
+
+.prose-alice p:last-child {
+  margin-bottom: 0;
 }
