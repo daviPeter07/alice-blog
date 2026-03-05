@@ -1,4 +1,4 @@
-import type { Comment, Post, User } from "@/generated/prisma/client";
+import type { Comment, Post, User } from '@/generated/prisma/client';
 
 // Discriminated union returned by every Server Action.
 // Keeps client-side narrowing type-safe without exposing Zod internals.
@@ -15,15 +15,15 @@ export type CommentWithReplies = Comment & {
 };
 
 export type PostWithRelations = Post & {
-  author: Pick<User, "name" | "image">;
+  author: Pick<User, 'name' | 'image'>;
   comments: CommentWithReplies[];
   _count: { likes: number };
 };
 
 export type PostSummary = Pick<
   Post,
-  "slug" | "title" | "excerpt" | "publishedAt" | "tags" | "readingTime"
+  'slug' | 'title' | 'excerpt' | 'publishedAt' | 'tags' | 'readingTime'
 > & {
-  author: Pick<User, "name" | "image">;
+  author: Pick<User, 'name' | 'image'>;
   _count: { likes: number; comments: number };
 };

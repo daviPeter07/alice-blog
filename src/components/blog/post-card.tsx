@@ -1,19 +1,19 @@
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight } from "lucide-react";
-import { formatDate } from "@/helpers/date";
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
+import { ArrowRight } from 'lucide-react';
+import { formatDate } from '@/helpers/date';
 
 export interface PostCardProps {
-  slug:          string;
-  title:         string;
-  excerpt:       string;
-  publishedAt:   Date | null;
-  tags:          string[];
-  readingTime:   number | null;
-  author:        { name: string; image: string | null };
-  likesCount:    number;
+  slug: string;
+  title: string;
+  excerpt: string;
+  publishedAt: Date | null;
+  tags: string[];
+  readingTime: number | null;
+  author: { name: string; image: string | null };
+  likesCount: number;
   commentsCount: number;
-  index?:        number;
+  index?: number;
 }
 
 export function PostCard({
@@ -70,15 +70,17 @@ export function PostCard({
             <span className="font-medium text-foreground/80">{author.name}</span>
             {publishedAt && (
               <>
-                <span aria-hidden className="text-border">·</span>
-                <time dateTime={publishedAt.toISOString()}>
-                  {formatDate(publishedAt)}
-                </time>
+                <span aria-hidden className="text-border">
+                  ·
+                </span>
+                <time dateTime={publishedAt.toISOString()}>{formatDate(publishedAt)}</time>
               </>
             )}
             {readingTime && (
               <>
-                <span aria-hidden className="text-border">·</span>
+                <span aria-hidden className="text-border">
+                  ·
+                </span>
                 <span>{readingTime} min</span>
               </>
             )}

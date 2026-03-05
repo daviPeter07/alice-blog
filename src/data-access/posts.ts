@@ -1,11 +1,9 @@
-import { cacheTag } from "next/cache";
-import { prisma } from "@/lib/prisma";
-import type { PostWithRelations } from "@/lib/types";
+import { cacheTag } from 'next/cache';
+import { prisma } from '@/lib/prisma';
+import type { PostWithRelations } from '@/lib/types';
 
-export async function getPostBySlug(
-  slug: string,
-): Promise<PostWithRelations | null> {
-  "use cache";
+export async function getPostBySlug(slug: string): Promise<PostWithRelations | null> {
+  'use cache';
 
   cacheTag(`post:${slug}`);
 
@@ -16,7 +14,7 @@ export async function getPostBySlug(
       comments: {
         where: { parentId: null },
         include: { replies: true },
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
       },
       _count: { select: { likes: true } },
     },
@@ -31,23 +29,23 @@ export async function getPostBySlug(
 }
 
 export async function getPublishedPostSlugs(): Promise<{ slug: string }[]> {
-  "use cache";
-  cacheTag("posts:list");
+  'use cache';
+  cacheTag('posts:list');
 
   return prisma.post.findMany({
-    where: { status: "PUBLISHED" },
+    where: { status: 'PUBLISHED' },
     select: { slug: true },
-    orderBy: { publishedAt: "desc" },
+    orderBy: { publishedAt: 'desc' },
   });
 }
 
 export async function getRecentPosts(limit = 10) {
-  "use cache";
+  'use cache';
 
-  cacheTag("posts:list");
+  cacheTag('posts:list');
 
   return prisma.post.findMany({
-    where: { status: "PUBLISHED" },
+    where: { status: 'PUBLISHED' },
     select: {
       slug: true,
       title: true,
@@ -58,7 +56,7 @@ export async function getRecentPosts(limit = 10) {
       author: { select: { name: true, image: true } },
       _count: { select: { likes: true, comments: true } },
     },
-    orderBy: { publishedAt: "desc" },
+    orderBy: { publishedAt: 'desc' },
     take: limit,
   });
 }

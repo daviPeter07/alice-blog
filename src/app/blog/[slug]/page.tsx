@@ -1,14 +1,14 @@
-import { Suspense } from "react";
-import { notFound } from "next/navigation";
-import Image from "next/image";
-import type { Metadata } from "next";
+import { Suspense } from 'react';
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
+import type { Metadata } from 'next';
 
-import { getPostBySlug, getPublishedPostSlugs } from "@/data-access/posts";
-import { postSlugParamsSchema } from "@/lib/schemas/post.schema";
-import { Badge } from "@/components/ui/badge";
-import { CommentSection } from "@/components/blog/comment-section";
-import { formatDate } from "@/helpers/date";
-import { getInitials } from "@/helpers/author";
+import { getPostBySlug, getPublishedPostSlugs } from '@/data-access/posts';
+import { postSlugParamsSchema } from '@/lib/schemas/post.schema';
+import { Badge } from '@/components/ui/badge';
+import { CommentSection } from '@/components/blog/comment-section';
+import { formatDate } from '@/helpers/date';
+import { getInitials } from '@/helpers/author';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -19,14 +19,12 @@ export async function generateStaticParams() {
   return slugs.map(({ slug }) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const parsed = postSlugParamsSchema.safeParse({ slug });
   if (!parsed.success) return {};
   return {
-    title: decodeURIComponent(parsed.data.slug.replace(/-/g, " ")),
+    title: decodeURIComponent(parsed.data.slug.replace(/-/g, ' ')),
   };
 }
 
@@ -45,7 +43,7 @@ function PostSkeleton() {
 
 async function PostContent({ slug }: { slug: string }) {
   const post = await getPostBySlug(slug);
-  if (!post || post.status === "DRAFT") notFound();
+  if (!post || post.status === 'DRAFT') notFound();
 
   return (
     <main className="max-w-2xl mx-auto px-6 py-16">
@@ -71,27 +69,23 @@ async function PostContent({ slug }: { slug: string }) {
           {post.author.image ? (
             <Image
               src={post.author.image}
-              alt={post.author.name ?? ""}
+              alt={post.author.name ?? ''}
               width={32}
               height={32}
               className="rounded-full object-cover"
             />
           ) : (
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-brown/20 text-sm font-medium text-brand-brown">
-              {getInitials(post.author.name ?? "") || "?"}
+              {getInitials(post.author.name ?? '') || '?'}
             </div>
           )}
 
-          <span className="font-medium text-foreground">
-            {post.author.name}
-          </span>
+          <span className="font-medium text-foreground">{post.author.name}</span>
 
           {post.publishedAt && (
             <>
               <span aria-hidden>·</span>
-              <time dateTime={post.publishedAt.toISOString()}>
-                {formatDate(post.publishedAt)}
-              </time>
+              <time dateTime={post.publishedAt.toISOString()}>{formatDate(post.publishedAt)}</time>
             </>
           )}
 
@@ -105,9 +99,7 @@ async function PostContent({ slug }: { slug: string }) {
       </header>
 
       {/* Corpo do post */}
-      <article className="prose-alice mb-14 whitespace-pre-wrap">
-        {post.content}
-      </article>
+      <article className="prose-alice mb-14 whitespace-pre-wrap">{post.content}</article>
 
       {/* Divisor */}
       <hr className="border-border mb-10" />

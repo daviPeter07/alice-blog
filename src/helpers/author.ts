@@ -3,10 +3,10 @@
  */
 export function getInitials(name: string): string {
   return name
-    .split(" ")
+    .split(' ')
     .slice(0, 2)
     .map((n) => n[0])
-    .join("")
+    .join('')
     .toUpperCase();
 }
 

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useActionState, useOptimistic, startTransition, useRef } from "react";
-import { createComment } from "@/actions/comments";
-import type { ActionResult, CommentWithReplies } from "@/lib/types";
-import { formatDate } from "@/helpers/date";
-import { getInitials, avatarHue } from "@/helpers/author";
+import { useActionState, useOptimistic, startTransition, useRef } from 'react';
+import { createComment } from '@/actions/comments';
+import type { ActionResult, CommentWithReplies } from '@/lib/types';
+import { formatDate } from '@/helpers/date';
+import { getInitials, avatarHue } from '@/helpers/author';
 
 interface CommentSectionProps {
   postId: string;
@@ -13,16 +13,13 @@ interface CommentSectionProps {
 
 type OptimisticComment = CommentWithReplies & { pending?: boolean };
 
-export function CommentSection({
-  postId,
-  initialComments,
-}: CommentSectionProps) {
+export function CommentSection({ postId, initialComments }: CommentSectionProps) {
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [state, formAction, isPending] = useActionState<
-    ActionResult | null,
-    FormData
-  >(createComment, null);
+  const [state, formAction, isPending] = useActionState<ActionResult | null, FormData>(
+    createComment,
+    null
+  );
 
   const [optimisticComments, addOptimisticComment] = useOptimistic<
     OptimisticComment[],
@@ -30,8 +27,8 @@ export function CommentSection({
   >(initialComments, (current, next) => [next, ...current]);
 
   const handleSubmit = (formData: FormData) => {
-    const authorName = (formData.get("authorName") as string) || "Você";
-    const body = (formData.get("body") as string) || "";
+    const authorName = (formData.get('authorName') as string) || 'Você';
+    const body = (formData.get('body') as string) || '';
 
     startTransition(() => {
       addOptimisticComment({
@@ -39,7 +36,7 @@ export function CommentSection({
         postId,
         parentId: null,
         authorName,
-        authorEmail: "",
+        authorEmail: '',
         approved: false,
         body,
         createdAt: new Date(),
@@ -59,19 +56,15 @@ export function CommentSection({
       {/* Cabeçalho */}
       <h2 className="font-body text-2xl font-semibold text-foreground mb-8">
         {topLevel.length === 0
-          ? "Comentários"
-          : `${topLevel.length} comentário${topLevel.length > 1 ? "s" : ""}`}
+          ? 'Comentários'
+          : `${topLevel.length} comentário${topLevel.length > 1 ? 's' : ''}`}
       </h2>
 
       {/* Lista de comentários */}
       {topLevel.length > 0 && (
         <ul className="flex flex-col gap-6 mb-10">
           {topLevel.map((comment) => (
-            <CommentItem
-              key={comment.id}
-              comment={comment}
-              allComments={optimisticComments}
-            />
+            <CommentItem key={comment.id} comment={comment} allComments={optimisticComments} />
           ))}
         </ul>
       )}
@@ -103,11 +96,7 @@ export function CommentSection({
               label="Nome"
               name="authorName"
               placeholder="Seu nome"
-              error={
-                state?.success === false
-                  ? state.fieldErrors?.authorName?.[0]
-                  : undefined
-              }
+              error={state?.success === false ? state.fieldErrors?.authorName?.[0] : undefined}
               required
             />
             <Field
@@ -115,11 +104,7 @@ export function CommentSection({
               name="authorEmail"
               type="email"
               placeholder="seu@email.com"
-              error={
-                state?.success === false
-                  ? state.fieldErrors?.authorEmail?.[0]
-                  : undefined
-              }
+              error={state?.success === false ? state.fieldErrors?.authorEmail?.[0] : undefined}
               required
             />
           </div>
@@ -146,9 +131,7 @@ export function CommentSection({
               "
             />
             {state?.success === false && state.fieldErrors?.body && (
-              <p className="mt-1 font-ui text-xs text-destructive">
-                {state.fieldErrors.body[0]}
-              </p>
+              <p className="mt-1 font-ui text-xs text-destructive">{state.fieldErrors.body[0]}</p>
             )}
           </div>
 
@@ -165,7 +148,7 @@ export function CommentSection({
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/60
               "
             >
-              {isPending ? "Enviando…" : "Enviar comentário"}
+              {isPending ? 'Enviando…' : 'Enviar comentário'}
             </button>
           </div>
         </form>
@@ -181,7 +164,7 @@ export function CommentSection({
 function Field({
   label,
   name,
-  type = "text",
+  type = 'text',
   placeholder,
   error,
   required,
@@ -195,10 +178,7 @@ function Field({
 }) {
   return (
     <div>
-      <label
-        htmlFor={name}
-        className="block font-ui text-sm font-medium text-foreground mb-1.5"
-      >
+      <label htmlFor={name} className="block font-ui text-sm font-medium text-foreground mb-1.5">
         {label} {required && <span className="text-destructive">*</span>}
       </label>
       <input
@@ -214,9 +194,7 @@ function Field({
           transition-all duration-150
         "
       />
-      {error && (
-        <p className="mt-1 font-ui text-xs text-destructive">{error}</p>
-      )}
+      {error && <p className="mt-1 font-ui text-xs text-destructive">{error}</p>}
     </div>
   );
 }
@@ -232,9 +210,7 @@ function CommentItem({
   const hue = avatarHue(comment.authorName);
 
   return (
-    <li
-      className={`flex gap-4 animate-fade-in ${comment.pending ? "opacity-50" : ""}`}
-    >
+    <li className={`flex gap-4 animate-fade-in ${comment.pending ? 'opacity-50' : ''}`}>
       {/* Avatar */}
       <div
         className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-ui font-semibold select-none mt-0.5"
@@ -256,9 +232,7 @@ function CommentItem({
             </time>
           )}
           {comment.pending && (
-            <span className="font-ui text-xs text-muted-foreground italic">
-              enviando…
-            </span>
+            <span className="font-ui text-xs text-muted-foreground italic">enviando…</span>
           )}
         </div>
 
@@ -270,11 +244,7 @@ function CommentItem({
         {replies.length > 0 && (
           <ul className="mt-4 pl-4 border-l border-border flex flex-col gap-4">
             {replies.map((reply) => (
-              <CommentItem
-                key={reply.id}
-                comment={reply}
-                allComments={allComments}
-              />
+              <CommentItem key={reply.id} comment={reply} allComments={allComments} />
             ))}
           </ul>
         )}
