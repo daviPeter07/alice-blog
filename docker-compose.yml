@@ -4,10 +4,10 @@ services:
     container_name: alice_blog_db
     environment:
       POSTGRES_USER: alice
-      POSTGRES_PASSWORD: alice
+      POSTGRES_PASSWORD: "Alice@Blog!2026"
       POSTGRES_DB: alice_blog_dev
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - alice_postgres_data:/var/lib/postgresql/data
     healthcheck:
