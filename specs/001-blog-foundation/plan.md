@@ -171,9 +171,9 @@ if (!fingerprint) {
 ### Invalidation in Actions
 
 ```typescript
-// Após createComment:
-revalidateTag(`comments:${postId}`);
+// Após createComment (Next.js 16: segundo argumento "max"):
+revalidateTag(`comments:${postId}`, "max");
 
 // Após toggleLike:
-revalidateTag(`likes:${postId}`);
+revalidateTag(`likes:${postId}`, "max");
 ```

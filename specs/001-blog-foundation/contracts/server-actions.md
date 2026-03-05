@@ -34,22 +34,17 @@ export type ActionResult<T = void> =
 
 ### Output
 ```typescript
-ActionResult<{
-  id: string;
-  authorName: string;
-  body: string;
-  createdAt: Date;
-  parentId: string | null;
-}>
+ActionResult<void>
 ```
+Em sucesso, `data` é `undefined`; o cliente usa `useOptimistic` para exibir o comentário imediatamente.
 
 ### Comportamento
 1. Recebe `prevState` e `formData` (assinatura de `useActionState`)
 2. Extrai campos com `formData.get()`
 3. `createCommentSchema.safeParse()` — retorna `fieldErrors` se inválido
 4. `prisma.comment.create()` via DAL (não direto — via função de escrita em `src/actions/`)
-5. `revalidateTag("comments:<postId>")` após sucesso
-6. Retorna `{ success: true, data: comment }` ou `{ success: false, ... }`
+5. `revalidateTag("comments:<postId>", "max")` após sucesso (Next.js 16: segundo argumento é o perfil de revalidação)
+6. Retorna `{ success: true, data: undefined }` (UI optimista exibe o comentário antes da confirmação) ou `{ success: false, ... }`
 
 ### Exemplo de uso (Client Component)
 ```typescript
@@ -82,7 +77,7 @@ ActionResult<{
 3. `toggleLikeSchema.safeParse({ postId })` — retorna erro se inválido
 4. `prisma.like.findUnique({ where: { postId_fingerprint: { postId, fingerprint } } })`
 5. Se existe → `prisma.like.delete()` (unlike) | Se não existe → `prisma.like.create()` (like)
-6. `revalidateTag("likes:<postId>")` após mutação
+6. `revalidateTag("likes:<postId>", "max")` após mutação (Next.js 16)
 7. Conta total de likes com `prisma.like.count({ where: { postId } })`
 8. Retorna estado final e total
 

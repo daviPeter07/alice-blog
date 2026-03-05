@@ -1,6 +1,9 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@/generated/prisma/client';
 
+/** Re-export dos tipos gerados pelo Prisma (Constitution II — type safety). */
+export type { Comment, Like, Post, User } from '@/generated/prisma/client';
+
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
