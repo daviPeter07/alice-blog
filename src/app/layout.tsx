@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Lora } from 'next/font/google';
+import { Toaster } from 'sonner';
 import { Header } from '@/components/layout/header';
 import './globals.css';
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="antialiased min-h-screen flex flex-col">
         <Header />
         <div className="flex-1">{children}</div>
+        <Toaster position="top-center" richColors closeButton />
       </body>
     </html>
   );

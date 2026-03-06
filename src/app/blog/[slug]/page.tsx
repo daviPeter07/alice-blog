@@ -7,8 +7,7 @@ import { getPostBySlug, getPublishedPostSlugs } from '@/data-access/posts';
 import { postSlugParamsSchema } from '@/lib/schemas/post.schema';
 import { Badge } from '@/components/ui/badge';
 import { CommentSection } from '@/components/blog/comment-section';
-import { formatDate } from '@/helpers/date';
-import { getInitials } from '@/helpers/author';
+import { formatDate, getInitials } from '@/helpers';
 
 interface PageProps {
   params: Promise<{ slug: string }>;

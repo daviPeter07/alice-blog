@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight } from 'lucide-react';
-import { formatDate } from '@/helpers/date';
+import { formatDate } from '@/helpers';
 
 export interface PostCardProps {
   slug: string;
