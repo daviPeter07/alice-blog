@@ -208,7 +208,14 @@ function CommentItem({
   isPending: boolean;
   state: ActionResult | null;
 }) {
-  const replies = allComments.filter((c) => c.parentId === comment.id);
+  const persistedReplies = comment.replies ?? [];
+  const optimisticReplyIds = new Set(persistedReplies.map((r) => r.id));
+  const fromOptimistic = allComments.filter(
+    (c) => c.parentId === comment.id && !optimisticReplyIds.has(c.id)
+  );
+  const replies: OptimisticComment[] = [...persistedReplies, ...fromOptimistic]
+    .map((r) => ({ ...r, replies: (r as OptimisticComment).replies ?? [] }))
+    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   const hue = avatarHue(comment.authorName);
   const isReplying = replyingToId === comment.id;
 

@@ -50,6 +50,7 @@ export function useCommentSection({
   initialComments,
 }: UseCommentSectionOptions): UseCommentSectionReturn {
   const replyFormRef = useRef<HTMLFormElement | null>(null);
+  const lastSubmitWasReplyRef = useRef(false);
   const [replyingToId, setReplyingToId] = useState<string | null>(null);
 
   const [state, formAction, isPending] = useActionState<ActionResult | null, FormData>(
@@ -69,7 +70,7 @@ export function useCommentSection({
   });
 
   useEffect(() => {
-    if (state?.success === false && state.fieldErrors) {
+    if (state?.success === false && state.fieldErrors && !lastSubmitWasReplyRef.current) {
       (Object.entries(state.fieldErrors) as [keyof CreateCommentInput, string[]][]).forEach(
         ([field, messages]) => {
           mainForm.setError(field, { message: messages?.[0] });
@@ -105,6 +106,7 @@ export function useCommentSection({
 
   const onMainSubmit = useCallback(
     (data: CreateCommentInput) => {
+      lastSubmitWasReplyRef.current = false;
       const payload = { ...data, postId };
       addOptimistic(payload);
       mainForm.reset({ postId, authorName: '', authorEmail: '', body: '' });
@@ -115,6 +117,7 @@ export function useCommentSection({
 
   const handleReplySubmit = useCallback(
     (parentId: string, data: CreateCommentInput) => {
+      lastSubmitWasReplyRef.current = true;
       const payload = { ...data, postId, parentId };
       addOptimistic(payload);
       setReplyingToId(null);

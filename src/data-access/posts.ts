@@ -13,7 +13,7 @@ export async function getPostBySlug(slug: string): Promise<PostWithRelations | n
       author: { select: { name: true, image: true } },
       comments: {
         where: { parentId: null },
-        include: { replies: true },
+        include: { replies: { orderBy: { createdAt: 'asc' } } },
         orderBy: { createdAt: 'desc' },
       },
       _count: { select: { likes: true } },

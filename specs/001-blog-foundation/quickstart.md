@@ -38,6 +38,22 @@ DATABASE_URL="postgresql://alice:alice@localhost:5432/alice_blog_dev"
 
 ## 3. Subir o banco de dados
 
+Crie um arquivo `docker-compose.yml` na raiz do projeto (o arquivo não é versionado por padrão; use `docker-compose.example.yml` como referência se existir) com um serviço PostgreSQL na porta 5432. Exemplo:
+
+```yaml
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: alice
+      POSTGRES_PASSWORD: alice
+      POSTGRES_DB: alice_blog_dev
+    ports:
+      - "5432:5432"
+```
+
+Depois execute:
+
 ```bash
 docker compose up -d
 ```
