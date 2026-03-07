@@ -152,7 +152,7 @@
 - [X] T034 [P] Executar `pnpm typecheck` e corrigir erros de tipo até zero
 - [X] T035 [P] Executar `pnpm lint` e corrigir warnings até zero
 - [X] T036 Executar `pnpm build` e corrigir erros de build até sucesso
-- [ ] T037 Validar smoke tests manuais descritos em `specs/002-blog-admin-theme/quickstart.md`
+- [X] T037 Validar smoke tests manuais descritos em `specs/002-blog-admin-theme/quickstart.md`
 
 ---
 
