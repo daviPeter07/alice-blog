@@ -1,25 +1,24 @@
 import { PostCard } from '@/components/blog/post-card';
+import { LandingSection } from '@/components/blog/landing-section';
 import type { PostPreview } from '@/types/landing';
 
 export interface FeaturedSectionProps {
   posts: PostPreview[];
-  /** Atraso em ms para animação de entrada (respeita prefers-reduced-motion) */
   animationDelay?: number;
 }
 
 export function FeaturedSection({ posts, animationDelay = 0 }: FeaturedSectionProps) {
   return (
-    <section
-      id="destaque"
-      className="py-16 px-6 bg-background/50"
-      aria-labelledby="featured-heading"
-      style={
-        animationDelay
-          ? ({ '--section-delay': `${animationDelay}ms` } as React.CSSProperties)
-          : undefined
-      }
-    >
-      <div className="max-w-2xl mx-auto">
+    <LandingSection variant="featured">
+      <section
+        id="destaque"
+        aria-labelledby="featured-heading"
+        style={
+          animationDelay
+            ? ({ '--section-delay': `${animationDelay}ms` } as React.CSSProperties)
+            : undefined
+        }
+      >
         <header className="mb-12">
           <p
             className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
@@ -32,13 +31,13 @@ export function FeaturedSection({ posts, animationDelay = 0 }: FeaturedSectionPr
             className="animate-fade-up font-body text-3xl sm:text-4xl font-semibold text-foreground leading-tight"
             style={{ animationDelay: '60ms' }}
           >
-            Artigos em destaque
+            Em destaque
           </h2>
           <p
             className="animate-fade-up font-ui text-muted-foreground mt-2 leading-relaxed"
             style={{ animationDelay: '120ms' }}
           >
-            Os textos mais recentes da Alice.
+            Os textos mais recentes.
           </p>
         </header>
 
@@ -63,7 +62,7 @@ export function FeaturedSection({ posts, animationDelay = 0 }: FeaturedSectionPr
             ))}
           </div>
         )}
-      </div>
-    </section>
+      </section>
+    </LandingSection>
   );
 }

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { getRecentPosts } from '@/data-access/posts';
 import { HeroSection } from '@/components/blog/hero-section';
 import { FeaturedSection } from '@/components/blog/featured-section';
@@ -27,7 +28,20 @@ export default async function HomePage() {
       <HeroSection />
       <FeaturedSection posts={posts} />
       <CategoriesSection categories={categories} />
-      <FooterPlaceholder />
+      <Suspense
+        fallback={
+          <footer
+            className="py-8 px-6 border-t border-border bg-background/30"
+            aria-label="Rodapé"
+          >
+            <div className="max-w-2xl mx-auto font-ui text-sm text-muted-foreground text-center">
+              <p>© Alice.</p>
+            </div>
+          </footer>
+        }
+      >
+        <FooterPlaceholder />
+      </Suspense>
       <BackToTop threshold={400} />
     </main>
   );

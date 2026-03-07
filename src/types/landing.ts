@@ -25,3 +25,11 @@ export interface PostPreview {
   author: { name: string; image: string | null };
   _count: { likes: number; comments: number };
 }
+
+/** Variantes de layout/bloco da landing (cores e largura por seção) */
+export type LandingSectionVariant =
+  | 'hero'
+  | 'featured'
+  | 'categories'
+  | 'categories-alt'
+  | 'footer';

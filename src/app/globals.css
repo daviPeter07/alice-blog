@@ -27,10 +27,15 @@
   --ring: oklch(0.708 0 0);
   --radius: 0.625rem;
 
-  /* Brand tokens — Alice Blog */
+  /* Brand tokens — Alice Blog (marrom, cloud-dancer, verde + variantes para landing) */
   --brand-brown: #5d4037;
+  --brand-brown-light: #8d6e63;
   --brand-green: #1b3022;
+  --brand-green-light: #2e5c3e;
   --cloud-dancer: #f0eee9;
+  --landing-cream: #f5f3ef;
+  --landing-sage: #e8efe9;
+  --landing-warm: #f4efe8;
 }
 
 /* Tema light (padrão) — explícito para transição */
@@ -43,8 +48,13 @@
   --muted-foreground: oklch(0.556 0 0);
   --border: oklch(0.922 0 0);
   --brand-brown: #5d4037;
+  --brand-brown-light: #8d6e63;
   --brand-green: #1b3022;
+  --brand-green-light: #2e5c3e;
   --cloud-dancer: #f0eee9;
+  --landing-cream: #f5f3ef;
+  --landing-sage: #e8efe9;
+  --landing-warm: #f4efe8;
 }
 
 /* Tema dark */
@@ -57,8 +67,13 @@
   --muted-foreground: oklch(0.65 0 0);
   --border: oklch(0.28 0 0);
   --brand-brown: #8d6e63;
+  --brand-brown-light: #a1887f;
   --brand-green: #2e5c3e;
+  --brand-green-light: #4a7c59;
   --cloud-dancer: oklch(0.145 0 0);
+  --landing-cream: oklch(0.2 0.01 80);
+  --landing-sage: oklch(0.18 0.02 150);
+  --landing-warm: oklch(0.2 0.015 60);
 }
 
 @theme inline {
@@ -88,8 +103,13 @@
 
   /* Brand tokens */
   --color-brand-brown: var(--brand-brown);
+  --color-brand-brown-light: var(--brand-brown-light);
   --color-brand-green: var(--brand-green);
+  --color-brand-green-light: var(--brand-green-light);
   --color-cloud-dancer: var(--cloud-dancer);
+  --color-landing-cream: var(--landing-cream);
+  --color-landing-sage: var(--landing-sage);
+  --color-landing-warm: var(--landing-warm);
 
   /* Typography */
   --font-body: var(--font-lora);
