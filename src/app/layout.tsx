@@ -1,10 +1,18 @@
 import type { Metadata } from 'next';
 import { Inter, Lora } from 'next/font/google';
 import { Toaster } from 'sonner';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
 import './globals.css';
 
 const LANDING_NAV_ANCHORS = [
+  { href: '/#destaque', label: 'Destaques' },
+  { href: '/#categorias', label: 'Categorias' },
+] as const;
+
+const FOOTER_TOPICS = [
+  { href: '/blog', label: 'Blog' },
   { href: '/#destaque', label: 'Destaques' },
   { href: '/#categorias', label: 'Categorias' },
 ] as const;
@@ -32,11 +40,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${lora.variable} ${inter.variable}`} data-theme="light">
+    <html lang="pt-BR" className={`${lora.variable} ${inter.variable}`} suppressHydrationWarning>
       <body className="antialiased min-h-screen flex flex-col">
-        <Header navAnchors={[...LANDING_NAV_ANCHORS]} />
-        <div className="flex-1">{children}</div>
-        <Toaster position="top-center" richColors closeButton />
+        <ThemeProvider>
+          <Header navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle />
+          <div className="flex-1">{children}</div>
+          <Footer
+            topics={[...FOOTER_TOPICS]}
+            contactEmail="alice@example.com"
+            contactLabel="Entrar em contato"
+          />
+          <Toaster position="bottom-right" richColors closeButton />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import type { NavAnchor } from '@/types/landing';
 
 export interface HeaderProps {
@@ -11,7 +12,7 @@ export interface HeaderProps {
 export function Header({
   navAnchors = [],
   showLoginButton,
-  showThemeToggle,
+  showThemeToggle = false,
   user,
 }: HeaderProps) {
   return (
@@ -55,6 +56,7 @@ export function Header({
           >
             Artigos
           </Link>
+          {showThemeToggle && <ThemeToggle />}
           {showLoginButton && !user && (
             <Link
               href="/login"
