@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { Inter, Lora } from 'next/font/google';
-import { Toaster } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Header } from '@/components/layout/header';
 import { HeaderWithSession } from '@/components/layout/header-with-session';
@@ -63,15 +63,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             contactEmail="alice@example.com"
             contactLabel="Entrar em contato"
           />
-          <Toaster
-            position="bottom-right"
-            closeButton={false}
-            richColors={false}
-            toastOptions={{
-              className:
-                'border-0 rounded-lg px-4 py-3 text-sm shadow-md theme-dark:bg-white theme-dark:text-neutral-900 theme-light:bg-neutral-900 theme-light:text-white theme-dark:[&_[data-icon]]:text-neutral-900 theme-light:[&_[data-icon]]:text-white',
-            }}
-          />
+          <Toaster position="bottom-right" closeButton={false} />
         </ThemeProvider>
       </body>
     </html>
