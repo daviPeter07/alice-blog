@@ -30,12 +30,13 @@ enum PostStatus {
 // ---------------------------------------------------------------------------
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  image     String?
-  role      Role     @default(READER)
-  createdAt DateTime @default(now()) @map("created_at")
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String?  @map("password_hash")
+  image        String?
+  role         Role     @default(READER)
+  createdAt    DateTime @default(now()) @map("created_at")
 
   posts Post[]
 
