@@ -1,0 +1,69 @@
+---
+description: Project Development Guidelines
+globs: ["**/*"]
+alwaysApply: true
+---
+# Alice Blog — Development Guidelines
+
+Auto-generated from feature plans. Last updated: 2026-03-05
+
+## Active Technologies
+
+- TypeScript 5 (strict) + Next.js 16 App Router + React 19 (001-blog-foundation)
+- Tailwind CSS v4 (CSS @theme tokens, no tailwind.config) (001-blog-foundation)
+- Prisma 6 + PostgreSQL 16 — DAL-only access (001-blog-foundation)
+- Zod 3 — validation on all Server Action inputs (001-blog-foundation)
+
+## Project Structure
+
+```text
+src/
+├── app/                     # Routes & layouts (Server Components by default)
+├── actions/                 # Server Actions (mutations only)
+├── data-access/             # DAL — "use cache" + cacheTag (reads only)
+├── components/
+│   ├── ui/                  # Atomic design-system primitives
+│   └── blog/                # Feature organisms
+└── lib/
+    ├── prisma.ts            # Singleton Prisma client
+    ├── types.ts             # ActionResult<T> shared types
+    └── schemas/             # Zod schemas per entity
+prisma/
+├── schema.prisma
+└── seed.ts
+```
+
+## Commands
+
+```bash
+pnpm dev            # Start dev server
+pnpm typecheck      # tsc --noEmit
+pnpm lint           # ESLint
+pnpm build          # Production build
+pnpm prisma migrate dev   # Run migrations
+pnpm prisma db seed       # Seed database
+```
+
+## Code Style
+
+- **Components**: `export function ComponentName()` — named export, PascalCase
+- **Utilities/hooks**: `export const fn = () => {}` — arrow function
+- **File names**: kebab-case matching the exported symbol
+- **Server Actions**: prefixed with verb (`createComment`, `toggleLike`)
+- **DAL functions**: prefixed with `get`/`query` (`getPostBySlug`)
+- **Imports order**: external → internal (`@/`) → relative
+- **No `any`** — use `unknown` and narrow explicitly
+- **No `useEffect`** for data fetching — use Server Components or DAL
+
+## Cache Convention
+
+- DAL functions MUST use `"use cache"` + `cacheTag("<entity>:<id>")`
+- Tags: `post:<slug>`, `comments:<postId>`, `likes:<postId>`, `posts:list`
+- Mutations MUST call `revalidateTag()` after successful write
+
+## Recent Changes
+
+- 001-blog-foundation: Added Next.js 16 + React 19 + Tailwind v4 + Prisma + Zod foundation
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->

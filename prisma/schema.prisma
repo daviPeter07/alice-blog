@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Role {
+  ADMIN
+  READER
+
+  @@map("role")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+
+  @@map("post_status")
+}
+
+// ---------------------------------------------------------------------------
+// Entities
+// ---------------------------------------------------------------------------
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  image     String?
+  role      Role     @default(READER)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  posts Post[]
+
+  @@map("users")
+}
+
+model Post {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  title       String
+  excerpt     String
+  content     String
+  coverImage  String?    @map("cover_image")
+  publishedAt DateTime?  @map("published_at")
+  status      PostStatus @default(DRAFT)
+  tags        String[]
+  readingTime Int?       @map("reading_time")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  authorId String  @map("author_id")
+  author   User    @relation(fields: [authorId], references: [id])
+
+  comments Comment[]
+  likes    Like[]
+
+  @@index([status, publishedAt(sort: Desc)])
+  @@index([slug])
+  @@map("posts")
+}
+
+model Comment {
+  id          String   @id @default(cuid())
+  body        String   @db.VarChar(5000)
+  authorName  String   @map("author_name")
+  authorEmail String   @map("author_email")
+  approved    Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  postId String @map("post_id")
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  parentId String?   @map("parent_id")
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  Comment[] @relation("CommentReplies")
+
+  @@index([postId, createdAt(sort: Asc)])
+  @@map("comments")
+}
+
+model Like {
+  id          String   @id @default(cuid())
+  fingerprint String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  postId String @map("post_id")
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, fingerprint])
+  @@index([postId])
+  @@map("likes")
+}
