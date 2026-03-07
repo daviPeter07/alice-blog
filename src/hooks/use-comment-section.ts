@@ -83,22 +83,25 @@ export function useCommentSection({
     OptimisticComment
   >(initialComments, (current, next) => [next, ...current]);
 
-  const addOptimistic = useCallback((data: CreateCommentInput) => {
-    startTransition(() => {
-      addOptimisticComment({
-        id: `optimistic-${Date.now()}`,
-        postId: data.postId,
-        parentId: data.parentId ?? null,
-        authorName: data.authorName,
-        authorEmail: data.authorEmail,
-        approved: false,
-        body: data.body,
-        createdAt: new Date(),
-        replies: [],
-        pending: true,
+  const addOptimistic = useCallback(
+    (data: CreateCommentInput) => {
+      startTransition(() => {
+        addOptimisticComment({
+          id: `optimistic-${Date.now()}`,
+          postId: data.postId,
+          parentId: data.parentId ?? null,
+          authorName: data.authorName,
+          authorEmail: data.authorEmail,
+          approved: false,
+          body: data.body,
+          createdAt: new Date(),
+          replies: [],
+          pending: true,
+        });
       });
-    });
-  }, [addOptimisticComment]);
+    },
+    [addOptimisticComment]
+  );
 
   const onMainSubmit = useCallback(
     (data: CreateCommentInput) => {
