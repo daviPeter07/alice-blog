@@ -33,6 +33,34 @@
   --cloud-dancer: #f0eee9;
 }
 
+/* Tema light (padrão) — explícito para transição */
+[data-theme='light'] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --border: oklch(0.922 0 0);
+  --brand-brown: #5d4037;
+  --brand-green: #1b3022;
+  --cloud-dancer: #f0eee9;
+}
+
+/* Tema dark */
+[data-theme='dark'] {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.18 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+  --border: oklch(0.28 0 0);
+  --brand-brown: #8d6e63;
+  --brand-green: #2e5c3e;
+  --cloud-dancer: oklch(0.145 0 0);
+}
+
 @theme inline {
   /* shadcn tokens */
   --color-background: var(--background);
@@ -71,11 +99,18 @@
 /* -------------------------------------------------------------------------
    Base
    ------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--cloud-dancer);
   color: var(--foreground);
   font-family: var(--font-body), Georgia, serif;
   line-height: 1.75;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 /* -------------------------------------------------------------------------
@@ -122,6 +157,15 @@ body {
 
 .animate-scale-in {
   animation: scale-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-in,
+  .animate-scale-in {
+    animation-duration: 0.01ms;
+    animation-timing-function: step-end;
+  }
 }
 
 /* -------------------------------------------------------------------------

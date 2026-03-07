@@ -1,0 +1,26 @@
+---
+description: Usar Lucide React para todos os ícones do projeto
+globs: 'src/**/*.tsx'
+alwaysApply: false
+---
+
+# Ícones — Lucide React
+
+Sempre usar **lucide-react** para ícones. Não usar SVGs inline nem outras bibliotecas de ícones.
+
+```tsx
+// ✅ Correto
+import { ArrowUp, ArrowRight, Menu } from 'lucide-react';
+<ArrowUp size={20} aria-hidden />;
+```
+
+```tsx
+// ❌ Evitar — SVG inline
+<svg xmlns="..." viewBox="0 0 24 24">
+  ...
+</svg>
+```
+
+- Importar o ícone nomeado de `'lucide-react'`.
+- Para ícones decorativos, usar `aria-hidden` no elemento.
+- Ajustar tamanho com a prop `size` (número em px).

@@ -1,4 +1,4 @@
----
+﻿---
 description: Project Development Guidelines
 globs: ["**/*"]
 alwaysApply: true
@@ -8,6 +8,8 @@ alwaysApply: true
 Auto-generated from feature plans. Last updated: 2026-03-05
 
 ## Active Technologies
+- TypeScript 5.x (strict mode) + Next.js 16 (App Router), React 19, Tailwind CSS v4, Prisma 7, Zod 3, Sonner (toast) (002-blog-admin-theme)
+- PostgreSQL 16 (Docker local) — `DATABASE_URL` via `prisma.config.ts` (002-blog-admin-theme)
 
 - TypeScript 5 (strict) + Next.js 16 App Router + React 19 (001-blog-foundation)
 - Tailwind CSS v4 (CSS @theme tokens, no tailwind.config) (001-blog-foundation)
@@ -62,6 +64,7 @@ pnpm prisma db seed       # Seed database
 - Mutations MUST call `revalidateTag()` after successful write
 
 ## Recent Changes
+- 002-blog-admin-theme: Added TypeScript 5.x (strict mode) + Next.js 16 (App Router), React 19, Tailwind CSS v4, Prisma 7, Zod 3, Sonner (toast)
 
 - 001-blog-foundation: Added Next.js 16 + React 19 + Tailwind v4 + Prisma + Zod foundation
 
