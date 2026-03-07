@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { useForm, useWatch, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createCommentSchema, type CreateCommentInput } from '@/lib/schemas/comment.schema';
@@ -12,9 +13,16 @@ import { cn } from '@/lib/utils';
 interface CommentSectionProps {
   postId: string;
   initialComments: CommentWithReplies[];
+  isAuthenticated?: boolean;
+  currentUser?: { name: string; email: string } | null;
 }
 
-export function CommentSection({ postId, initialComments }: CommentSectionProps) {
+export function CommentSection({
+  postId,
+  initialComments,
+  isAuthenticated = true,
+  currentUser = null,
+}: CommentSectionProps) {
   const {
     mainForm,
     state,
@@ -25,7 +33,7 @@ export function CommentSection({ postId, initialComments }: CommentSectionProps)
     replyFormRef,
     onMainSubmit,
     handleReplySubmit,
-  } = useCommentSection({ postId, initialComments });
+  } = useCommentSection({ postId, initialComments, isAuthenticated, currentUser });
 
   const authorName = useWatch({ control: mainForm.control, name: 'authorName', defaultValue: '' });
   const authorEmail = useWatch({
@@ -36,8 +44,9 @@ export function CommentSection({ postId, initialComments }: CommentSectionProps)
   const body = useWatch({ control: mainForm.control, name: 'body', defaultValue: '' });
 
   const canSubmitMain =
-    String(authorName ?? '').trim() !== '' &&
-    String(authorEmail ?? '').trim() !== '' &&
+    (isAuthenticated && currentUser
+      ? true
+      : String(authorName ?? '').trim() !== '' && String(authorEmail ?? '').trim() !== '') &&
     String(body ?? '').trim() !== '';
 
   useToastOnSuccess(state, 'Comentário enviado com sucesso! Obrigado pela participação.');
@@ -83,67 +92,95 @@ export function CommentSection({ postId, initialComments }: CommentSectionProps)
           Deixe um comentário
         </h3>
 
-        {state?.success === false && !state.fieldErrors && (
-          <p className="font-ui text-sm text-destructive mb-4">{state.error}</p>
+        {!isAuthenticated && (
+          <div
+            role="alert"
+            className="rounded-xl border border-border bg-muted/50 px-4 py-3 font-ui text-sm text-foreground"
+          >
+            Para comentar,{' '}
+            <Link href="/auth/login" className="text-brand-green font-medium hover:underline">
+              faça login
+            </Link>
+            .
+          </div>
         )}
 
-        <form onSubmit={mainForm.handleSubmit(onMainSubmit)} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <RHFField
-              control={mainForm.control}
-              name="authorName"
-              label="Nome"
-              placeholder="Seu nome"
-              required
-              errorMessage={mainForm.formState.errors.authorName?.message}
-            />
-            <RHFField
-              control={mainForm.control}
-              name="authorEmail"
-              label="E-mail"
-              type="email"
-              placeholder="seu@email.com"
-              required
-              errorMessage={mainForm.formState.errors.authorEmail?.message}
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="body"
-              className="block font-ui text-sm font-medium text-foreground mb-1.5"
-            >
-              Comentário <span className="text-destructive">*</span>
-            </label>
-            <textarea
-              id="body"
-              rows={4}
-              placeholder="Escreva aqui suas reflexões…"
-              className={cn(
-                'w-full rounded-lg border border-input bg-background px-4 py-3 font-ui text-sm',
-                'text-foreground placeholder:text-muted-foreground resize-none',
-                'focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green/50',
-                mainForm.formState.errors.body && 'border-destructive'
-              )}
-              {...mainForm.register('body')}
-            />
-            {mainForm.formState.errors.body && (
-              <p className="mt-1 font-ui text-xs text-destructive">
-                {mainForm.formState.errors.body.message}
+        {isAuthenticated && (
+          <>
+            {state?.success === false && state.error === 'login_required' && (
+              <p className="font-ui text-sm text-destructive mb-4">
+                <Link href="/auth/login" className="underline">
+                  Faça login
+                </Link>{' '}
+                para comentar.
               </p>
             )}
-          </div>
 
-          <div className="flex justify-end pt-1">
-            <button
-              type="submit"
-              disabled={isPending || !canSubmitMain}
-              className="font-ui text-sm font-medium px-5 py-2.5 rounded-xl bg-brand-green text-white hover:bg-brand-green/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/60"
-            >
-              {isPending ? 'Enviando…' : 'Enviar comentário'}
-            </button>
-          </div>
-        </form>
+            {state?.success === false && !state.fieldErrors && state.error !== 'login_required' && (
+              <p className="font-ui text-sm text-destructive mb-4">{state.error}</p>
+            )}
+
+            <form onSubmit={mainForm.handleSubmit(onMainSubmit)} className="space-y-4">
+              {!currentUser ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <RHFField
+                    control={mainForm.control}
+                    name="authorName"
+                    label="Nome"
+                    placeholder="Seu nome"
+                    required
+                    errorMessage={mainForm.formState.errors.authorName?.message}
+                  />
+                  <RHFField
+                    control={mainForm.control}
+                    name="authorEmail"
+                    label="E-mail"
+                    type="email"
+                    placeholder="seu@email.com"
+                    required
+                    errorMessage={mainForm.formState.errors.authorEmail?.message}
+                  />
+                </div>
+              ) : null}
+
+              <div>
+                <label
+                  htmlFor="body"
+                  className="block font-ui text-sm font-medium text-foreground mb-1.5"
+                >
+                  Comentário <span className="text-destructive">*</span>
+                </label>
+                <textarea
+                  id="body"
+                  rows={4}
+                  placeholder="Escreva aqui suas reflexões…"
+                  className={cn(
+                    'w-full rounded-lg border border-input bg-background px-4 py-3 font-ui text-sm',
+                    'text-foreground placeholder:text-muted-foreground resize-none',
+                    'focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green/50',
+                    mainForm.formState.errors.body && 'border-destructive'
+                  )}
+                  {...mainForm.register('body')}
+                />
+                {mainForm.formState.errors.body && (
+                  <p className="mt-1 font-ui text-xs text-destructive">
+                    {mainForm.formState.errors.body.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex justify-end pt-1">
+                <button
+                  type="submit"
+                  disabled={isPending || !canSubmitMain || !isAuthenticated}
+                  className="font-ui text-sm font-medium px-5 py-2.5 rounded-xl bg-brand-green text-white hover:bg-brand-green/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/60"
+                >
+                  {isPending ? 'Enviando…' : 'Enviar comentário'}
+                </button>
+              </div>
+            </form>
+          </>
+        )}
       </div>
     </section>
   );

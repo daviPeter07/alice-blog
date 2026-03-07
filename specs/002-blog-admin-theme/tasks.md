@@ -83,14 +83,14 @@
 
 ### Implementação — User Story 3
 
-- [ ] T016 [US3] Criar `src/app/login/page.tsx` com formulário de login (email, senha), chamada à action `login`, redirecionamento após sucesso e link para registro
-- [ ] T017 [US3] Criar `src/app/login/register/page.tsx` com formulário de registro (nome, email, senha), chamada à action `register`, redirecionamento após sucesso e link para login
-- [ ] T018 [US3] Atualizar `src/actions/comments.ts`: no início obter sessão com `getSession()`; se não houver usuário retornar `{ success: false, error: "login_required" }`; quando logado preencher `authorName` e `authorEmail` a partir do User da sessão (não do FormData)
-- [ ] T019 [US3] Atualizar `src/actions/likes.ts`: no início obter sessão; se não houver usuário retornar `{ success: false, error: "login_required" }`
-- [ ] T020 [US3] Atualizar `src/components/blog/comment-section.tsx` para aceitar props `isAuthenticated` e `currentUser` (opcional); quando `!isAuthenticated` e usuário tentar enviar comentário (submit ou foco no form) exibir alerta ou mensagem inline "Faça login para comentar" com link para `/login` e não submeter; quando `isAuthenticated` e `currentUser` preencher nome/email do form a partir de currentUser e ocultar campos nome/email do formulário
-- [ ] T021 [US3] Atualizar `src/components/blog/like-button.tsx` para aceitar prop `isAuthenticated`; quando `!isAuthenticated` e usuário clicar exibir alerta "Faça login para curtir" com link para `/login` e não chamar toggleLike
-- [ ] T022 [US3] Atualizar `src/app/blog/[slug]/page.tsx`: obter sessão no Server Component e passar `isAuthenticated` e `currentUser` (name, email) para `CommentSection` e `isAuthenticated` para `LikeButton`
-- [ ] T023 [US3] Adicionar botão "Login" no `src/components/layout/header.tsx` (visível quando não autenticado) com link para `/login`
+- [X] T016 [US3] Criar `src/app/login/page.tsx` com formulário de login (email, senha), chamada à action `login`, redirecionamento após sucesso e link para registro
+- [X] T017 [US3] Criar `src/app/login/register/page.tsx` com formulário de registro (nome, email, senha), chamada à action `register`, redirecionamento após sucesso e link para login
+- [X] T018 [US3] Atualizar `src/actions/comments.ts`: no início obter sessão com `getSession()`; se não houver usuário retornar `{ success: false, error: "login_required" }`; quando logado preencher `authorName` e `authorEmail` a partir do User da sessão (não do FormData)
+- [X] T019 [US3] Atualizar `src/actions/likes.ts`: no início obter sessão; se não houver usuário retornar `{ success: false, error: "login_required" }`
+- [X] T020 [US3] Atualizar `src/components/blog/comment-section.tsx` para aceitar props `isAuthenticated` e `currentUser` (opcional); quando `!isAuthenticated` e usuário tentar enviar comentário (submit ou foco no form) exibir alerta ou mensagem inline "Faça login para comentar" com link para `/login` e não submeter; quando `isAuthenticated` e `currentUser` preencher nome/email do form a partir de currentUser e ocultar campos nome/email do formulário
+- [X] T021 [US3] Atualizar `src/components/blog/like-button.tsx` para aceitar prop `isAuthenticated`; quando `!isAuthenticated` e usuário clicar exibir alerta "Faça login para curtir" com link para `/login` e não chamar toggleLike
+- [X] T022 [US3] Atualizar `src/app/blog/[slug]/page.tsx`: obter sessão no Server Component e passar `isAuthenticated` e `currentUser` (name, email) para `CommentSection` e `isAuthenticated` para `LikeButton`
+- [X] T023 [US3] Adicionar botão "Login" no `src/components/layout/header.tsx` (visível quando não autenticado) com link para `/login`
 
 **Checkpoint**: US3 funcional — login/registro, comentários e likes exigem login com alerta; avatar por iniciais já existente em comentários.
 

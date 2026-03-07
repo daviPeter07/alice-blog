@@ -59,7 +59,7 @@ export function Header({
           {showThemeToggle && <ThemeToggle />}
           {showLoginButton && !user && (
             <Link
-              href="/login"
+              href="/auth/login"
               className="text-muted-foreground hover:text-foreground transition-colors duration-200"
             >
               Login

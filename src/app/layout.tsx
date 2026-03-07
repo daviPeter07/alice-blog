@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Inter, Lora } from 'next/font/google';
 import { Toaster } from 'sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Header } from '@/components/layout/header';
+import { HeaderWithSession } from '@/components/layout/header-with-session';
 import { Footer } from '@/components/layout/footer';
 import './globals.css';
 
@@ -38,12 +40,26 @@ export const metadata: Metadata = {
     'Reflexões sobre filosofia, história, crítica social e a condição humana. Por Alice.',
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR" className={`${lora.variable} ${inter.variable}`} suppressHydrationWarning>
-      <body className="antialiased min-h-screen flex flex-col">
+      <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
-          <Header navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle />
+          <Suspense
+            fallback={
+              <Header
+                navAnchors={[...LANDING_NAV_ANCHORS]}
+                showThemeToggle
+                showLoginButton
+                user={null}
+              />
+            }
+          >
+            <HeaderWithSession
+              navAnchors={[...LANDING_NAV_ANCHORS]}
+              showThemeToggle
+            />
+          </Suspense>
           <div className="flex-1">{children}</div>
           <Footer
             topics={[...FOOTER_TOPICS]}

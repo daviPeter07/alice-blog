@@ -86,7 +86,6 @@ export interface CategoriesSectionProps {
 export function CategoriesSection({
   categories,
   featuredCount = 4,
-  animationDelay = 0,
 }: CategoriesSectionProps) {
   const featured = categories.slice(0, featuredCount);
   const rest = categories.slice(featuredCount);

@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { getRecentPosts } from '@/data-access/posts';
 import { HeroSection } from '@/components/blog/hero-section';
 import { FeaturedSection } from '@/components/blog/featured-section';

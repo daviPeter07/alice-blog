@@ -30,6 +30,8 @@ function valuesToFormData(data: CreateCommentInput): FormData {
 export interface UseCommentSectionOptions {
   postId: string;
   initialComments: CommentWithReplies[];
+  isAuthenticated?: boolean;
+  currentUser?: { name: string; email: string } | null;
 }
 
 export interface UseCommentSectionReturn {
@@ -48,6 +50,7 @@ export interface UseCommentSectionReturn {
 export function useCommentSection({
   postId,
   initialComments,
+  currentUser = null,
 }: UseCommentSectionOptions): UseCommentSectionReturn {
   const replyFormRef = useRef<HTMLFormElement | null>(null);
   const lastSubmitWasReplyRef = useRef(false);
@@ -63,8 +66,8 @@ export function useCommentSection({
     mode: 'onChange',
     defaultValues: {
       postId,
-      authorName: '',
-      authorEmail: '',
+      authorName: currentUser?.name ?? '',
+      authorEmail: currentUser?.email ?? '',
       body: '',
     },
   });
@@ -107,23 +110,39 @@ export function useCommentSection({
   const onMainSubmit = useCallback(
     (data: CreateCommentInput) => {
       lastSubmitWasReplyRef.current = false;
-      const payload = { ...data, postId };
+      const payload = {
+        ...data,
+        postId,
+        authorName: currentUser?.name ?? data.authorName,
+        authorEmail: currentUser?.email ?? data.authorEmail,
+      };
       addOptimistic(payload);
-      mainForm.reset({ postId, authorName: '', authorEmail: '', body: '' });
+      mainForm.reset({
+        postId,
+        authorName: currentUser?.name ?? '',
+        authorEmail: currentUser?.email ?? '',
+        body: '',
+      });
       formAction(valuesToFormData(payload));
     },
-    [postId, addOptimistic, mainForm, formAction]
+    [postId, currentUser, addOptimistic, mainForm, formAction]
   );
 
   const handleReplySubmit = useCallback(
     (parentId: string, data: CreateCommentInput) => {
       lastSubmitWasReplyRef.current = true;
-      const payload = { ...data, postId, parentId };
+      const payload = {
+        ...data,
+        postId,
+        parentId,
+        authorName: currentUser?.name ?? data.authorName,
+        authorEmail: currentUser?.email ?? data.authorEmail,
+      };
       addOptimistic(payload);
       setReplyingToId(null);
       formAction(valuesToFormData(payload));
     },
-    [postId, addOptimistic, formAction]
+    [postId, currentUser, addOptimistic, formAction]
   );
 
   return {

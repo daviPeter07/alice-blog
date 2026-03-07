@@ -3,7 +3,7 @@ import type { Comment, Post, User } from '@/lib/prisma';
 // Discriminated union returned by every Server Action.
 // Keeps client-side narrowing type-safe without exposing Zod internals.
 export type ActionResult<T = void> =
-  | { success: true; data: T }
+  | { success: true; data: T; fieldErrors?: undefined }
   | { success: false; error: string; fieldErrors?: Record<string, string[]> };
 
 // ---------------------------------------------------------------------------

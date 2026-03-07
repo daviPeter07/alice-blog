@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import bcrypt from 'bcryptjs';
 import { loginSchema, registerSchema } from '@/lib/schemas/auth.schema';
-import { getSession, createSession, destroySession } from '@/lib/auth';
+import { createSession, destroySession } from '@/lib/auth';
 import { getUserByEmail, createUser } from '@/data-access/users';
 import type { ActionResult } from '@/lib/types';
 
