@@ -60,3 +60,24 @@ export async function getRecentPosts(limit = 10) {
     take: limit,
   });
 }
+
+/** Busca um post por ID (para admin). Não usa cache. */
+export async function getPostById(id: string) {
+  return prisma.post.findUnique({
+    where: { id },
+    include: {
+      author: { select: { name: true } },
+    },
+  });
+}
+
+/** Lista todos os posts para a área admin (qualquer status). Não usa cache. */
+export async function getPostsForAdmin() {
+  return prisma.post.findMany({
+    orderBy: { updatedAt: 'desc' },
+    include: {
+      author: { select: { name: true } },
+      _count: { select: { comments: true, likes: true } },
+    },
+  });
+}

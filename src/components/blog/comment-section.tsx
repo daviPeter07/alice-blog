@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useForm, useWatch, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -51,17 +51,10 @@ export function CommentSection({
 
   useToastOnSuccess(state, 'Comentário enviado com sucesso! Obrigado pela participação.');
 
-  const sectionRef = useRef<HTMLElement>(null);
-  useEffect(() => {
-    if (state?.success === true && sectionRef.current) {
-      sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }, [state?.success]);
-
   const topLevel = optimisticComments.filter((c) => !c.parentId);
 
   return (
-    <section ref={sectionRef} className="mt-16 pt-10 border-t border-border">
+    <section className="mt-16 pt-10 border-t border-border">
       <h2 className="font-body text-2xl font-semibold text-foreground mb-8">
         {topLevel.length === 0
           ? 'Comentários'

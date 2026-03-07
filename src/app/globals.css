@@ -2,6 +2,8 @@
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant theme-dark (&:is([data-theme='dark'] *));
+@custom-variant theme-light (&:is([data-theme='light'] *));
 
 /* -------------------------------------------------------------------------
    shadcn/ui design tokens — new-york, Tailwind v4

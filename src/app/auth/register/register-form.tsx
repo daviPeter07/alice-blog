@@ -28,15 +28,15 @@ export function RegisterForm() {
     defaultValues,
   });
 
-  // Limpa os inputs ao entrar na tela (ex.: voltar de outra página).
-  // requestAnimationFrame evita setState síncrono no effect (regra react-hooks/set-state-in-effect).
+  // Limpa os inputs ao entrar na tela (uma vez na montagem).
   useEffect(() => {
     const id = requestAnimationFrame(() => {
       reset(defaultValues);
       setServerError(null);
     });
     return () => cancelAnimationFrame(id);
-  }, [reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run only on mount to avoid resetting while user types
+  }, []);
 
   const onSubmit = async (data: RegisterInput) => {
     setServerError(null);

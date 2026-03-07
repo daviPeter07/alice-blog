@@ -31,11 +31,11 @@
 **⚠️ CRÍTICO**: Nenhuma user story de conteúdo/auth pode começar antes desta fase estar completa.
 
 - [X] T002 Adicionar variáveis CSS de tema light/dark e seletor `[data-theme="light"]` / `[data-theme="dark"]` com transição suave em `src/app/globals.css`
-- [ ] T003 [P] Criar `src/lib/schemas/auth.schema.ts` com `loginSchema` e `registerSchema` (Zod) conforme `specs/002-blog-admin-theme/data-model.md`
-- [ ] T004 Criar `src/lib/auth.ts` com helper `getSession()` (leitura de cookie de sessão) e funções para criar/destruir sessão (cookie)
-- [ ] T005 Adicionar campo `passwordHash` (opcional) ao modelo `User` em `prisma/schema.prisma`, gerar migration com `pnpm prisma migrate dev --name add-user-password-hash`
-- [ ] T006 [P] Criar `src/data-access/users.ts` com `getUserByEmail(email)` e `createUser(data)` (hash de senha no create) usando `prisma`
-- [ ] T007 Criar `src/actions/auth.ts` com Server Actions `login`, `register` e `logout` (validação Zod, sessão via cookie, retorno `ActionResult`)
+- [X] T003 [P] Criar `src/lib/schemas/auth.schema.ts` com `loginSchema` e `registerSchema` (Zod) conforme `specs/002-blog-admin-theme/data-model.md`
+- [X] T004 Criar `src/lib/auth.ts` com helper `getSession()` (leitura de cookie de sessão) e funções para criar/destruir sessão (cookie)
+- [X] T005 Adicionar campo `passwordHash` (opcional) ao modelo `User` em `prisma/schema.prisma`, gerar migration com `pnpm prisma migrate dev --name add-user-password-hash`
+- [X] T006 [P] Criar `src/data-access/users.ts` com `getUserByEmail(email)` e `createUser(data)` (hash de senha no create) usando `prisma`
+- [X] T007 Criar `src/actions/auth.ts` com Server Actions `login`, `register` e `logout` (validação Zod, sessão via cookie, retorno `ActionResult`)
 
 **Checkpoint**: Tema e auth base prontos — landing, tema toggle, comentários com login e admin podem ser implementados.
 
@@ -67,9 +67,9 @@
 
 ### Implementação — User Story 2
 
-- [ ] T013 [P] [US2] Criar `src/hooks/use-theme.ts`: ler/escrever tema (ex.: `localStorage` chave `alice-theme`), aplicar `data-theme` em `<html>`, respeitar `prefers-color-scheme` quando não houver preferência salva
-- [ ] T014 [US2] Criar `src/components/ui/theme-toggle.tsx` como Client Component usando o hook de tema, com `aria-label` e transição visual (animação leve) em `src/app/globals.css` garantir `transition` em `body` ou container principal para `background-color` e `color` (ex.: 0.2s ease)
-- [ ] T015 [US2] Integrar `ThemeToggle` no `src/components/layout/header.tsx` e garantir que o tema seja aplicado no `<html>` antes da primeira paint (script inline no layout ou Provider que roda no cliente) em `src/app/layout.tsx`
+- [X] T013 [P] [US2] Criar `src/hooks/use-theme.ts`: ler/escrever tema (ex.: `localStorage` chave `alice-theme`), aplicar `data-theme` em `<html>`, respeitar `prefers-color-scheme` quando não houver preferência salva
+- [X] T014 [US2] Criar `src/components/ui/theme-toggle.tsx` como Client Component usando o hook de tema, com `aria-label` e transição visual (animação leve) em `src/app/globals.css` garantir `transition` em `body` ou container principal para `background-color` e `color` (ex.: 0.2s ease)
+- [X] T015 [US2] Integrar `ThemeToggle` no `src/components/layout/header.tsx` e garantir que o tema seja aplicado no `<html>` antes da primeira paint (script inline no layout ou Provider que roda no cliente) em `src/app/layout.tsx`
 
 **Checkpoint**: US2 funcional — toggle de tema com animação e persistência.
 
@@ -104,8 +104,8 @@
 
 ### Implementação — User Story 4
 
-- [ ] T024 [P] [US4] Criar `src/components/layout/footer.tsx` com props `topics` (array de `{ href, label }`) e `contactEmail`/`contactLabel`, renderizar tópicos e link `mailto:` para contato, export function `Footer`
-- [ ] T025 [US4] Incluir `Footer` em `src/app/layout.tsx` (ou em layout compartilhado) passando tópicos (ex.: Blog, Sobre, âncoras da home) e email da Alice para contato
+- [X] T024 [P] [US4] Criar `src/components/layout/footer.tsx` com props `topics` (array de `{ href, label }`) e `contactEmail`/`contactLabel`, renderizar tópicos e link `mailto:` para contato, export function `Footer`
+- [X] T025 [US4] Incluir `Footer` em `src/app/layout.tsx` (ou em layout compartilhado) passando tópicos (ex.: Blog, Sobre, âncoras da home) e email da Alice para contato
 
 **Checkpoint**: US4 funcional — footer visível com tópicos e contato por email.
 
@@ -119,12 +119,12 @@
 
 ### Implementação — User Story 5
 
-- [ ] T026 [US5] Criar middleware ou verificação em layout em `src/app/admin` que exige sessão com `role === "ADMIN"`; redirecionar para `/login` ou exibir 403
-- [ ] T027 [US5] Criar `src/lib/schemas/post.schema.ts` (ou estender) com schemas Zod para createPost e updatePost (título, slug, excerpt, content, tags, status) conforme `data-model.md` e contracts
-- [ ] T028 [US5] Criar `src/actions/posts.ts` com Server Actions `createPost`, `updatePost`, `deletePost` e `publishPost`/`unpublishPost` (exigir sessão ADMIN, validar com Zod, chamar prisma, `revalidateTag("posts:list", "max")` e tags do post)
-- [ ] T029 [US5] Criar `src/app/admin/posts/page.tsx` para listar posts (usar DAL ou nova função `getPostsForAdmin` em `src/data-access/posts.ts`) com links para editar e criar novo
-- [ ] T030 [US5] Criar `src/app/admin/posts/new/page.tsx` com formulário de criação de post (título, slug, excerpt, content, tags, status DRAFT) e submit para `createPost`
-- [ ] T031 [US5] Criar `src/app/admin/posts/[id]/edit/page.tsx` com formulário de edição e submit para `updatePost`; botões para publicar/despublicar e remover
+- [X] T026 [US5] Criar middleware ou verificação em layout em `src/app/admin` que exige sessão com `role === "ADMIN"`; redirecionar para `/auth/login` ou exibir 403
+- [X] T027 [US5] Criar `src/lib/schemas/post.schema.ts` (ou estender) com schemas Zod para createPost e updatePost (título, slug, excerpt, content, tags, status) conforme `data-model.md` e contracts
+- [X] T028 [US5] Criar `src/actions/posts.ts` com Server Actions `createPost`, `updatePost`, `deletePost` e `publishPost`/`unpublishPost` (exigir sessão ADMIN, validar com Zod, chamar prisma, `revalidateTag("posts:list", "max")` e tags do post)
+- [X] T029 [US5] Criar `src/app/admin/posts/page.tsx` para listar posts (usar DAL ou nova função `getPostsForAdmin` em `src/data-access/posts.ts`) com links para editar e criar novo
+- [X] T030 [US5] Criar `src/app/admin/posts/new/page.tsx` com formulário de criação de post (título, slug, excerpt, content, tags, status DRAFT) e submit para `createPost`
+- [X] T031 [US5] Criar `src/app/admin/posts/[id]/edit/page.tsx` com formulário de edição e submit para `updatePost`; botões para publicar/despublicar e remover
 
 **Checkpoint**: US5 funcional — área admin restrita com CRUD e publicação de posts.
 
@@ -138,8 +138,8 @@
 
 ### Implementação — User Story 6
 
-- [ ] T032 [US6] Configurar componente Toaster (Sonner) em `src/app/layout.tsx` com `position="bottom-right"` para que toasts de sucesso (ex.: comentário enviado) apareçam no canto inferior direito
-- [ ] T033 [US6] Em `src/components/blog/comment-section.tsx` (ou hook `use-comment-section.ts`): após envio bem-sucedido de comentário não disparar navegação ou refresh que cause scroll para o topo; opcionalmente chamar `scrollIntoView({ behavior: 'smooth' })` na seção de comentários ou no novo comentário para manter foco na área
+- [X] T032 [US6] Configurar componente Toaster (Sonner) em `src/app/layout.tsx` com `position="bottom-right"` para que toasts de sucesso (ex.: comentário enviado) apareçam no canto inferior direito
+- [X] T033 [US6] Em `src/components/blog/comment-section.tsx` (ou hook `use-comment-section.ts`): após envio bem-sucedido de comentário não disparar navegação ou refresh que cause scroll para o topo; opcionalmente chamar `scrollIntoView({ behavior: 'smooth' })` na seção de comentários ou no novo comentário para manter foco na área
 
 **Checkpoint**: US6 funcional — toast bottom-right e scroll preservado na área de comentários.
 
@@ -149,9 +149,9 @@
 
 **Purpose**: Qualidade e validação final.
 
-- [ ] T034 [P] Executar `pnpm typecheck` e corrigir erros de tipo até zero
-- [ ] T035 [P] Executar `pnpm lint` e corrigir warnings até zero
-- [ ] T036 Executar `pnpm build` e corrigir erros de build até sucesso
+- [X] T034 [P] Executar `pnpm typecheck` e corrigir erros de tipo até zero
+- [X] T035 [P] Executar `pnpm lint` e corrigir warnings até zero
+- [X] T036 Executar `pnpm build` e corrigir erros de build até sucesso
 - [ ] T037 Validar smoke tests manuais descritos em `specs/002-blog-admin-theme/quickstart.md`
 
 ---

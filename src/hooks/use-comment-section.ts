@@ -123,7 +123,9 @@ export function useCommentSection({
         authorEmail: currentUser?.email ?? '',
         body: '',
       });
-      formAction(valuesToFormData(payload));
+      startTransition(() => {
+        formAction(valuesToFormData(payload));
+      });
     },
     [postId, currentUser, addOptimistic, mainForm, formAction]
   );
@@ -140,7 +142,9 @@ export function useCommentSection({
       };
       addOptimistic(payload);
       setReplyingToId(null);
-      formAction(valuesToFormData(payload));
+      startTransition(() => {
+        formAction(valuesToFormData(payload));
+      });
     },
     [postId, currentUser, addOptimistic, formAction]
   );
