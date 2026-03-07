@@ -25,13 +25,22 @@ pnpm install
 
 ## 2. Variáveis de ambiente
 
-Além de `DATABASE_URL`, se a auth usar variáveis (ex.: secret para cookie de sessão):
+Crie um `.env` com:
 
 ```env
 DATABASE_URL="postgresql://alice:alice@localhost:5432/alice_blog_dev"
-# Exemplo (ajustar conforme implementação):
-# SESSION_SECRET="sua-chave-secreta"
+SESSION_SECRET="sua-chave-secreta-de-pelo-menos-16-caracteres"
+
+# Obrigatórias para o seed (pnpm prisma db seed)
+SEED_ALICE_NAME="Alice"
+SEED_ALICE_EMAIL="alice@example.com"
+SEED_ALICE_PASSWORD="sua-senha-segura"
+SEED_DAVI_NAME="Davi"
+SEED_DAVI_EMAIL="davi@example.com"
+SEED_DAVI_PASSWORD="sua-senha-segura"
 ```
+
+Veja `.env.example` para mais opções (ex.: `NEXT_PUBLIC_CONTACT_EMAIL`).
 
 ---
 

@@ -30,7 +30,6 @@ function valuesToFormData(data: CreateCommentInput): FormData {
 export interface UseCommentSectionOptions {
   postId: string;
   initialComments: CommentWithReplies[];
-  isAuthenticated?: boolean;
   currentUser?: { name: string; email: string } | null;
 }
 

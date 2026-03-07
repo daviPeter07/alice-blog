@@ -10,8 +10,9 @@ export type ActionResult<T = void> =
 // DAL projection types (mirrors contracts/server-actions.md)
 // ---------------------------------------------------------------------------
 
+// DAL projection: replies fetched one level only (no nested replies)
 export type CommentWithReplies = Comment & {
-  replies: CommentWithReplies[];
+  replies: (Comment & { author?: Pick<User, 'role'> | null })[];
   author?: Pick<User, 'role'> | null;
 };
 

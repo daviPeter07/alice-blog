@@ -60,7 +60,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <div className="flex-1">{children}</div>
           <Footer
             topics={[...FOOTER_TOPICS]}
-            contactEmail="alice@example.com"
+            contactEmail={process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'alice@example.com'}
             contactLabel="Entrar em contato"
           />
           <Toaster position="bottom-right" closeButton={false} />

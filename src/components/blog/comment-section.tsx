@@ -34,7 +34,7 @@ export function CommentSection({
     replyFormRef,
     onMainSubmit,
     handleReplySubmit,
-  } = useCommentSection({ postId, initialComments, isAuthenticated, currentUser });
+  } = useCommentSection({ postId, initialComments, currentUser });
 
   const authorName = useWatch({ control: mainForm.control, name: 'authorName', defaultValue: '' });
   const authorEmail = useWatch({
@@ -250,7 +250,7 @@ function CommentItem({
   currentUser?: { name: string; email: string; role?: 'ADMIN' | 'READER' } | null;
 }) {
   const isAdmin =
-    (comment as { author?: { role?: string } }).author?.role === 'ADMIN' ||
+    comment.author?.role === 'ADMIN' ||
     (comment.pending && currentUser?.role === 'ADMIN' && comment.authorEmail === currentUser?.email);
   const persistedReplies = comment.replies ?? [];
   const optimisticReplyIds = new Set(persistedReplies.map((r) => r.id));

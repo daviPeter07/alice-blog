@@ -96,5 +96,5 @@ export async function createSession(user: SessionUser): Promise<void> {
  */
 export async function destroySession(): Promise<void> {
   const store = await cookies();
-  store.delete(COOKIE_NAME);
+  store.delete({ name: COOKIE_NAME, path: '/' });
 }

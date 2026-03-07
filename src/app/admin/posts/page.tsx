@@ -4,7 +4,8 @@ import { getPostsForAdmin } from '@/data-access/posts';
 import { formatDate } from '@/helpers';
 
 export default async function AdminPostsPage() {
-  await getSession();
+  // Layout já protege; chamamos getSession para optar em dynamic rendering (cookies)
+  await getSession().catch(() => null);
   const posts = await getPostsForAdmin();
 
   return (
