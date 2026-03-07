@@ -10,6 +10,7 @@ import { postSlugParamsSchema } from '@/lib/schemas/post.schema';
 import { Badge } from '@/components/ui/badge';
 import { CommentSection } from '@/components/blog/comment-section';
 import { LikeButton } from '@/components/blog/like-button';
+import { AdminCheck } from '@/components/ui/admin-check';
 import { formatDate, getInitials } from '@/helpers';
 
 interface PageProps {
@@ -86,6 +87,9 @@ async function PostContent({ slug }: { slug: string }) {
           )}
 
           <span className="font-medium text-foreground">{post.author.name}</span>
+          {post.author.role === 'ADMIN' && (
+            <AdminCheck size={16} className="text-brand-green" />
+          )}
 
           {post.publishedAt && (
             <>
@@ -124,7 +128,7 @@ async function PostContent({ slug }: { slug: string }) {
         postId={post.id}
         initialComments={post.comments}
         isAuthenticated={!!session}
-        currentUser={session ? { name: session.name, email: session.email } : null}
+        currentUser={session ? { name: session.name, email: session.email, role: session.role } : null}
       />
     </main>
   );

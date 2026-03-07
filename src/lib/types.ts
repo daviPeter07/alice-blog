@@ -11,11 +11,12 @@ export type ActionResult<T = void> =
 // ---------------------------------------------------------------------------
 
 export type CommentWithReplies = Comment & {
-  replies: Comment[];
+  replies: CommentWithReplies[];
+  author?: Pick<User, 'role'> | null;
 };
 
 export type PostWithRelations = Post & {
-  author: Pick<User, 'name' | 'image'>;
+  author: Pick<User, 'name' | 'image' | 'role'>;
   comments: CommentWithReplies[];
   _count: { likes: number };
 };
@@ -24,6 +25,6 @@ export type PostSummary = Pick<
   Post,
   'slug' | 'title' | 'excerpt' | 'publishedAt' | 'tags' | 'readingTime'
 > & {
-  author: Pick<User, 'name' | 'image'>;
+  author: Pick<User, 'name' | 'image' | 'role'>;
   _count: { likes: number; comments: number };
 };

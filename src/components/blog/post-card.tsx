@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
+import { AdminCheck } from '@/components/ui/admin-check';
 import { ArrowRight } from 'lucide-react';
 import { formatDate } from '@/helpers';
 
@@ -10,7 +11,7 @@ export interface PostCardProps {
   publishedAt: Date | null;
   tags: string[];
   readingTime: number | null;
-  author: { name: string; image: string | null };
+  author: { name: string; image: string | null; role?: 'ADMIN' | 'READER' };
   likesCount: number;
   commentsCount: number;
   index?: number;
@@ -68,6 +69,7 @@ export function PostCard({
         <div className="flex items-center justify-between">
           <div className="flex flex-wrap items-center gap-2 text-[0.8rem] text-muted-foreground font-ui">
             <span className="font-medium text-foreground/80">{author.name}</span>
+            {author.role === 'ADMIN' && <AdminCheck size={12} />}
             {publishedAt && (
               <>
                 <span aria-hidden className="text-border">

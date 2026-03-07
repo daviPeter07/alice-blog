@@ -94,6 +94,7 @@ export function useCommentSection({
           id: `optimistic-${Date.now()}`,
           postId: data.postId,
           parentId: data.parentId ?? null,
+          authorId: null,
           authorName: data.authorName,
           authorEmail: data.authorEmail,
           approved: false,

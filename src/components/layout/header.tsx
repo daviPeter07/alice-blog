@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { logout } from '@/actions/auth';
 import type { NavAnchor } from '@/types/landing';
 
 export interface HeaderProps {
   navAnchors?: NavAnchor[];
   showLoginButton?: boolean;
   showThemeToggle?: boolean;
-  user?: { name: string } | null;
+  user?: { name: string; role?: 'ADMIN' | 'READER' } | null;
 }
 
 export function Header({
@@ -56,7 +57,30 @@ export function Header({
           >
             Artigos
           </Link>
+          {user?.role === 'ADMIN' && (
+            <Link
+              href="/admin/posts"
+              className="rounded-lg bg-brand-green px-3 py-1.5 font-medium text-white hover:bg-brand-green/90 transition-colors duration-200 text-sm"
+            >
+              Lançar artigo
+            </Link>
+          )}
           {showThemeToggle && <ThemeToggle />}
+          {showLoginButton && user && (
+            <div className="flex items-center gap-3">
+              <span className="text-muted-foreground text-xs">
+                Logado como <strong className="text-foreground">{user.name}</strong>
+              </span>
+              <form action={logout}>
+                <button
+                  type="submit"
+                  className="font-ui text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                >
+                  Sair
+                </button>
+              </form>
+            </div>
+          )}
           {showLoginButton && !user && (
             <Link
               href="/auth/login"

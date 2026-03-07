@@ -1,14 +1,18 @@
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createPost } from '@/actions/posts';
 import { Button } from '@/components/ui/button';
+import { slugFromTitle } from '@/helpers';
 
 export function NewPostForm() {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(createPost, null);
+  const [title, setTitle] = useState('');
+
+  const slug = useMemo(() => slugFromTitle(title), [title]);
 
   useEffect(() => {
     if (state && state.success === true && 'data' in state && state.data) {
@@ -34,6 +38,8 @@ export function NewPostForm() {
           name="title"
           type="text"
           required
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           className="w-full rounded-lg border border-input bg-background px-4 py-2.5 font-ui text-sm text-foreground"
         />
       </div>
@@ -46,14 +52,22 @@ export function NewPostForm() {
           id="slug"
           name="slug"
           type="text"
-          required
-          placeholder="meu-post"
-          className="w-full rounded-lg border border-input bg-background px-4 py-2.5 font-ui text-sm text-foreground"
+          readOnly
+          value={slug}
+          tabIndex={-1}
+          aria-describedby="slug-hint"
+          className="w-full rounded-lg border border-input bg-muted/50 px-4 py-2.5 font-ui text-sm text-muted-foreground cursor-default"
         />
+        <p id="slug-hint" className="mt-1 font-ui text-xs text-muted-foreground">
+          Gerado automaticamente a partir do título.
+        </p>
       </div>
 
       <div>
-        <label htmlFor="excerpt" className="block font-ui text-sm font-medium text-foreground mb-1.5">
+        <label
+          htmlFor="excerpt"
+          className="block font-ui text-sm font-medium text-foreground mb-1.5"
+        >
           Resumo
         </label>
         <textarea
@@ -65,7 +79,10 @@ export function NewPostForm() {
       </div>
 
       <div>
-        <label htmlFor="content" className="block font-ui text-sm font-medium text-foreground mb-1.5">
+        <label
+          htmlFor="content"
+          className="block font-ui text-sm font-medium text-foreground mb-1.5"
+        >
           Conteúdo
         </label>
         <textarea
@@ -93,7 +110,11 @@ export function NewPostForm() {
       <input type="hidden" name="status" value="DRAFT" />
 
       <div className="flex gap-3 pt-2">
-        <Button type="submit" disabled={isPending} className="bg-brand-green hover:bg-brand-green/90">
+        <Button
+          type="submit"
+          disabled={isPending || !slug.trim()}
+          className="bg-brand-green hover:bg-brand-green/90"
+        >
           {isPending ? 'Salvando…' : 'Criar rascunho'}
         </Button>
         <Link

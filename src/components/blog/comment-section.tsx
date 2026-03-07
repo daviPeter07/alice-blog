@@ -8,13 +8,14 @@ import { createCommentSchema, type CreateCommentInput } from '@/lib/schemas/comm
 import type { ActionResult, CommentWithReplies } from '@/lib/types';
 import { formatDate, getInitials, avatarHue } from '@/helpers';
 import { useCommentSection, useToastOnSuccess, type OptimisticComment } from '@/hooks';
+import { AdminCheck } from '@/components/ui/admin-check';
 import { cn } from '@/lib/utils';
 
 interface CommentSectionProps {
   postId: string;
   initialComments: CommentWithReplies[];
   isAuthenticated?: boolean;
-  currentUser?: { name: string; email: string } | null;
+  currentUser?: { name: string; email: string; role?: 'ADMIN' | 'READER' } | null;
 }
 
 export function CommentSection({
@@ -75,6 +76,7 @@ export function CommentSection({
               replyFormRef={replyFormRef}
               isPending={isPending}
               state={state}
+              currentUser={currentUser}
             />
           ))}
         </ul>
@@ -234,6 +236,7 @@ function CommentItem({
   replyFormRef,
   isPending,
   state,
+  currentUser,
 }: {
   comment: OptimisticComment;
   allComments: OptimisticComment[];
@@ -244,7 +247,11 @@ function CommentItem({
   replyFormRef: React.RefObject<HTMLFormElement | null>;
   isPending: boolean;
   state: ActionResult | null;
+  currentUser?: { name: string; email: string; role?: 'ADMIN' | 'READER' } | null;
 }) {
+  const isAdmin =
+    (comment as { author?: { role?: string } }).author?.role === 'ADMIN' ||
+    (comment.pending && currentUser?.role === 'ADMIN' && comment.authorEmail === currentUser?.email);
   const persistedReplies = comment.replies ?? [];
   const optimisticReplyIds = new Set(persistedReplies.map((r) => r.id));
   const fromOptimistic = allComments.filter(
@@ -271,6 +278,7 @@ function CommentItem({
           <span className="font-ui text-sm font-semibold text-foreground">
             {comment.authorName}
           </span>
+          {isAdmin && <AdminCheck size={14} />}
           {!comment.pending && (
             <time className="font-ui text-xs text-muted-foreground">
               {formatDate(comment.createdAt)}
@@ -323,6 +331,7 @@ function CommentItem({
                 replyFormRef={replyFormRef}
                 isPending={isPending}
                 state={state}
+                currentUser={currentUser}
               />
             ))}
           </ul>

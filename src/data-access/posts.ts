@@ -10,10 +10,16 @@ export async function getPostBySlug(slug: string): Promise<PostWithRelations | n
   const post = await prisma.post.findUnique({
     where: { slug },
     include: {
-      author: { select: { name: true, image: true } },
+      author: { select: { name: true, image: true, role: true } },
       comments: {
         where: { parentId: null },
-        include: { replies: { orderBy: { createdAt: 'asc' } } },
+        include: {
+          author: { select: { role: true } },
+          replies: {
+            orderBy: { createdAt: 'asc' },
+            include: { author: { select: { role: true } } },
+          },
+        },
         orderBy: { createdAt: 'desc' },
       },
       _count: { select: { likes: true } },
@@ -53,7 +59,7 @@ export async function getRecentPosts(limit = 10) {
       publishedAt: true,
       tags: true,
       readingTime: true,
-      author: { select: { name: true, image: true } },
+      author: { select: { name: true, image: true, role: true } },
       _count: { select: { likes: true, comments: true } },
     },
     orderBy: { publishedAt: 'desc' },

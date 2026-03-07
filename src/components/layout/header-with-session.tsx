@@ -17,7 +17,7 @@ export async function HeaderWithSession({
       navAnchors={navAnchors}
       showThemeToggle={showThemeToggle}
       showLoginButton
-      user={session ? { name: session.name } : null}
+      user={session ? { name: session.name, role: session.role } : null}
     />
   );
 }
