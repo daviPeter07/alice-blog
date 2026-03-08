@@ -50,7 +50,13 @@ export async function getSession(): Promise<SessionUser | null> {
 
   if (!verify(payloadB64, signature)) return null;
 
-  let payload: { userId: string; name: string; email: string; role: 'ADMIN' | 'READER'; exp: number };
+  let payload: {
+    userId: string;
+    name: string;
+    email: string;
+    role: 'ADMIN' | 'READER';
+    exp: number;
+  };
   try {
     payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
   } catch {

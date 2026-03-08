@@ -21,8 +21,8 @@ export function LikeButton({
 }: LikeButtonProps) {
   const [state, formAction, isPending] = useActionState(toggleLike, null);
 
-  const count = state?.success ? state.data?.count ?? initialCount : initialCount;
-  const liked = state?.success ? state.data?.liked ?? initialLiked : initialLiked;
+  const count = state?.success ? (state.data?.count ?? initialCount) : initialCount;
+  const liked = state?.success ? (state.data?.liked ?? initialLiked) : initialLiked;
 
   if (!isAuthenticated) {
     return (
@@ -36,7 +36,11 @@ export function LikeButton({
           <span>{count}</span>
         </button>
         <span className="font-ui text-xs text-muted-foreground">
-          Faça <Link href="/auth/login" className="text-brand-green underline">login</Link> para curtir.
+          Faça{' '}
+          <Link href="/auth/login" className="text-brand-green underline">
+            login
+          </Link>{' '}
+          para curtir.
         </span>
       </div>
     );

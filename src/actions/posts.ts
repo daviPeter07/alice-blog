@@ -3,11 +3,7 @@
 import { revalidateTag } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
-import {
-  createPostSchema,
-  updatePostSchema,
-  postIdSchema,
-} from '@/lib/schemas/post.schema';
+import { createPostSchema, updatePostSchema, postIdSchema } from '@/lib/schemas/post.schema';
 import type { ActionResult } from '@/lib/types';
 import type { Post } from '@/lib/prisma';
 

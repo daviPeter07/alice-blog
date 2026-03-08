@@ -3,12 +3,7 @@
 import { useActionState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {
-  updatePost,
-  deletePost,
-  publishPost,
-  unpublishPost,
-} from '@/actions/posts';
+import { updatePost, deletePost, publishPost, unpublishPost } from '@/actions/posts';
 import { Button } from '@/components/ui/button';
 
 interface EditPostFormProps {
@@ -53,8 +48,10 @@ export function EditPostForm({ post }: EditPostFormProps) {
 
   return (
     <div className="space-y-8">
-      {(updateState?.success === false || deleteState?.success === false ||
-        publishState?.success === false || unpublishState?.success === false) && (
+      {(updateState?.success === false ||
+        deleteState?.success === false ||
+        publishState?.success === false ||
+        unpublishState?.success === false) && (
         <p className="font-ui text-sm text-destructive rounded-lg bg-destructive/10 px-4 py-2">
           {updateState && !updateState.success && 'error' in updateState
             ? updateState.error
@@ -71,7 +68,10 @@ export function EditPostForm({ post }: EditPostFormProps) {
       <form action={updateAction} className="space-y-6">
         <input type="hidden" name="id" value={post.id} />
         <div>
-          <label htmlFor="title" className="block font-ui text-sm font-medium text-foreground mb-1.5">
+          <label
+            htmlFor="title"
+            className="block font-ui text-sm font-medium text-foreground mb-1.5"
+          >
             Título
           </label>
           <input
@@ -84,7 +84,10 @@ export function EditPostForm({ post }: EditPostFormProps) {
           />
         </div>
         <div>
-          <label htmlFor="slug" className="block font-ui text-sm font-medium text-foreground mb-1.5">
+          <label
+            htmlFor="slug"
+            className="block font-ui text-sm font-medium text-foreground mb-1.5"
+          >
             Slug (URL)
           </label>
           <input
@@ -97,7 +100,10 @@ export function EditPostForm({ post }: EditPostFormProps) {
           />
         </div>
         <div>
-          <label htmlFor="excerpt" className="block font-ui text-sm font-medium text-foreground mb-1.5">
+          <label
+            htmlFor="excerpt"
+            className="block font-ui text-sm font-medium text-foreground mb-1.5"
+          >
             Resumo
           </label>
           <textarea
@@ -109,7 +115,10 @@ export function EditPostForm({ post }: EditPostFormProps) {
           />
         </div>
         <div>
-          <label htmlFor="content" className="block font-ui text-sm font-medium text-foreground mb-1.5">
+          <label
+            htmlFor="content"
+            className="block font-ui text-sm font-medium text-foreground mb-1.5"
+          >
             Conteúdo
           </label>
           <textarea
@@ -122,7 +131,10 @@ export function EditPostForm({ post }: EditPostFormProps) {
           />
         </div>
         <div>
-          <label htmlFor="tags" className="block font-ui text-sm font-medium text-foreground mb-1.5">
+          <label
+            htmlFor="tags"
+            className="block font-ui text-sm font-medium text-foreground mb-1.5"
+          >
             Tags (separadas por vírgula)
           </label>
           <input
@@ -134,7 +146,11 @@ export function EditPostForm({ post }: EditPostFormProps) {
           />
         </div>
         <input type="hidden" name="status" value={post.status} />
-        <Button type="submit" disabled={isPending} className="bg-brand-green hover:bg-brand-green/90">
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="bg-brand-green hover:bg-brand-green/90"
+        >
           {isUpdatePending ? 'Salvando…' : 'Salvar alterações'}
         </Button>
       </form>
@@ -164,7 +180,12 @@ export function EditPostForm({ post }: EditPostFormProps) {
           }}
         >
           <input type="hidden" name="id" value={post.id} />
-          <Button type="submit" disabled={isPending} variant="outline" className="text-destructive border-destructive hover:bg-destructive/10">
+          <Button
+            type="submit"
+            disabled={isPending}
+            variant="outline"
+            className="text-destructive border-destructive hover:bg-destructive/10"
+          >
             {isDeletePending ? 'Removendo…' : 'Remover post'}
           </Button>
         </form>

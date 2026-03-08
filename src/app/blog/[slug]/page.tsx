@@ -87,9 +87,7 @@ async function PostContent({ slug }: { slug: string }) {
           )}
 
           <span className="font-medium text-foreground">{post.author.name}</span>
-          {post.author.role === 'ADMIN' && (
-            <AdminCheck size={16} className="text-brand-green" />
-          )}
+          {post.author.role === 'ADMIN' && <AdminCheck size={16} className="text-brand-green" />}
 
           {post.publishedAt && (
             <>
@@ -128,7 +126,9 @@ async function PostContent({ slug }: { slug: string }) {
         postId={post.id}
         initialComments={post.comments}
         isAuthenticated={!!session}
-        currentUser={session ? { name: session.name, email: session.email, role: session.role } : null}
+        currentUser={
+          session ? { name: session.name, email: session.email, role: session.role } : null
+        }
       />
     </main>
   );

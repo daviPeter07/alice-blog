@@ -251,7 +251,9 @@ function CommentItem({
 }) {
   const isAdmin =
     comment.author?.role === 'ADMIN' ||
-    (comment.pending && currentUser?.role === 'ADMIN' && comment.authorEmail === currentUser?.email);
+    (comment.pending &&
+      currentUser?.role === 'ADMIN' &&
+      comment.authorEmail === currentUser?.email);
   const persistedReplies = comment.replies ?? [];
   const optimisticReplyIds = new Set(persistedReplies.map((r) => r.id));
   const fromOptimistic = allComments.filter(

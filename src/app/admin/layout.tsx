@@ -13,11 +13,15 @@ async function AdminAuthGuard({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-export default function AdminLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function AdminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <Suspense fallback={<div className="max-w-3xl mx-auto px-6 py-12 font-ui text-muted-foreground">Carregando…</div>}>
+    <Suspense
+      fallback={
+        <div className="max-w-3xl mx-auto px-6 py-12 font-ui text-muted-foreground">
+          Carregando…
+        </div>
+      }
+    >
       <AdminAuthGuard>{children}</AdminAuthGuard>
     </Suspense>
   );

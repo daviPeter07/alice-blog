@@ -25,7 +25,14 @@ export const createPostSchema = z.object({
     .string()
     .optional()
     .default('')
-    .transform((s) => (s ? s.split(',').map((t) => t.trim()).filter(Boolean) : [])),
+    .transform((s) =>
+      s
+        ? s
+            .split(',')
+            .map((t) => t.trim())
+            .filter(Boolean)
+        : []
+    ),
   status: postStatusSchema.default('DRAFT'),
 });
 

@@ -37,13 +37,13 @@ export async function createComment(
     };
   }
 
-  // Só vincula authorId se o usuário ainda existir no banco (evita FK após seed/reset)
-  const userExists = await prisma.user.findUnique({
-    where: { id: session.userId },
-    select: { id: true },
-  });
-
   try {
+    // Só vincula authorId se o usuário ainda existir no banco (evita FK após seed/reset)
+    const userExists = await prisma.user.findUnique({
+      where: { id: session.userId },
+      select: { id: true },
+    });
+
     await prisma.comment.create({
       data: {
         postId: parsed.data.postId,
