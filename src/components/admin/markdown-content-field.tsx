@@ -82,7 +82,7 @@ export function MarkdownContentField({
         placeholder={placeholder}
         rows={rows}
         className={cn(
-          'w-full rounded-lg border border-input bg-background px-4 py-2.5 font-ui text-sm text-foreground resize-y whitespace-pre-wrap break-words',
+          'w-full rounded-lg border border-input bg-background px-4 py-2.5 font-ui text-sm text-foreground resize-y whitespace-pre-wrap wrap-break-words',
           viewMode === 'preview' && 'sr-only'
         )}
         aria-hidden={viewMode === 'preview'}

@@ -25,7 +25,7 @@ export function ComoFuncionaSection() {
     },
     {
       icon: Share2,
-      title: 'Compartilhe (em breve)',
+      title: 'Compartilhe',
       text: 'Envie artigos por e-mail ou compartilhe em redes sociais diretamente da página do post.',
     },
   ];

@@ -159,6 +159,7 @@
 - [x] T030 [P] Executar `pnpm typecheck` e corrigir erros até zero
 - [x] T031 [P] Executar `pnpm lint` e corrigir warnings até zero
 - [x] T032 Executar `pnpm build` e corrigir erros até sucesso
+- [x] T034 [US3] Refinamentos de comentários e post: PostFooter (like + comentário + compartilhar), form de comentário oculto/abre por ícone ou Responder, markdown no body com preview, ações editar (≤5 min) e excluir via dropdown "…"; toast e fechar form após enviar; dark theme no dropdown do usuário e botão Sair em vermelho (src/components/blog/post-footer.tsx, comment-section.tsx, comment-form.tsx, comment-item.tsx, reply-form.tsx, comment-actions.tsx, src/actions/comments.ts, src/app/globals.css, src/components/layout/navbar.tsx)
 - [ ] T033 Validar smoke tests manuais descritos em `specs/003-blog-redesign/quickstart.md`
 
 ---

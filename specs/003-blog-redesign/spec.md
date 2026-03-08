@@ -250,6 +250,23 @@ Nenhuma entidade de dados nova. O redesign atua sobre entidades já existentes (
 ### Próximo foco
 - Rota `/admin/posts`: refinamentos visuais (User Story 4) aplicados; smoke tests pendentes.
 
+### Sessão 2026-03-05 — Post, comentários e navbar
+
+**Post e rodapé**
+- Removido `hr` e bloco separado de like abaixo do post. Criado `PostFooter` (`src/components/blog/post-footer.tsx`): uma única linha com Like, Comentário (ícone + contador) e Compartilhar. O botão de comentário alterna a visibilidade do formulário de comentário; compartilhar usa Web Share API ou copia o link.
+- Página do post (`src/app/blog/[slug]/page.tsx`) passou a usar `PostFooter` com `postUrl`, `initialLikeCount`, `initialLiked`, `initialComments`.
+
+**Comentários**
+- Formulário de comentário só é exibido para usuários logados. Quando não logado, exibe "Para comentar, faça login" e modal de login ao clicar. Campos nome/e-mail removidos (sessão fornece dados).
+- Formulário principal de comentário fica oculto por padrão; abre ao clicar no ícone de comentário no PostFooter (acima da lista de comentários). Ao clicar em "Responder" em um comentário, o formulário de resposta aparece **abaixo** desse comentário (inline).
+- Corpo do comentário em Markdown: campo com alternância Texto/Preview (`MarkdownContentField`), `remark-breaks`; exibição dos comentários com `ReactMarkdown` e classe `.prose-alice-comment` (espaçamento compacto).
+- Seção de comentários refatorada em componentes: `comment-form.tsx` (formulário principal), `comment-item.tsx` (item + respostas), `reply-form.tsx` (resposta com "Respondendo a {nome}"), `comment-section.tsx` (orquestração). Após enviar comentário: toast de sucesso e formulário principal fecha.
+- **Ações no comentário** (próprios comentários): botão "…" que abre dropdown **para cima** com "Editar" (somente até 5 min após publicar; após isso opção com opacidade baixa e texto "Só é possível editar até 5 min após publicar") e "Excluir". Criadas Server Actions `deleteComment` e `updateComment` em `src/actions/comments.ts`. Componente `CommentActions` em `src/components/blog/comment-actions.tsx`. "Responder" e "…" ficam na mesma linha.
+
+**Navbar e tema**
+- Dropdown do usuário (navbar) não usava variáveis de tema dark para fundo e hover. Em `[data-theme='dark']` em `globals.css` definidos `--popover`, `--popover-foreground`, `--accent`, `--accent-foreground` para o dropdown e painel mobile ficarem corretos no dark mode.
+- Botão "Sair" no dropdown (desktop) e no menu mobile estilizado em vermelho: `text-destructive`, `hover:bg-destructive/10` (desktop) e `text-destructive hover:underline` (mobile).
+
 ---
 
 ## Dependencies
