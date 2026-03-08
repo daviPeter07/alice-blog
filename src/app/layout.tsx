@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { NavbarWithSession } from '@/components/layout/navbar-with-session';
 import { Footer } from '@/components/layout/footer';
+import { LoadingDots } from '@/components/ui/loading-dots';
 import './globals.css';
 
 const LANDING_NAV_ANCHORS = [
@@ -32,8 +33,8 @@ function LayoutFallback() {
           </a>
         </div>
       </header>
-      <div className="flex-1 flex items-center justify-center min-h-[50vh]">
-        <p className="font-ui text-sm text-muted-foreground">Carregando…</p>
+      <div className="flex-1 flex items-center justify-center min-h-[50vh] text-muted-foreground">
+        <LoadingDots size="lg" />
       </div>
     </>
   );
@@ -75,7 +76,7 @@ export const metadata: Metadata = {
     template: '%s — Alice',
   },
   description:
-    'Reflexões sobre filosofia, história, crítica social e a condição humana. Por Alice.',
+    'Reflexões, histórias e experiências do cotidiano. Um blog pessoal por Alice.',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -57,7 +57,7 @@ export function PostEditActions({
           <Button
             type="submit"
             disabled={isPending}
-            className="cursor-pointer border-2 border-border bg-background shadow-md hover:bg-muted hover:border-muted-foreground/30 hover:shadow-lg transition-all px-5 py-2.5 rounded-lg font-medium disabled:cursor-not-allowed disabled:opacity-50"
+            className="cursor-pointer border-2 border-border bg-muted/60 text-muted-foreground shadow-md hover:bg-muted hover:border-muted-foreground/30 hover:shadow-lg transition-all px-5 py-2.5 rounded-lg font-medium disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isUnpublishPending ? 'Despublicando…' : 'Despublicar'}
           </Button>

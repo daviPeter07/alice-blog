@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
+import { LoadingDots } from '@/components/ui/loading-dots';
 
 async function AdminAuthGuard({ children }: { children: React.ReactNode }) {
   const session = await getSession().catch(() => null);
@@ -17,8 +18,8 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
   return (
     <Suspense
       fallback={
-        <div className="max-w-3xl mx-auto px-6 py-12 font-ui text-muted-foreground">
-          Carregando…
+        <div className="max-w-3xl mx-auto px-6 py-12 flex items-center justify-center min-h-[200px]">
+          <LoadingDots size="lg" className="text-muted-foreground" />
         </div>
       }
     >

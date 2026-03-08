@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { getPostsPaginated } from '@/data-access/posts';
 import { PostCard } from '@/components/blog/post-card';
 import { Pagination } from '@/components/blog/pagination';
+import { LoadingDots } from '@/components/ui/loading-dots';
 
 const PER_PAGE = 12; // 3 colunas × 4 linhas
 
@@ -64,10 +65,8 @@ async function BlogContent({
 
 function BlogFallback() {
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="animate-pulse rounded-2xl border border-border bg-card h-56" />
-      ))}
+    <section className="flex items-center justify-center min-h-[320px]" aria-label="Carregando artigos">
+      <LoadingDots size="lg" className="text-muted-foreground" />
     </section>
   );
 }

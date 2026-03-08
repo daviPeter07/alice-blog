@@ -8,6 +8,7 @@ import { PersonalizarSection } from '@/components/blog/personalizar-section';
 import { ComoFuncionaSection } from '@/components/blog/como-funciona-section';
 import { RevealSectionWrapper } from '@/components/blog/reveal-section-wrapper';
 import { BackToTop } from '@/components/ui/back-to-top';
+import { LoadingDots } from '@/components/ui/loading-dots';
 import type { CategoryItem } from '@/types/landing';
 
 const PER_PAGE = 12; // 3 colunas × 4 linhas
@@ -51,7 +52,13 @@ export default async function HomePage({
     <main className="flex flex-col min-h-[calc(100vh-3.5rem)]">
       <HeroSection />
       <RevealSectionWrapper>
-        <Suspense fallback={<div className="min-h-[400px] animate-pulse bg-muted/30" />}>
+        <Suspense
+          fallback={
+            <div className="min-h-[400px] flex items-center justify-center text-muted-foreground">
+              <LoadingDots size="lg" />
+            </div>
+          }
+        >
           <FeaturedContent searchParams={searchParams} />
         </Suspense>
       </RevealSectionWrapper>

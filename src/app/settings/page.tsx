@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
+import { LoadingDots } from '@/components/ui/loading-dots';
 
 export const metadata = {
   title: 'Configurações',
@@ -25,11 +26,8 @@ async function SettingsContent() {
 
 function SettingsFallback() {
   return (
-    <main className="max-w-2xl mx-auto px-6 py-12">
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-muted rounded w-48" />
-        <div className="h-4 bg-muted rounded w-full max-w-md" />
-      </div>
+    <main className="max-w-2xl mx-auto px-6 py-12 flex items-center justify-center min-h-[200px]">
+      <LoadingDots size="lg" className="text-muted-foreground" />
     </main>
   );
 }

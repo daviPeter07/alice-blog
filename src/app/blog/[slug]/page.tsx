@@ -13,6 +13,7 @@ import { postSlugParamsSchema } from '@/lib/schemas/post.schema';
 import { Badge } from '@/components/ui/badge';
 import { PostFooter } from '@/components/blog/post-footer';
 import { AdminCheck } from '@/components/ui/admin-check';
+import { LoadingDots } from '@/components/ui/loading-dots';
 import { formatDate, getInitials } from '@/helpers';
 
 interface PageProps {
@@ -35,13 +36,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 function PostSkeleton() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16">
-      <div className="animate-pulse space-y-6">
-        <div className="h-6 bg-muted rounded w-1/3" />
-        <div className="h-10 bg-muted rounded w-full" />
-        <div className="h-4 bg-muted rounded w-2/3" />
-        <div className="h-48 bg-muted rounded w-full" />
-      </div>
+    <main className="max-w-4xl mx-auto px-6 py-16 flex items-center justify-center min-h-[60vh]">
+      <LoadingDots size="lg" className="text-muted-foreground" />
     </main>
   );
 }
