@@ -4,9 +4,9 @@ import { useState, useActionState, useEffect, startTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { deletePost } from '@/actions/posts';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
-import { useToastOnSuccess } from '@/hooks';
 import { cn } from '@/lib/utils';
 
 export interface PostRowActionsProps {
@@ -18,8 +18,6 @@ export function PostRowActions({ postId, postTitle }: PostRowActionsProps) {
   const router = useRouter();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteState, deleteAction, isDeletePending] = useActionState(deletePost, null);
-
-  useToastOnSuccess(deleteState, 'Post excluído com sucesso.');
 
   useEffect(() => {
     if (deleteState?.success) {
@@ -34,6 +32,7 @@ export function PostRowActions({ postId, postTitle }: PostRowActionsProps) {
     startTransition(() => {
       deleteAction(fd);
     });
+    toast.success('Post excluído com sucesso.');
   };
 
   return (
