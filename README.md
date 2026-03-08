@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Alice-Blog
 
-## Getting Started
+Blog de reflexões sobre filosofia, história, crítica social e a condição humana. Por Alice.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) + **React 19**
+- **Prisma** + **PostgreSQL** — persistência
+- **Tailwind CSS v4** — estilos
+- **react-markdown** + **remark-breaks** + **rehype-raw** — Markdown e HTML em posts e comentários
+- **next-themes** — tema claro/escuro
+- **Radix UI** — componentes base (Dialog, Slot)
+- **react-hook-form** + **zod** — formulários
+
+## Pré-requisitos
+
+- Node.js 18+
+- pnpm (recomendado)
+- PostgreSQL
+
+## Como rodar
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Instalar dependências
+pnpm install
+
+# Variáveis de ambiente
+cp .env.example .env
+# Edite .env com DATABASE_URL e demais variáveis
+
+# Migrar banco
+pnpm db:migrate
+
+# Seed (opcional)
+pnpm db:seed
+
+# Dev
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script        | Descrição                              |
+|---------------|----------------------------------------|
+| `pnpm dev`    | Servidor de desenvolvimento            |
+| `pnpm build`  | Build de produção                      |
+| `pnpm start`  | Servidor de produção                   |
+| `pnpm lint`   | ESLint                                 |
+| `pnpm typecheck` | Verificação de tipos TypeScript     |
+| `pnpm format` | Prettier (formatar código)             |
+| `pnpm db:migrate` | Rodar migrações Prisma             |
+| `pnpm db:seed`    | Popular banco com dados iniciais    |
+| `pnpm db:studio`  | Abrir Prisma Studio                |
+| `pnpm db:reset`   | Resetar banco e rodar migrações    |
 
-## Learn More
+## Estrutura
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/              # Rotas (App Router)
+│   ├── admin/        # Área administrativa (posts)
+│   ├── auth/         # Login, registro
+│   ├── blog/         # Listagem e posts
+│   └── settings/     # Configurações do usuário
+├── actions/          # Server Actions
+├── components/       # Componentes React
+│   ├── admin/        # Formulários e campos admin
+│   ├── blog/         # Hero, cards, comentários, etc.
+│   ├── layout/       # Navbar, Footer
+│   └── ui/           # Componentes base (LoadingDots, Badge, etc.)
+├── data-access/      # Acesso a dados (Prisma)
+├── helpers/          # Utilitários
+├── hooks/            # Hooks customizados
+├── lib/              # Auth, schemas, types
+└── types/            # Tipos globais
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+specs/                # Especificações de features
+├── 001-blog-foundation/
+├── 002-blog-admin-theme/
+└── 003-blog-redesign/
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## O que está implementado
 
-## Deploy on Vercel
+- **Landing** — Hero com animação de digitação, Destaques, Quem sou eu, Categorias, Personalizar, Como funciona; scroll reveal; gatos laterais; BackToTop
+- **Blog** — Listagem paginada com filtro por tag, posts com Markdown/HTML, tempo de leitura
+- **Comentários** — Formulário, respostas aninhadas, edição (até 5 min), exclusão; Markdown/HTML
+- **Curtir** — Like por post (fingerprint)
+- **Auth** — Login, registro, sessão por cookie
+- **Admin** — CRUD de posts (título, resumo, conteúdo, tags); publicação/rascunho
+- **Tema** — Tema claro/escuro (next-themes)
+- **Navbar** — Logo, âncoras, toggle tema, dropdown (logado: configurações/sair; não logado: Entre/Cadastre-se); menu hamburger no mobile
+- **Configurações** — Página base (feature 004)
+- **Loading** — `LoadingDots` padronizado em todos os fallbacks de Suspense
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Roadmap
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **003-blog-redesign** (em andamento) — Refinamento visual, layouts variados na landing, animações, referências de design
+- **004-acessibilidade** (planejada) — Sidebar configurável, paleta configurável, layout de leitura configurável, tempo de leitura, split de artigo
+
+## Specs
+
+Especificações em `specs/`. Comandos speckit em `spec-commands.md`.
+
+---
+
+Feito com ♥ e ☕
