@@ -67,6 +67,57 @@ export async function getRecentPosts(limit = 10) {
   });
 }
 
+/** Lista posts paginados (backend). 12 por página (3 colunas × 4 linhas). */
+export async function getPostsPaginated(
+  page: number,
+  perPage: number,
+  tag?: string
+): Promise<{
+  posts: Awaited<ReturnType<typeof getRecentPosts>>;
+  total: number;
+  totalPages: number;
+  currentPage: number;
+}> {
+  'use cache';
+
+  cacheTag('posts:list');
+
+  const where =
+    tag && tag.trim()
+      ? { status: 'PUBLISHED' as const, tags: { has: tag.trim() } }
+      : { status: 'PUBLISHED' as const };
+
+  const [posts, total] = await Promise.all([
+    prisma.post.findMany({
+      where,
+      select: {
+        slug: true,
+        title: true,
+        excerpt: true,
+        publishedAt: true,
+        tags: true,
+        readingTime: true,
+        author: { select: { name: true, image: true, role: true } },
+        _count: { select: { likes: true, comments: true } },
+      },
+      orderBy: { publishedAt: 'desc' },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    }),
+    prisma.post.count({ where }),
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const currentPage = Math.max(1, Math.min(page, totalPages));
+
+  return {
+    posts: posts as Awaited<ReturnType<typeof getRecentPosts>>,
+    total,
+    totalPages,
+    currentPage,
+  };
+}
+
 /** Busca um post por ID (para admin). Não usa cache. */
 export async function getPostById(id: string) {
   return prisma.post.findUnique({

@@ -23,20 +23,20 @@ export function CategoryPillBlock({
       : 'hover:bg-brand-green/10 hover:text-brand-green';
 
   return (
-    <div>
+    <div className="text-center">
       <h3 className="font-body text-xl font-semibold text-foreground mb-1">{title}</h3>
       {subtitle && <p className="font-ui text-sm text-muted-foreground mb-4">{subtitle}</p>}
-      <div className="flex flex-wrap gap-2" role="list" aria-label={title}>
+      <div className="flex flex-wrap justify-center gap-x-3 gap-y-2" role="list" aria-label={title}>
         {categories.map((cat, index) => (
           <Link
             key={cat.slug}
             href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
             title={cat.label}
-            className={`animate-fade-up font-ui text-sm py-1.5 px-3 rounded-md border border-border bg-card/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring max-w-[140px] truncate inline-block ${hoverClass}`}
+            className={`animate-fade-up font-ui text-sm py-2 px-4 rounded-lg border border-border bg-card/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring max-w-[180px] truncate inline-block ${hoverClass}`}
             style={{ animationDelay: `${index * 40}ms` }}
             role="listitem"
           >
-            {cat.label.length > 18 ? `${cat.label.slice(0, 16)}…` : cat.label}
+            {cat.label.length > 24 ? `${cat.label.slice(0, 22)}…` : cat.label}
           </Link>
         ))}
       </div>
@@ -52,24 +52,24 @@ export interface CategoryBadgeBlockProps {
 
 export function CategoryBadgeBlock({ categories, title, subtitle }: CategoryBadgeBlockProps) {
   return (
-    <div>
+    <div className="text-center">
       <h3 className="font-body text-xl font-semibold text-foreground mb-1">{title}</h3>
       {subtitle && <p className="font-ui text-sm text-muted-foreground mb-4">{subtitle}</p>}
-      <div className="flex flex-wrap gap-2" role="list" aria-label={title}>
+      <div className="flex flex-wrap justify-center gap-x-3 gap-y-2" role="list" aria-label={title}>
         {categories.map((cat, index) => (
           <Link
             key={cat.slug}
             href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
             title={cat.label}
-            className="animate-fade-up focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md min-w-0 max-w-[140px]"
+            className="animate-fade-up focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg inline-flex"
             style={{ animationDelay: `${index * 30}ms` }}
             role="listitem"
           >
             <Badge
               variant="secondary"
-              className="font-ui text-sm py-1.5 px-3 hover:bg-brand-brown/10 hover:text-brand-brown transition-colors truncate block max-w-full"
+              className="font-ui text-sm py-2 px-4 hover:bg-brand-brown/10 hover:text-brand-brown transition-colors max-w-[180px] truncate"
             >
-              {cat.label.length > 18 ? `${cat.label.slice(0, 16)}…` : cat.label}
+              {cat.label.length > 24 ? `${cat.label.slice(0, 22)}…` : cat.label}
             </Badge>
           </Link>
         ))}

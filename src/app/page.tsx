@@ -1,4 +1,5 @@
-import { getRecentPosts } from '@/data-access/posts';
+import { Suspense } from 'react';
+import { getRecentPosts, getPostsPaginated } from '@/data-access/posts';
 import { HeroSection } from '@/components/blog/hero-section';
 import { FeaturedSection } from '@/components/blog/featured-section';
 import { CategoriesSection } from '@/components/blog/categories-section';
@@ -7,6 +8,8 @@ import { ComoFuncionaSection } from '@/components/blog/como-funciona-section';
 import { RevealSectionWrapper } from '@/components/blog/reveal-section-wrapper';
 import { BackToTop } from '@/components/ui/back-to-top';
 import type { CategoryItem } from '@/types/landing';
+
+const PER_PAGE = 12; // 3 colunas × 4 linhas
 
 function getCategoriesFromPosts(posts: Awaited<ReturnType<typeof getRecentPosts>>): CategoryItem[] {
   const tagSet = new Set<string>();
@@ -20,15 +23,36 @@ function getCategoriesFromPosts(posts: Awaited<ReturnType<typeof getRecentPosts>
     .map((label) => ({ slug: label, label }));
 }
 
-export default async function HomePage() {
-  const posts = await getRecentPosts(6);
-  const categories = getCategoriesFromPosts(posts);
+async function FeaturedContent({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? '1', 10) || 1);
+  const { posts, totalPages, currentPage } = await getPostsPaginated(page, PER_PAGE);
+
+  return (
+    <FeaturedSection
+      posts={posts}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      searchParams={undefined}
+    />
+  );
+}
+
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const postsForCategories = await getRecentPosts(50);
+  const categories = getCategoriesFromPosts(postsForCategories);
 
   return (
     <main className="flex flex-col min-h-[calc(100vh-3.5rem)]">
       <HeroSection />
       <RevealSectionWrapper>
-        <FeaturedSection posts={posts} />
+        <Suspense fallback={<div className="min-h-[400px] animate-pulse bg-muted/30" />}>
+          <FeaturedContent searchParams={searchParams} />
+        </Suspense>
       </RevealSectionWrapper>
       <RevealSectionWrapper>
         <CategoriesSection categories={categories} />

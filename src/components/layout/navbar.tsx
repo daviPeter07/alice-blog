@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { User, Menu, X } from 'lucide-react';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
@@ -25,28 +26,75 @@ export interface NavbarProps {
   logo?: React.ReactNode;
 }
 
-function NavLink({ href, label }: NavAnchor) {
+function NavLink({ href, label, isActive }: NavAnchor & { isActive?: boolean }) {
   const baseClass =
-    'font-ui text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center h-8';
+    'font-ui text-sm transition-colors duration-200 flex items-center h-8 border-b-2 border-transparent -mb-[1px]';
+  const activeClass = isActive
+    ? 'text-foreground font-medium border-foreground'
+    : 'text-muted-foreground hover:text-foreground';
+  const className = `${baseClass} ${activeClass}`;
   if (href.startsWith('#')) {
     return (
-      <a href={href} className={baseClass}>
+      <a href={href} className={className}>
         {label}
       </a>
     );
   }
   return (
-    <Link href={href} className={baseClass}>
+    <Link href={href} className={className}>
       {label}
     </Link>
   );
 }
 
+function getHashFromHref(href: string): string | null {
+  const match = href.match(/#(.+)/);
+  return match ? match[1] : null;
+}
+
+function useActiveSection() {
+  const pathname = usePathname();
+  const [activeSection, setActiveSection] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (pathname !== '/') return;
+    const ids = ['destaque', 'categorias', 'personalizar', 'como-funciona'];
+    const elements = ids.map((id) => document.getElementById(id)).filter(Boolean);
+    if (elements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const id = entry.target.getAttribute('id');
+          if (id) setActiveSection(id);
+          break;
+        }
+      },
+      { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
+    );
+    elements.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  return { pathname, activeSection };
+}
+
 export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo }: NavbarProps) {
+  const { pathname, activeSection } = useActiveSection();
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  const isLinkActive = React.useCallback(
+    (href: string) => {
+      if (href === '/blog') return pathname === '/blog';
+      const hash = getHashFromHref(href);
+      return pathname === '/' && hash !== null && activeSection === hash;
+    },
+    [pathname, activeSection]
+  );
 
   const handleLogout = React.useCallback(async () => {
     await logout();
@@ -95,17 +143,14 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
   const navContent = (
     <>
       {navAnchors.map((anchor) => (
-        <NavLink key={anchor.href} href={anchor.href} label={anchor.label} />
+        <NavLink
+          key={anchor.href}
+          href={anchor.href}
+          label={anchor.label}
+          isActive={isLinkActive(anchor.href)}
+        />
       ))}
-      <NavLink href="/blog" label="Artigos" />
-      {user?.role === 'ADMIN' && (
-        <Link
-          href="/admin/posts"
-          className="flex items-center h-8 rounded-lg bg-brand-green px-3 font-medium text-white hover:bg-brand-green/90 transition-colors duration-200 text-sm font-ui"
-        >
-          Lançar artigo
-        </Link>
-      )}
+      <NavLink href="/blog" label="Artigos" isActive={isLinkActive('/blog')} />
     </>
   );
 
@@ -174,16 +219,27 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b border-border bg-cloud-dancer/85 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           <Link href="/" className="shrink-0">
             {logo ?? defaultLogo}
           </Link>
 
-          <nav className="hidden md:flex items-center gap-5" aria-label="Navegação principal">
+          <nav
+            className="hidden md:flex items-center gap-5 flex-1 justify-center"
+            aria-label="Navegação principal"
+          >
             {navContent}
           </nav>
 
-          <div className="hidden md:flex items-center gap-4 min-h-9">
+          <div className="hidden md:flex items-center gap-3 shrink-0">
+            {user?.role === 'ADMIN' && (
+              <Link
+                href="/admin/posts"
+                className="flex items-center h-8 rounded-lg bg-brand-green px-3 font-medium text-white hover:bg-brand-green/90 transition-colors duration-200 text-sm font-ui"
+              >
+                Lançar artigo
+              </Link>
+            )}
             {showThemeToggle && <ThemeToggle />}
             {authContent}
           </div>
@@ -222,23 +278,27 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
             <nav className="flex flex-col gap-4" aria-label="Navegação principal">
               {navAnchors.map((anchor) => (
                 <div key={anchor.href} onClick={() => setMenuOpen(false)}>
-                  <NavLink href={anchor.href} label={anchor.label} />
+                  <NavLink
+                    href={anchor.href}
+                    label={anchor.label}
+                    isActive={isLinkActive(anchor.href)}
+                  />
                 </div>
               ))}
               <div onClick={() => setMenuOpen(false)}>
-                <NavLink href="/blog" label="Artigos" />
+                <NavLink href="/blog" label="Artigos" isActive={isLinkActive('/blog')} />
               </div>
+            </nav>
+            <div className="flex flex-col gap-4 pt-4 border-t border-border">
               {user?.role === 'ADMIN' && (
                 <Link
                   href="/admin/posts"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-lg bg-brand-green px-3 py-1.5 font-medium text-white hover:bg-brand-green/90 text-sm font-ui"
+                  className="rounded-lg bg-brand-green px-3 py-2 font-medium text-white hover:bg-brand-green/90 text-sm font-ui text-center"
                 >
                   Lançar artigo
                 </Link>
               )}
-            </nav>
-            <div className="flex flex-col gap-4 pt-4 border-t border-border">
               {showThemeToggle && <ThemeToggle />}
               {user ? (
                 <div className="flex flex-col gap-2">

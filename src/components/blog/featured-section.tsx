@@ -1,13 +1,23 @@
 import { PostCard } from '@/components/blog/post-card';
+import { Pagination } from '@/components/blog/pagination';
 import { LandingSection } from '@/components/blog/landing-section';
 import type { PostPreview } from '@/types/landing';
 
 export interface FeaturedSectionProps {
   posts: PostPreview[];
   animationDelay?: number;
+  currentPage?: number;
+  totalPages?: number;
+  searchParams?: Record<string, string>;
 }
 
-export function FeaturedSection({ posts, animationDelay = 0 }: FeaturedSectionProps) {
+export function FeaturedSection({
+  posts,
+  animationDelay = 0,
+  currentPage = 1,
+  totalPages = 1,
+  searchParams,
+}: FeaturedSectionProps) {
   return (
     <LandingSection variant="featured" id="destaque">
       <section aria-labelledby="featured-heading">
@@ -43,23 +53,34 @@ export function FeaturedSection({ posts, animationDelay = 0 }: FeaturedSectionPr
           {posts.length === 0 ? (
             <p className="font-ui text-muted-foreground">Nenhum artigo publicado ainda.</p>
           ) : (
-            <div className="flex flex-col gap-6" aria-label="Lista de artigos em destaque">
-              {posts.map((post, index) => (
-                <PostCard
-                  key={post.slug}
-                  slug={post.slug}
-                  title={post.title}
-                  excerpt={post.excerpt ?? ''}
-                  publishedAt={post.publishedAt}
-                  tags={post.tags}
-                  readingTime={post.readingTime}
-                  author={post.author}
-                  likesCount={post._count.likes}
-                  commentsCount={post._count.comments}
-                  index={index}
-                />
-              ))}
-            </div>
+            <>
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+                aria-label="Lista de artigos em destaque"
+              >
+                {posts.map((post, index) => (
+                  <PostCard
+                    key={post.slug}
+                    slug={post.slug}
+                    title={post.title}
+                    excerpt={post.excerpt ?? ''}
+                    publishedAt={post.publishedAt}
+                    tags={post.tags}
+                    readingTime={post.readingTime}
+                    author={post.author}
+                    likesCount={post._count.likes}
+                    commentsCount={post._count.comments}
+                    index={index}
+                  />
+                ))}
+              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                baseUrl="/"
+                searchParams={searchParams}
+              />
+            </>
           )}
         </div>
       </section>

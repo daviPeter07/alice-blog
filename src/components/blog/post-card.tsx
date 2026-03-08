@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { AdminCheck } from '@/components/ui/admin-check';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Heart, MessageCircle } from 'lucide-react';
 import { formatDate } from '@/helpers';
 
 export interface PostCardProps {
@@ -37,7 +37,7 @@ export function PostCard({
     >
       <article
         className="
-          relative rounded-2xl border border-border bg-card px-7 py-6
+          relative flex flex-col h-[320px] rounded-2xl border border-border bg-card px-7 py-6
           transition-all duration-300 ease-out
           hover:border-brand-green/30
           hover:shadow-[0_8px_32px_0_rgba(27,48,34,0.1)]
@@ -46,7 +46,7 @@ export function PostCard({
       >
         {/* Tags */}
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-3 min-h-[28px]">
             {tags.slice(0, 6).map((tag) => (
               <Badge
                 key={tag}
@@ -61,23 +61,23 @@ export function PostCard({
         )}
 
         {/* Título */}
-        <h2 className="font-body text-[1.4rem] font-semibold text-foreground leading-snug mb-3 group-hover:text-brand-green transition-colors duration-200">
+        <h2 className="font-body text-[1.25rem] font-semibold text-foreground leading-snug mb-2 line-clamp-2 group-hover:text-brand-green transition-colors duration-200">
           {title}
         </h2>
 
         {/* Excerpt */}
-        <p className="font-ui text-muted-foreground text-[0.95rem] leading-relaxed line-clamp-2 mb-6">
+        <p className="font-ui text-muted-foreground text-[0.9rem] leading-relaxed line-clamp-2 mb-4 flex-1 min-h-0">
           {excerpt}
         </p>
 
         {/* Rodapé */}
-        <div className="flex items-center justify-between">
-          <div className="flex flex-wrap items-center gap-2 text-[0.8rem] text-muted-foreground font-ui">
-            <span className="font-medium text-foreground/80">{author.name}</span>
-            {author.role === 'ADMIN' && <AdminCheck size={12} />}
+        <div className="flex items-center justify-between shrink-0">
+          <div className="flex flex-wrap items-center gap-2 text-[0.8rem] text-muted-foreground font-ui min-w-0">
+            <span className="font-medium text-foreground/80 truncate">{author.name}</span>
+            {author.role === 'ADMIN' && <AdminCheck size={12} className="shrink-0" />}
             {publishedAt && (
               <>
-                <span aria-hidden className="text-border">
+                <span aria-hidden className="text-border shrink-0">
                   ·
                 </span>
                 <time dateTime={publishedAt.toISOString()}>{formatDate(publishedAt)}</time>
@@ -85,17 +85,27 @@ export function PostCard({
             )}
             {readingTime && (
               <>
-                <span aria-hidden className="text-border">
+                <span aria-hidden className="text-border shrink-0">
                   ·
                 </span>
-                <span>{readingTime} min</span>
+                <span className="shrink-0">{readingTime} min</span>
               </>
             )}
           </div>
 
-          <div className="flex items-center gap-3 text-[0.75rem] text-muted-foreground font-ui shrink-0 ml-4">
-            {likesCount > 0 && <span>{likesCount} ♥</span>}
-            {commentsCount > 0 && <span>{commentsCount}</span>}
+          <div className="flex items-center gap-3 text-[0.75rem] text-muted-foreground font-ui shrink-0 ml-3">
+            {likesCount > 0 && (
+              <span className="flex items-center gap-1" title="Curtidas">
+                <Heart size={12} className="shrink-0" aria-hidden />
+                {likesCount}
+              </span>
+            )}
+            {commentsCount > 0 && (
+              <span className="flex items-center gap-1" title="Comentários">
+                <MessageCircle size={12} className="shrink-0" aria-hidden />
+                {commentsCount}
+              </span>
+            )}
             <ArrowRight
               size={14}
               className="text-brand-green opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"

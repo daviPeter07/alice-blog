@@ -39,20 +39,47 @@ export function LandingSection({
   narrow = true,
 }: LandingSectionProps) {
   const base = variant ? variantClasses[variant] : '';
-  const container = narrow && variant !== 'hero' ? 'max-w-2xl mx-auto' : '';
+  const container =
+    variant === 'hero'
+      ? ''
+      : variant === 'featured' ||
+          variant === 'categories' ||
+          variant === 'categories-alt' ||
+          variant === 'footer'
+        ? 'max-w-6xl mx-auto'
+        : narrow
+          ? 'max-w-2xl mx-auto'
+          : '';
   const sectionCls = cn(base, className).trim();
 
   if (variant === 'hero') {
     return (
       <section id={id} className={sectionCls || undefined}>
-        {layout ? <div className={layoutClasses[layout]}>{children}</div> : children}
+        {layout ? (
+          <div className={cn('max-w-6xl mx-auto px-4 sm:px-6', layoutClasses[layout])}>
+            {children}
+          </div>
+        ) : (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">{children}</div>
+        )}
       </section>
     );
   }
 
+  const useWideContainer =
+    variant === 'featured' ||
+    variant === 'categories' ||
+    variant === 'categories-alt' ||
+    variant === 'footer';
+  const wrapperClass = useWideContainer ? 'max-w-6xl mx-auto' : undefined;
+
   return (
     <section id={id} className={sectionCls || undefined}>
-      {layout ? (
+      {wrapperClass ? (
+        <div className={wrapperClass}>
+          {layout ? <div className={layoutClasses[layout]}>{children}</div> : children}
+        </div>
+      ) : layout ? (
         <div className={layoutClasses[layout]}>{children}</div>
       ) : (
         <div className={container || undefined}>{children}</div>
