@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useWatch } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import type { CommentWithReplies } from '@/lib/types';
 import { useCommentSection, useToastOnSuccess } from '@/hooks';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
@@ -23,6 +24,7 @@ export function CommentSection({
   isAuthenticated = true,
   currentUser = null,
   formOpen = false,
+  onFormOpenChange,
 }: CommentSectionProps) {
   const {
     mainForm,
@@ -40,8 +42,17 @@ export function CommentSection({
 
   useToastOnSuccess(state, 'Comentário enviado com sucesso! Obrigado pela participação.');
 
+  useEffect(() => {
+    if (state?.success === true) {
+      onFormOpenChange?.(false);
+    }
+  }, [state?.success, onFormOpenChange]);
+
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const topLevel = optimisticComments.filter((c) => !c.parentId);
+  const router = useRouter();
+
+  const handleCommentMutated = () => router.refresh();
 
   const handleReplyClick = (commentId: string | null) => {
     setReplyingToId(commentId);
@@ -68,7 +79,7 @@ export function CommentSection({
       )}
 
       {topLevel.length > 0 && (
-        <ul className="flex flex-col gap-6">
+        <ul className="flex flex-col gap-4">
           {topLevel.map((comment) => (
             <CommentItem
               key={comment.id}
@@ -82,6 +93,7 @@ export function CommentSection({
               state={state}
               currentUser={currentUser}
               isAuthenticated={isAuthenticated}
+              onCommentMutated={handleCommentMutated}
             />
           ))}
         </ul>

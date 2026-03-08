@@ -8,6 +8,7 @@ import { formatDate, getInitials, avatarHue } from '@/helpers';
 import type { OptimisticComment } from '@/hooks';
 import { AdminCheck } from '@/components/ui/admin-check';
 import { ReplyForm } from '@/components/blog/reply-form';
+import { CommentActions } from '@/components/blog/comment-actions';
 
 export interface CommentItemProps {
   comment: OptimisticComment;
@@ -20,6 +21,7 @@ export interface CommentItemProps {
   state: ActionResult | null;
   currentUser?: { name: string; email: string; role?: 'ADMIN' | 'READER' } | null;
   isAuthenticated?: boolean;
+  onCommentMutated?: () => void;
 }
 
 export function CommentItem({
@@ -33,6 +35,7 @@ export function CommentItem({
   state,
   currentUser,
   isAuthenticated = true,
+  onCommentMutated,
 }: CommentItemProps) {
   const isAdmin =
     comment.author?.role === 'ADMIN' ||
@@ -76,12 +79,12 @@ export function CommentItem({
           )}
         </div>
 
-        <div className="font-ui text-sm text-foreground/85 leading-relaxed prose prose-sm prose-alice max-w-none">
+        <div className="font-ui text-sm text-foreground/85 leading-relaxed prose prose-sm prose-alice prose-alice-comment max-w-none">
           <ReactMarkdown remarkPlugins={[remarkBreaks]}>{comment.body}</ReactMarkdown>
         </div>
 
-        {!comment.parentId && isAuthenticated && (
-          <div className="mt-2">
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+          {!comment.parentId && isAuthenticated && (
             <button
               type="button"
               onClick={() => onReplyClick(isReplying ? null : comment.id)}
@@ -89,8 +92,20 @@ export function CommentItem({
             >
               Responder
             </button>
-          </div>
-        )}
+          )}
+          {onCommentMutated && !comment.pending && (
+            <CommentActions
+              commentId={comment.id}
+              postId={postId}
+              body={comment.body}
+              authorEmail={comment.authorEmail}
+              createdAt={comment.createdAt}
+              currentUserEmail={currentUser?.email}
+              onDeleted={onCommentMutated}
+              onUpdated={onCommentMutated}
+            />
+          )}
+        </div>
 
         {isReplying && (
           <ReplyForm
@@ -120,6 +135,7 @@ export function CommentItem({
                 state={state}
                 currentUser={currentUser}
                 isAuthenticated={isAuthenticated}
+                onCommentMutated={onCommentMutated}
               />
             ))}
           </ul>

@@ -415,6 +415,83 @@ body {
   text-decoration: underline;
 }
 
+/* Prose compacto para comentários — menos espaçamento entre texto e markdown */
+.prose-alice-comment {
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+.prose-alice-comment p {
+  margin-bottom: 0.2rem;
+}
+
+.prose-alice-comment p:last-child {
+  margin-bottom: 0;
+}
+
+.prose-alice-comment h1,
+.prose-alice-comment h2,
+.prose-alice-comment h3 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-weight: 600;
+  margin-top: 0.35em;
+  margin-bottom: 0.15em;
+}
+
+.prose-alice-comment h1 {
+  font-size: 1.05rem;
+}
+.prose-alice-comment h2 {
+  font-size: 1rem;
+}
+.prose-alice-comment h3 {
+  font-size: 0.95rem;
+}
+
+.prose-alice-comment ul,
+.prose-alice-comment ol {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+.prose-alice-comment li {
+  margin-bottom: 0.15rem;
+}
+
+.prose-alice-comment blockquote {
+  border-left: 4px solid var(--border);
+  padding-left: 0.75rem;
+  margin: 0.35rem 0;
+  color: var(--muted-foreground);
+}
+
+.prose-alice-comment code {
+  background: var(--muted);
+  padding: 0.15em 0.35em;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+.prose-alice-comment pre {
+  background: var(--muted);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 0.35rem 0;
+}
+
+.prose-alice-comment pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose-alice-comment a {
+  color: var(--brand-green);
+  text-decoration: underline;
+}
+
 /* Container de leitura do artigo — background editável (--article-read-bg) */
 .article-read-container {
   background: var(--article-read-bg);
