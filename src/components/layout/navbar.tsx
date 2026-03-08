@@ -27,8 +27,7 @@ export interface NavbarProps {
 }
 
 function NavLink({ href, label, isActive }: NavAnchor & { isActive?: boolean }) {
-  const baseClass =
-    'font-ui text-sm transition-colors duration-200 flex items-center h-8';
+  const baseClass = 'font-ui text-sm transition-colors duration-200 flex items-center h-8';
   const activeClass = isActive
     ? 'text-foreground font-medium underline decoration-brand-green decoration-2 underline-offset-4'
     : 'text-muted-foreground hover:text-foreground no-underline';
@@ -218,7 +217,7 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-border bg-cloud-dancer/85 backdrop-blur-md">
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           <Link href="/" className="shrink-0">
             {logo ?? defaultLogo}

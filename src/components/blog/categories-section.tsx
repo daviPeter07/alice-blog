@@ -53,54 +53,58 @@ export function CategoriesSection({ categories, featuredCount = 4 }: CategoriesS
   const featured = categories.slice(0, featuredCount);
   const rest = categories.slice(featuredCount);
 
-  return (
-    <>
-      <LandingSection variant="categories" layout="center" id="categorias">
-        <section aria-labelledby="categories-heading">
-          <header className="mb-10">
-            <p
-              className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
-              style={{ animationDelay: '0ms' }}
-            >
-              explore
-            </p>
-            <h2
-              id="categories-heading"
-              className="animate-fade-up font-body text-3xl sm:text-4xl font-semibold text-foreground leading-tight"
-              style={{ animationDelay: '60ms' }}
-            >
-              Temas e assuntos
-            </h2>
-            <p
-              className="animate-fade-up font-ui text-muted-foreground mt-2 leading-relaxed"
-              style={{ animationDelay: '120ms' }}
-            >
-              Navegue por tópicos que aparecem nos textos.
-            </p>
-          </header>
+  const headerEl = (
+    <header className="mb-10 w-full">
+      <p
+        className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
+        style={{ animationDelay: '0ms' }}
+      >
+        explore
+      </p>
+      <h2
+        id="categories-heading"
+        className="animate-fade-up font-body text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
+        style={{ animationDelay: '60ms' }}
+      >
+        Temas e assuntos
+      </h2>
+      <p
+        className="animate-fade-up font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl"
+        style={{ animationDelay: '120ms' }}
+      >
+        Navegue por tópicos que aparecem nos textos. Clique em um tema para filtrar os artigos do blog.
+      </p>
+    </header>
+  );
 
-          {categories.length === 0 ? (
-            <p className="font-ui text-muted-foreground">Nenhuma categoria ainda.</p>
-          ) : (
-            <div className="rounded-2xl border border-border bg-card/50 p-8 sm:p-10 space-y-10">
-              {featured.length > 0 && (
-                <CategoryBlock
-                  categories={featured}
-                  title="Em destaque"
-                  subtitle="Alguns tópicos que aparecem com frequência."
-                />
-              )}
-              {rest.length > 0 && (
-                <CategoryBlock
-                  categories={rest}
-                  title="Todos os temas"
-                  subtitle="Lista completa para filtrar no blog."
-                />
-              )}
-            </div>
-          )}
-        </section>
-      </LandingSection>
-    </>
+  const contentEl =
+    categories.length === 0 ? (
+      <p className="font-ui text-muted-foreground">Nenhuma categoria ainda.</p>
+    ) : (
+      <div className="rounded-2xl border border-border bg-card p-8 sm:p-10 space-y-10">
+        {featured.length > 0 && (
+          <CategoryBlock
+            categories={featured}
+            title="Em destaque"
+            subtitle="Alguns tópicos que aparecem com frequência."
+          />
+        )}
+        {rest.length > 0 && (
+          <CategoryBlock
+            categories={rest}
+            title="Todos os temas"
+            subtitle="Lista completa para filtrar no blog."
+          />
+        )}
+      </div>
+    );
+
+  return (
+    <LandingSection variant="categories" layout="wide" id="categorias">
+      <section aria-labelledby="categories-heading" className="w-full flex flex-col">
+        {headerEl}
+        {contentEl}
+      </section>
+    </LandingSection>
   );
 }

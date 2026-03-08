@@ -9,54 +9,63 @@
    shadcn/ui design tokens — new-york, Tailwind v4
    ------------------------------------------------------------------------- */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --background: #ebe4dc;
+  --foreground: #3e2723;
+  --card: #f0eae2;
+  --card-foreground: #3e2723;
+  --popover: #f0eae2;
+  --popover-foreground: #3e2723;
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --secondary: #e2d6ca;
+  --secondary-foreground: #3e2723;
+  --muted: #e2d6ca;
+  --muted-foreground: #5d4037;
+  --accent: #d4c4b0;
+  --accent-foreground: #3e2723;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --border: #d4c8bc;
+  --input: #d4c8bc;
   --ring: oklch(0.708 0 0);
   --radius: 0.625rem;
 
-  /* Brand tokens — Alice Blog (marrom, cloud-dancer, verde + variantes para landing) */
+  /* Brand tokens — Alice Blog (marrom café, verde) */
   --brand-brown: #5d4037;
   --brand-brown-light: #8d6e63;
   --brand-green: #1b3022;
   --brand-green-light: #2e5c3e;
-  --cloud-dancer: #f0eee9;
-  --landing-cream: #f5f3ef;
-  --landing-sage: #e8efe9;
-  --landing-warm: #f4efe8;
+  /* Café palette — light theme (marrom claro → escuro, vibe café) */
+  --cafe-cream: #f0eae2;
+  --cafe-latte: #e2d6ca;
+  --cafe-mocha: #d4c4b0;
+  --cafe-card: #ebe4dc;
+  --cloud-dancer: #f0eae2;
+  --landing-cream: #f0eae2;
+  --landing-sage: #e2d6ca;
+  --landing-warm: #d4c4b0;
 }
 
-/* Tema light (padrão) — explícito para transição */
+/* Tema light — vibe café (marrom claro → mais escuro) */
 [data-theme='light'] {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --border: oklch(0.922 0 0);
+  --background: #ebe4dc;
+  --foreground: #3e2723;
+  --card: #f0eae2;
+  --card-foreground: #3e2723;
+  --muted: #e2d6ca;
+  --muted-foreground: #5d4037;
+  --border: #d4c8bc;
   --brand-brown: #5d4037;
   --brand-brown-light: #8d6e63;
   --brand-green: #1b3022;
   --brand-green-light: #2e5c3e;
-  --cloud-dancer: #f0eee9;
-  --landing-cream: #f5f3ef;
-  --landing-sage: #e8efe9;
-  --landing-warm: #f4efe8;
+  --cloud-dancer: #f0eae2;
+  --cafe-cream: #f0eae2;
+  --cafe-latte: #e2d6ca;
+  --cafe-mocha: #d4c4b0;
+  --cafe-card: #ebe4dc;
+  --landing-cream: #f0eae2;
+  --landing-sage: #e2d6ca;
+  --landing-warm: #d4c4b0;
 }
 
 /* Tema dark */
@@ -112,6 +121,10 @@
   --color-landing-cream: var(--landing-cream);
   --color-landing-sage: var(--landing-sage);
   --color-landing-warm: var(--landing-warm);
+  --color-cafe-cream: var(--cafe-cream);
+  --color-cafe-latte: var(--cafe-latte);
+  --color-cafe-mocha: var(--cafe-mocha);
+  --color-cafe-card: var(--cafe-card);
 
   /* Typography */
   --font-body: var(--font-lora);
@@ -134,7 +147,7 @@ html {
 }
 
 body {
-  background-color: var(--cloud-dancer);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), Georgia, serif;
   line-height: 1.75;

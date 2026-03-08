@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { PostCard } from '@/components/blog/post-card';
 import { Pagination } from '@/components/blog/pagination';
 import { LandingSection } from '@/components/blog/landing-section';
@@ -21,7 +22,7 @@ export function FeaturedSection({
   return (
     <LandingSection variant="featured" id="destaque">
       <section aria-labelledby="featured-heading">
-        <header className="mb-10">
+        <header className="mb-12">
           <p
             className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
             style={{ animationDelay: '0ms' }}
@@ -36,11 +37,23 @@ export function FeaturedSection({
             Em destaque
           </h2>
           <p
-            className="animate-fade-up font-ui text-muted-foreground mt-2 leading-relaxed"
+            className="animate-fade-up font-ui text-muted-foreground mt-3 leading-relaxed max-w-2xl"
             style={{ animationDelay: '120ms' }}
           >
-            Ordenados por curtidas.
+            Os textos mais curtidos aparecem primeiro. Use a paginação para explorar ou{' '}
+            <Link href="/blog" className="text-brand-green font-medium hover:underline">
+              acesse o blog completo
+            </Link>
+            .
           </p>
+          {posts.length > 0 && (
+            <p
+              className="animate-fade-up font-ui text-sm text-muted-foreground/80 mt-2"
+              style={{ animationDelay: '140ms' }}
+            >
+              {posts.length} {posts.length === 1 ? 'artigo' : 'artigos'} nesta página · Ordenados por curtidas
+            </p>
+          )}
         </header>
 
         <div
