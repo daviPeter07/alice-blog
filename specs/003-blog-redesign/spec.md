@@ -206,6 +206,52 @@ Nenhuma entidade de dados nova. O redesign atua sobre entidades já existentes (
 
 ---
 
+## Implementation Session Notes (2026-03-05)
+
+### Refinamentos Implementados (Landing, Blog, Footer, BackToTop)
+
+**Paleta e tipografia**
+- Paleta café aplicada em `globals.css`: `cafe-cream`, `cafe-latte`, `cafe-mocha` (marrom claro → escuro); background `#ebe4dc`, card `#f0eae2`.
+- Fontes: Nunito (body), Nunito Sans (UI), Bricolage Grotesque (títulos) via `next/font/google`.
+- Títulos usam `font-heading` (Bricolage Grotesque); corpo usa `font-body` (Nunito).
+
+**Hero**
+- Componente `TypewriterText` (`src/components/blog/typewriter-text.tsx`): animação de digitação com loop em 3 frases: "Um espaço para ideias.", "Um espaço para reflexões.", "Um espaço para histórias."
+- Texto em 2 linhas (`whitespace-pre`), espaço predefinido para evitar layout shift.
+- Botão "Ler os artigos" destacado: `bg-brand-green`, `text-white`, sombra.
+- Grid hero: coluna texto `520px`, gap `gap-12 md:gap-20 lg:gap-28` entre texto e imagem.
+- Bug fix: texto não aparece renderizado antes da animação (displayed vazio até `started`).
+
+**Scroll reveal**
+- `useIntersectionReveal`: `threshold` 0.12, `rootMargin` -8% (dispara mais cedo no mobile).
+- Animação mais lenta: 0.85s, stagger 100ms; direções variadas: `reveal-from-left`, `reveal-from-right` (keyframes `fade-left`, `fade-right`).
+- Seções Featured, Categories, Personalizar, Como funciona: elementos alternam direções.
+- PostCard: índice par `reveal-from-left`, ímpar `reveal-from-right`.
+
+**Landing layout**
+- Seções Temas, Personalizar, Como funciona adicionadas; `LandingSection` com variantes `featured`, `categories`, `categories-alt`, `footer`.
+- Coluna texto hero: `minmax(0, 520px)`; variação de cores entre seções (cafe-latte, cafe-mocha).
+
+**Footer**
+- Redesign inspirado em Davi Peterson: brand + Links Rápidos + Contato; copyright "Feito com ♥ e ☕ por Davi Peterson · © [ano] Alice" com ícones Lucide (Heart, Coffee).
+- Fundo `cafe-mocha` (light) / `muted/30` (dark); fontes `text-base` (links/descrição), `text-sm` (copyright).
+- Link Davi Peterson: `https://davi-peterson.vercel.app/` com underline.
+
+**BackToTop**
+- Tema light: `bg-brand-brown`, `text-white`, seta branca.
+- Tema dark: `bg-white`, `text-black`, seta preta.
+- Ícones: `[&_svg]:text-current`, `stroke-[2.5px]`.
+
+**PostCard**
+- Rodapé em 2 linhas (autor em cima; data, tempo de leitura, curtidas, comentários embaixo).
+- Tempo de leitura em `src/helpers/reading-time.ts` (~1000 chars/min).
+- Ordenação destaque: `orderBy: [{ likes: { _count: 'desc' } }, { publishedAt: 'desc' }]`.
+
+### Próximo foco
+- Rota `/admin/posts`: refinamentos visuais (User Story 4) aplicados; smoke tests pendentes.
+
+---
+
 ## Dependencies
 
 - **Feature 001 (Blog Foundation)**: Base funcional do blog.

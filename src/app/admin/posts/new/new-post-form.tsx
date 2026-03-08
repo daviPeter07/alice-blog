@@ -5,12 +5,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createPost } from '@/actions/posts';
 import { Button } from '@/components/ui/button';
+import { useToastOnSuccess } from '@/hooks';
 import { slugFromTitle } from '@/helpers';
 
 export function NewPostForm() {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(createPost, null);
   const [title, setTitle] = useState('');
+
+  useToastOnSuccess(state, 'Rascunho criado com sucesso.');
 
   const slug = useMemo(() => slugFromTitle(title), [title]);
 

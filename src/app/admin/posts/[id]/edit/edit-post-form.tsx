@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useActionState, useEffect } from 'react';
+import { useState, useActionState, useEffect, startTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { updatePost, deletePost, publishPost, unpublishPost } from '@/actions/posts';
 import { Button } from '@/components/ui/button';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
+import { useToastOnSuccess } from '@/hooks';
 
 interface EditPostFormProps {
   post: {
@@ -26,6 +27,11 @@ export function EditPostForm({ post }: EditPostFormProps) {
   const [deleteState, deleteAction, isDeletePending] = useActionState(deletePost, null);
   const [publishState, publishAction, isPublishPending] = useActionState(publishPost, null);
   const [unpublishState, unpublishAction, isUnpublishPending] = useActionState(unpublishPost, null);
+
+  useToastOnSuccess(updateState, 'Post atualizado com sucesso.');
+  useToastOnSuccess(deleteState, 'Post excluído com sucesso.');
+  useToastOnSuccess(publishState, 'Post publicado com sucesso.');
+  useToastOnSuccess(unpublishState, 'Post despublicado com sucesso.');
 
   useEffect(() => {
     if (updateState?.success) {
@@ -192,7 +198,9 @@ export function EditPostForm({ post }: EditPostFormProps) {
           onConfirm={() => {
             const fd = new FormData();
             fd.set('id', post.id);
-            deleteAction(fd);
+            startTransition(() => {
+              deleteAction(fd);
+            });
           }}
         />
         <Link
