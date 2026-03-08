@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface TypewriterTextProps {
@@ -37,21 +37,24 @@ export function TypewriterText({
   className = '',
   as: Tag = 'h1',
 }: TypewriterTextProps) {
-  const texts = phrases.length > 0 ? phrases : singleText ? [singleText] : [];
+  const texts = useMemo(
+    () => (phrases.length > 0 ? phrases : singleText ? [singleText] : []),
+    [phrases, singleText]
+  );
   const currentText = texts[0] ?? '';
+  const textsKey = texts.join('|');
 
   const [displayed, setDisplayed] = useState('');
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [started, setStarted] = useState(false);
-  const [skipAnimation, setSkipAnimation] = useState(false);
+  const [skipAnimation] = useState(() =>
+    typeof window !== 'undefined' ? prefersReducedMotion() : false
+  );
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const phraseIndexRef = useRef(0);
 
   const fullText = texts[phraseIndex] ?? currentText;
-
-  useEffect(() => {
-    setSkipAnimation(prefersReducedMotion());
-  }, []);
+  const effectiveDisplayed = skipAnimation ? fullText : displayed;
 
   useEffect(() => {
     const startTimer = setTimeout(() => setStarted(true), startDelay);
@@ -60,8 +63,7 @@ export function TypewriterText({
 
   useEffect(() => {
     if (skipAnimation || texts.length === 0) {
-      setDisplayed(currentText);
-      return;
+      return; /* Mostra texto completo via effectiveDisplayed */
     }
     if (!started) {
       return; /* Mantém displayed vazio até a digitação começar — evita flash do texto completo */
@@ -84,17 +86,19 @@ export function TypewriterText({
       }
     };
 
-    setDisplayed('');
+    queueMicrotask(() => {
+      setDisplayed('');
+      setPhraseIndex(0);
+    });
     phraseIndexRef.current = 0;
-    setPhraseIndex(0);
     type(0, texts[0]);
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [texts.join('|'), speed, started, skipAnimation, loop, pauseBeforeRestart]);
+  }, [textsKey, texts, speed, started, skipAnimation, loop, pauseBeforeRestart]);
 
   const longestText = texts.reduce((a, b) => (a.length >= b.length ? a : b), currentText);
-  const isTyping = !skipAnimation && displayed.length < fullText.length;
+  const isTyping = !skipAnimation && effectiveDisplayed.length < fullText.length;
 
   return (
     <Tag
@@ -106,7 +110,7 @@ export function TypewriterText({
         {longestText}
       </span>
       <span className="col-start-1 row-start-1 min-w-0 whitespace-pre" aria-live="polite">
-        {displayed}
+        {effectiveDisplayed}
         {isTyping && (
           <span
             className="inline-block w-[2px] h-[0.9em] bg-foreground/70 align-middle ml-0.5 animate-pulse"

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useActionState, useEffect, startTransition } from 'react';
+import { useActionState, useEffect, startTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createPost, updatePost, deletePost, publishPost, unpublishPost } from '@/actions/posts';
 import { useToastOnSuccess } from '@/hooks';
@@ -106,7 +106,6 @@ export function PostForm({ post }: PostFormProps) {
     register,
     control,
     handleSubmit,
-    watch,
     formState: { errors, isValid },
   } = useForm<CreatePostFormInput>({
     resolver: zodResolver(createPostFormSchema),
@@ -114,8 +113,8 @@ export function PostForm({ post }: PostFormProps) {
     defaultValues: post ? toFormInput(post) : emptyDefaultValues,
   });
 
-  const title = watch('title');
-  const slug = slugFromTitle(title);
+  const title = useWatch({ control, name: 'title', defaultValue: '' });
+  const slug = slugFromTitle(title ?? '');
 
   useEffect(() => {
     if (createState?.success && 'data' in createState && createState.data) {
