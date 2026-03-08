@@ -79,8 +79,12 @@
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.18 0 0);
   --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.18 0 0);
+  --popover-foreground: oklch(0.985 0 0);
   --muted: oklch(0.25 0 0);
   --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.28 0 0);
+  --accent-foreground: oklch(0.985 0 0);
   --border: oklch(0.28 0 0);
   --brand-brown: #8d6e63;
   --brand-brown-light: #a1887f;

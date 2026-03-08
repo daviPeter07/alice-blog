@@ -183,7 +183,7 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
             type="button"
             role="menuitem"
             onClick={() => setLogoutModalOpen(true)}
-            className="w-full px-4 py-2 text-left font-ui text-sm text-foreground hover:bg-accent"
+            className="w-full px-4 py-2 text-left font-ui text-sm text-destructive hover:bg-destructive/10 transition-colors"
           >
             Sair
           </button>
@@ -316,7 +316,7 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
                       setMenuOpen(false);
                       setLogoutModalOpen(true);
                     }}
-                    className="font-ui text-sm text-left text-foreground hover:text-brand-green"
+                    className="font-ui text-sm text-left text-destructive hover:underline"
                   >
                     Sair
                   </button>
