@@ -55,7 +55,11 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${nunito.variable} ${nunitoSans.variable} ${bricolage.variable}`} suppressHydrationWarning>
+    <html
+      lang="pt-BR"
+      className={`${nunito.variable} ${nunitoSans.variable} ${bricolage.variable}`}
+      suppressHydrationWarning
+    >
       <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
           <Suspense

@@ -1,10 +1,4 @@
-import {
-  Compass,
-  Tags,
-  MessageCirclePlus,
-  SlidersHorizontal,
-  Share2,
-} from 'lucide-react';
+import { Compass, Tags, MessageCirclePlus, SlidersHorizontal, Share2 } from 'lucide-react';
 import { LandingSection } from '@/components/blog/landing-section';
 
 export function ComoFuncionaSection() {
@@ -40,25 +34,22 @@ export function ComoFuncionaSection() {
     <LandingSection variant="footer" layout="wide" id="como-funciona">
       <section aria-labelledby="como-funciona-heading" className="w-full">
         <header className="mb-10 w-full">
-          <p
-            className="reveal-item reveal-delay-0 font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
-          >
+          <p className="reveal-item reveal-from-right reveal-delay-0 font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none">
             saiba mais
           </p>
           <h2
             id="como-funciona-heading"
-            className="reveal-item reveal-delay-1 font-heading text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
+            className="reveal-item reveal-from-left reveal-delay-1 font-heading text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
           >
             Como funciona o software
           </h2>
-          <p
-            className="reveal-item reveal-delay-2 font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl"
-          >
-            O Alice é um blog minimalista focado em textos e reflexões. Cadastre-se para comentar e curtir. Em breve, mais recursos de personalização.
+          <p className="reveal-item reveal-from-right reveal-delay-2 font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl">
+            O Alice é um blog minimalista focado em textos e reflexões. Cadastre-se para comentar e
+            curtir. Em breve, mais recursos de personalização.
           </p>
         </header>
 
-        <div className="reveal-item reveal-delay-3 rounded-2xl border border-border bg-card p-8 sm:p-10 w-full">
+        <div className="reveal-item reveal-from-left reveal-delay-3 rounded-2xl border border-border bg-card p-8 sm:p-10 w-full">
           <div className="relative">
             <div
               className="absolute top-6 left-0 right-0 hidden h-px bg-linear-to-r from-transparent via-border to-transparent sm:block"
@@ -68,7 +59,7 @@ export function ComoFuncionaSection() {
               {steps.map(({ icon: Icon, title, text }, i) => (
                 <div
                   key={title}
-                  className={`reveal-item reveal-delay-${Math.min(i + 3, 11)} relative flex flex-col items-center text-center sm:pt-6`}
+                  className={`reveal-item ${i % 2 === 0 ? 'reveal-from-left' : 'reveal-from-right'} reveal-delay-${Math.min(i + 3, 11)} relative flex flex-col items-center text-center sm:pt-6`}
                 >
                   <div
                     className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-border bg-background text-muted-foreground

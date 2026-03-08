@@ -31,14 +31,14 @@ export function FeaturedSection({
           </p>
           <h2
             id="featured-heading"
-            className="animate-fade-up font-body text-3xl sm:text-4xl font-semibold text-foreground leading-tight"
-            style={{ animationDelay: '60ms' }}
+            className="animate-fade-up font-heading text-3xl sm:text-4xl font-semibold text-foreground leading-tight"
+            style={{ animationDelay: '120ms' }}
           >
             Em destaque
           </h2>
           <p
             className="animate-fade-up font-ui text-muted-foreground mt-3 leading-relaxed max-w-2xl"
-            style={{ animationDelay: '120ms' }}
+            style={{ animationDelay: '240ms' }}
           >
             Os textos mais curtidos aparecem primeiro. Use a paginação para explorar ou{' '}
             <Link href="/blog" className="text-brand-green font-medium hover:underline">
@@ -49,9 +49,10 @@ export function FeaturedSection({
           {posts.length > 0 && (
             <p
               className="animate-fade-up font-ui text-sm text-muted-foreground/80 mt-2"
-              style={{ animationDelay: '140ms' }}
+              style={{ animationDelay: '360ms' }}
             >
-              {posts.length} {posts.length === 1 ? 'artigo' : 'artigos'} nesta página · Ordenados por curtidas
+              {posts.length} {posts.length === 1 ? 'artigo' : 'artigos'} nesta página · Ordenados
+              por curtidas
             </p>
           )}
         </header>

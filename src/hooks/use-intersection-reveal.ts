@@ -3,9 +3,9 @@
 import { useEffect, useRef, useCallback } from 'react';
 
 export interface UseIntersectionRevealOptions {
-  /** Margin around root for triggering; default "0px 0px -50px 0px" */
+  /** Margin around root for triggering; default "0px 0px -8% 0px" */
   rootMargin?: string;
-  /** Visibility threshold 0–1; default 0.1 */
+  /** Visibility threshold 0–1; default 0.12 (12% visível, dispara mais cedo) */
   threshold?: number;
   /** If true, disable animation (e.g. prefers-reduced-motion) */
   disabled?: boolean;
@@ -19,7 +19,7 @@ function prefersReducedMotion(): boolean {
 export function useIntersectionReveal<T extends HTMLElement = HTMLDivElement>(
   options?: UseIntersectionRevealOptions
 ): React.RefObject<T | null> {
-  const { rootMargin = '0px 0px -50px 0px', threshold = 0.1, disabled = false } = options ?? {};
+  const { rootMargin = '0px 0px -8% 0px', threshold = 0.12, disabled = false } = options ?? {};
 
   const ref = useRef<T | null>(null);
   const hasRevealed = useRef(false);

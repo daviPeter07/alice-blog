@@ -16,7 +16,7 @@ const variantClasses: Record<LandingSectionVariant, string> = {
 };
 
 const layoutClasses: Record<LandingSectionLayout, string> = {
-  'text-left': 'grid md:grid-cols-[minmax(0,320px)_1fr] gap-8 md:gap-12 md:gap-16 items-start',
+  'text-left': 'grid md:grid-cols-[minmax(0,520px)_1fr] gap-12 md:gap-20 lg:gap-28 items-start',
   'text-right':
     'grid md:grid-cols-[1fr_minmax(0,320px)] gap-8 md:gap-12 md:gap-16 items-start md:[&>*:first-child]:order-1 md:[&>*:last-child]:order-2',
   center: 'flex flex-col items-center text-center max-w-2xl mx-auto',

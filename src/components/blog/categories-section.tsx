@@ -28,7 +28,7 @@ function CategoryBlock({ categories, title, subtitle }: CategoryBlockProps) {
             key={cat.slug}
             href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
             title={cat.label}
-            className={`reveal-item reveal-delay-${Math.min(index + 3, 11)} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md inline-flex`}
+            className={`reveal-item ${index % 2 === 0 ? 'reveal-from-left' : 'reveal-from-right'} reveal-delay-${Math.min(index + 3, 11)} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md inline-flex`}
             role="listitem"
           >
             <Badge variant="secondary" className={TAG_BADGE_CLASS}>
@@ -54,21 +54,18 @@ export function CategoriesSection({ categories, featuredCount = 4 }: CategoriesS
 
   const headerEl = (
     <header className="mb-10 w-full">
-      <p
-        className="reveal-item reveal-delay-0 font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
-      >
+      <p className="reveal-item reveal-from-right reveal-delay-0 font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none">
         explore
       </p>
       <h2
         id="categories-heading"
-        className="reveal-item reveal-delay-1 font-heading text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
+        className="reveal-item reveal-from-left reveal-delay-1 font-heading text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
       >
         Temas e assuntos
       </h2>
-      <p
-        className="reveal-item reveal-delay-2 font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl"
-      >
-        Navegue por tópicos que aparecem nos textos. Clique em um tema para filtrar os artigos do blog.
+      <p className="reveal-item reveal-from-right reveal-delay-2 font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl">
+        Navegue por tópicos que aparecem nos textos. Clique em um tema para filtrar os artigos do
+        blog.
       </p>
     </header>
   );
@@ -77,7 +74,7 @@ export function CategoriesSection({ categories, featuredCount = 4 }: CategoriesS
     categories.length === 0 ? (
       <p className="font-ui text-muted-foreground">Nenhuma categoria ainda.</p>
     ) : (
-      <div className="reveal-item reveal-delay-3 rounded-2xl border border-border bg-card p-8 sm:p-10 space-y-10">
+      <div className="reveal-item reveal-from-left reveal-delay-3 rounded-2xl border border-border bg-card p-8 sm:p-10 space-y-10">
         {featured.length > 0 && (
           <CategoryBlock
             categories={featured}

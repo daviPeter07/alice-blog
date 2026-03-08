@@ -32,7 +32,7 @@ export function PostCard({
   return (
     <Link
       href={`/blog/${slug}`}
-      className={`group block reveal-item focus-visible:outline-none reveal-delay-${Math.min(index, 11)}`}
+      className={`group block reveal-item ${index % 2 === 0 ? 'reveal-from-left' : 'reveal-from-right'} focus-visible:outline-none reveal-delay-${Math.min(index, 11)}`}
     >
       <article
         className="
