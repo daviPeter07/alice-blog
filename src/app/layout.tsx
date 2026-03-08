@@ -1,8 +1,23 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Inter, Lora } from 'next/font/google';
-import { Toaster } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Header } from '@/components/layout/header';
+import { HeaderWithSession } from '@/components/layout/header-with-session';
+import { Footer } from '@/components/layout/footer';
 import './globals.css';
+
+const LANDING_NAV_ANCHORS = [
+  { href: '/#destaque', label: 'Destaques' },
+  { href: '/#categorias', label: 'Categorias' },
+] as const;
+
+const FOOTER_TOPICS = [
+  { href: '/blog', label: 'Blog' },
+  { href: '/#destaque', label: 'Destaques' },
+  { href: '/#categorias', label: 'Categorias' },
+] as const;
 
 const lora = Lora({
   variable: '--font-lora',
@@ -25,13 +40,31 @@ export const metadata: Metadata = {
     'Reflexões sobre filosofia, história, crítica social e a condição humana. Por Alice.',
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${lora.variable} ${inter.variable}`}>
-      <body className="antialiased min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Toaster position="top-center" richColors closeButton />
+    <html lang="pt-BR" className={`${lora.variable} ${inter.variable}`} suppressHydrationWarning>
+      <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
+        <ThemeProvider>
+          <Suspense
+            fallback={
+              <Header
+                navAnchors={[...LANDING_NAV_ANCHORS]}
+                showThemeToggle
+                showLoginButton
+                user={null}
+              />
+            }
+          >
+            <HeaderWithSession navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle />
+          </Suspense>
+          <div className="flex-1">{children}</div>
+          <Footer
+            topics={[...FOOTER_TOPICS]}
+            contactEmail={process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'alice@example.com'}
+            contactLabel="Entrar em contato"
+          />
+          <Toaster position="bottom-right" closeButton={false} />
+        </ThemeProvider>
       </body>
     </html>
   );

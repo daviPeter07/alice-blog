@@ -4,9 +4,13 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 
 import { getPostBySlug, getPublishedPostSlugs } from '@/data-access/posts';
+import { getLikeByPostAndFingerprint } from '@/data-access/likes';
+import { getSession } from '@/lib/auth';
 import { postSlugParamsSchema } from '@/lib/schemas/post.schema';
 import { Badge } from '@/components/ui/badge';
 import { CommentSection } from '@/components/blog/comment-section';
+import { LikeButton } from '@/components/blog/like-button';
+import { AdminCheck } from '@/components/ui/admin-check';
 import { formatDate, getInitials } from '@/helpers';
 
 interface PageProps {
@@ -44,6 +48,9 @@ async function PostContent({ slug }: { slug: string }) {
   const post = await getPostBySlug(slug);
   if (!post || post.status === 'DRAFT') notFound();
 
+  const session = await getSession().catch(() => null);
+  const initialLiked = session ? await getLikeByPostAndFingerprint(post.id, session.userId) : false;
+
   return (
     <main className="max-w-2xl mx-auto px-6 py-16">
       <header className="mb-10">
@@ -80,6 +87,7 @@ async function PostContent({ slug }: { slug: string }) {
           )}
 
           <span className="font-medium text-foreground">{post.author.name}</span>
+          {post.author.role === 'ADMIN' && <AdminCheck size={16} className="text-brand-green" />}
 
           {post.publishedAt && (
             <>
@@ -103,17 +111,25 @@ async function PostContent({ slug }: { slug: string }) {
       {/* Divisor */}
       <hr className="border-border mb-10" />
 
-      {/* LikeButton — placeholder até US3 */}
-      <div
-        data-placeholder="like-button"
-        data-post-id={post.id}
-        data-initial-count={post._count.likes}
-        data-initial-liked="false"
-        className="mb-10 h-10"
-      />
+      {/* LikeButton */}
+      <div className="mb-10">
+        <LikeButton
+          postId={post.id}
+          initialCount={post._count.likes}
+          initialLiked={initialLiked}
+          isAuthenticated={!!session}
+        />
+      </div>
 
-      {/* CommentSection — US2 */}
-      <CommentSection postId={post.id} initialComments={post.comments} />
+      {/* CommentSection */}
+      <CommentSection
+        postId={post.id}
+        initialComments={post.comments}
+        isAuthenticated={!!session}
+        currentUser={
+          session ? { name: session.name, email: session.email, role: session.role } : null
+        }
+      />
     </main>
   );
 }

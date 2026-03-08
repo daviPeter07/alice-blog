@@ -1,23 +1,56 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
+import bcrypt from "bcryptjs";
 import "dotenv/config";
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }),
 });
 
+const BCRYPT_ROUNDS = 10;
+
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value?.trim()) {
+    throw new Error(
+      `Variável de ambiente ${name} é obrigatória para o seed. Defina em .env (veja .env.example).`
+    );
+  }
+  return value.trim();
+}
+
 async function main() {
   console.log("🌱 Seeding database...");
+
+  const aliceName = requireEnv("SEED_ALICE_NAME");
+  const aliceEmail = requireEnv("SEED_ALICE_EMAIL");
+  const alicePassword = requireEnv("SEED_ALICE_PASSWORD");
+  const daviName = requireEnv("SEED_DAVI_NAME");
+  const daviEmail = requireEnv("SEED_DAVI_EMAIL");
+  const daviPassword = requireEnv("SEED_DAVI_PASSWORD");
+
+  const alicePasswordHash = await bcrypt.hash(alicePassword, BCRYPT_ROUNDS);
+  const daviPasswordHash = await bcrypt.hash(daviPassword, BCRYPT_ROUNDS);
 
   await prisma.like.deleteMany();
   await prisma.comment.deleteMany();
   await prisma.post.deleteMany();
   await prisma.user.deleteMany();
 
-  const author = await prisma.user.create({
+  const alice = await prisma.user.create({
     data: {
-      name: "Alice",
-      email: "alice@aliceblog.dev",
+      name: aliceName,
+      email: aliceEmail,
+      passwordHash: alicePasswordHash,
+      role: "ADMIN",
+    },
+  });
+
+  const davi = await prisma.user.create({
+    data: {
+      name: daviName,
+      email: daviEmail,
+      passwordHash: daviPasswordHash,
       role: "ADMIN",
     },
   });
@@ -50,7 +83,7 @@ A questão é o que fazemos com esse peso.`,
       publishedAt: new Date("2025-11-10"),
       tags: ["filosofia", "existencialismo", "liberdade"],
       readingTime: 5,
-      authorId: author.id,
+      authorId: alice.id,
     },
   });
 
@@ -82,7 +115,7 @@ A pergunta não é se as redes são boas ou más. É: que tipo de presença esta
       publishedAt: new Date("2025-12-03"),
       tags: ["crítica social", "tecnologia", "solidão"],
       readingTime: 6,
-      authorId: author.id,
+      authorId: alice.id,
     },
   });
 
@@ -112,7 +145,7 @@ As sociedades que não conseguem olhar para seus passados violentos tendem a rep
       publishedAt: new Date("2026-01-18"),
       tags: ["história", "memória", "poder"],
       readingTime: 7,
-      authorId: author.id,
+      authorId: alice.id,
     },
   });
 
@@ -135,8 +168,9 @@ As sociedades que não conseguem olhar para seus passados violentos tendem a rep
   });
 
   console.log("✅ Seed concluído:");
-  console.log(`   Autora → ${author.name} (${author.email})`);
-  console.log(`   Posts  → ${post1.slug} | ${post2.slug} | ${post3.slug}`);
+  console.log(`   Alice (ADMIN) → ${alice.name} (${alice.email})`);
+  console.log(`   Davi (DEV) → ${davi.name} (${davi.email})`);
+  console.log(`   Posts → ${post1.slug} | ${post2.slug} | ${post3.slug}`);
   console.log("   Comments → 2 comentários de exemplo");
 }
 
