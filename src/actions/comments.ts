@@ -84,8 +84,7 @@ export async function deleteComment(
     return { success: false, error: 'Comentário não encontrado.' };
   }
 
-  const isOwner =
-    comment.authorId === session.userId || comment.authorEmail === session.email;
+  const isOwner = comment.authorId === session.userId || comment.authorEmail === session.email;
   if (!isOwner) {
     return { success: false, error: 'Você não pode excluir este comentário.' };
   }
@@ -125,8 +124,7 @@ export async function updateComment(
     return { success: false, error: 'Comentário não encontrado.' };
   }
 
-  const isOwner =
-    comment.authorId === session.userId || comment.authorEmail === session.email;
+  const isOwner = comment.authorId === session.userId || comment.authorEmail === session.email;
   if (!isOwner) {
     return { success: false, error: 'Você não pode editar este comentário.' };
   }

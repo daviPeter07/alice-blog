@@ -261,7 +261,11 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
               aria-expanded={menuOpen}
               className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-transparent text-foreground hover:bg-accent transition-colors"
             >
-              {menuOpen ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
+              {menuOpen ? (
+                <X className="size-5" aria-hidden />
+              ) : (
+                <Menu className="size-5" aria-hidden />
+              )}
             </button>
           </div>
         </div>

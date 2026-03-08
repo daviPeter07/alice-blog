@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { register } from '@/actions/auth';
 import { registerSchema, type RegisterInput } from '@/lib/schemas/auth.schema';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ const defaultValues: RegisterInput = { name: '', email: '', password: '' };
 export function RegisterForm() {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register: registerField,
     handleSubmit,
@@ -159,17 +160,29 @@ export function RegisterForm() {
               />
               <input
                 id="register-password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="new-password"
                 placeholder="Mínimo 8 caracteres"
                 className={cn(
-                  'w-full rounded-xl border border-input bg-background py-3 pl-10 pr-4 font-ui text-sm',
+                  'w-full rounded-xl border border-input bg-background py-3 pl-10 pr-11 font-ui text-sm',
                   'text-foreground placeholder:text-muted-foreground',
                   'focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green',
                   errors.password && 'border-destructive'
                 )}
                 {...registerField('password')}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:ring-offset-0 rounded-md"
+                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {showPassword ? (
+                  <EyeOff className="size-4" aria-hidden />
+                ) : (
+                  <Eye className="size-4" aria-hidden />
+                )}
+              </button>
             </div>
             {errors.password && (
               <p className="mt-1 font-ui text-xs text-destructive">{errors.password.message}</p>
