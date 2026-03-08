@@ -2,6 +2,9 @@ import { getRecentPosts } from '@/data-access/posts';
 import { HeroSection } from '@/components/blog/hero-section';
 import { FeaturedSection } from '@/components/blog/featured-section';
 import { CategoriesSection } from '@/components/blog/categories-section';
+import { PersonalizarSection } from '@/components/blog/personalizar-section';
+import { ComoFuncionaSection } from '@/components/blog/como-funciona-section';
+import { RevealSectionWrapper } from '@/components/blog/reveal-section-wrapper';
 import { BackToTop } from '@/components/ui/back-to-top';
 import type { CategoryItem } from '@/types/landing';
 
@@ -24,8 +27,18 @@ export default async function HomePage() {
   return (
     <main className="flex flex-col min-h-[calc(100vh-3.5rem)]">
       <HeroSection />
-      <FeaturedSection posts={posts} />
-      <CategoriesSection categories={categories} />
+      <RevealSectionWrapper>
+        <FeaturedSection posts={posts} />
+      </RevealSectionWrapper>
+      <RevealSectionWrapper>
+        <CategoriesSection categories={categories} />
+      </RevealSectionWrapper>
+      <RevealSectionWrapper>
+        <PersonalizarSection />
+      </RevealSectionWrapper>
+      <RevealSectionWrapper>
+        <ComoFuncionaSection />
+      </RevealSectionWrapper>
       <BackToTop threshold={400} />
     </main>
   );

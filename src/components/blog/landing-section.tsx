@@ -1,4 +1,7 @@
 import type { LandingSectionVariant } from '@/types/landing';
+import { cn } from '@/lib/utils';
+
+export type LandingSectionLayout = 'text-left' | 'text-right' | 'center';
 
 const variantClasses: Record<LandingSectionVariant, string> = {
   hero: 'bg-cloud-dancer',
@@ -8,8 +11,19 @@ const variantClasses: Record<LandingSectionVariant, string> = {
   footer: 'bg-background/30',
 };
 
+const layoutClasses: Record<LandingSectionLayout, string> = {
+  'text-left': 'grid md:grid-cols-2 gap-8 md:gap-12 items-center',
+  'text-right':
+    'grid md:grid-cols-2 gap-8 md:gap-12 items-center md:[&>*:first-child]:order-1 md:[&>*:last-child]:order-2',
+  center: 'flex flex-col items-center text-center max-w-2xl mx-auto',
+};
+
 export interface LandingSectionProps {
-  variant: LandingSectionVariant;
+  id?: string;
+  /** Layout da seção: texto esq/dir/centro; extensível para seções futuras */
+  layout?: LandingSectionLayout;
+  /** Variante de estilo (background); mantido para compatibilidade */
+  variant?: LandingSectionVariant;
   children: React.ReactNode;
   className?: string;
   /** Para seções com conteúdo centralizado (não hero) */
@@ -17,21 +31,32 @@ export interface LandingSectionProps {
 }
 
 export function LandingSection({
+  id,
+  layout,
   variant,
   children,
   className = '',
   narrow = true,
 }: LandingSectionProps) {
-  const base = variantClasses[variant];
+  const base = variant ? variantClasses[variant] : '';
   const container = narrow && variant !== 'hero' ? 'max-w-2xl mx-auto' : '';
+  const sectionCls = cn(base, className).trim();
 
   if (variant === 'hero') {
-    return <section className={`${base} ${className}`.trim()}>{children}</section>;
+    return (
+      <section id={id} className={sectionCls || undefined}>
+        {layout ? <div className={layoutClasses[layout]}>{children}</div> : children}
+      </section>
+    );
   }
 
   return (
-    <section className={`${base} ${className}`.trim()}>
-      <div className={container}>{children}</div>
+    <section id={id} className={sectionCls || undefined}>
+      {layout ? (
+        <div className={layoutClasses[layout]}>{children}</div>
+      ) : (
+        <div className={container || undefined}>{children}</div>
+      )}
     </section>
   );
 }

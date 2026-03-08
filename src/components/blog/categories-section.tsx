@@ -31,11 +31,12 @@ export function CategoryPillBlock({
           <Link
             key={cat.slug}
             href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
-            className={`animate-fade-up font-ui text-sm py-1.5 px-3 rounded-md border border-border bg-card/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${hoverClass}`}
+            title={cat.label}
+            className={`animate-fade-up font-ui text-sm py-1.5 px-3 rounded-md border border-border bg-card/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring max-w-[140px] truncate inline-block ${hoverClass}`}
             style={{ animationDelay: `${index * 40}ms` }}
             role="listitem"
           >
-            {cat.label}
+            {cat.label.length > 18 ? `${cat.label.slice(0, 16)}…` : cat.label}
           </Link>
         ))}
       </div>
@@ -59,15 +60,16 @@ export function CategoryBadgeBlock({ categories, title, subtitle }: CategoryBadg
           <Link
             key={cat.slug}
             href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
-            className="animate-fade-up focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+            title={cat.label}
+            className="animate-fade-up focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md min-w-0 max-w-[140px]"
             style={{ animationDelay: `${index * 30}ms` }}
             role="listitem"
           >
             <Badge
               variant="secondary"
-              className="font-ui text-sm py-1.5 px-3 hover:bg-brand-brown/10 hover:text-brand-brown transition-colors"
+              className="font-ui text-sm py-1.5 px-3 hover:bg-brand-brown/10 hover:text-brand-brown transition-colors truncate block max-w-full"
             >
-              {cat.label}
+              {cat.label.length > 18 ? `${cat.label.slice(0, 16)}…` : cat.label}
             </Badge>
           </Link>
         ))}
@@ -89,8 +91,8 @@ export function CategoriesSection({ categories, featuredCount = 4 }: CategoriesS
 
   return (
     <>
-      <LandingSection variant="categories">
-        <section id="categorias" aria-labelledby="categories-heading">
+      <LandingSection variant="categories" layout="center" id="categorias">
+        <section aria-labelledby="categories-heading">
           <header className="mb-10">
             <p
               className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"

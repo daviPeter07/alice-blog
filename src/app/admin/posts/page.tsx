@@ -20,7 +20,7 @@ export default async function AdminPostsPage() {
         </Link>
       </div>
 
-      <ul className="space-y-4">
+      <ul className="space-y-2">
         {posts.length === 0 ? (
           <li className="font-ui text-sm text-muted-foreground py-8">
             Nenhum post ainda. Crie o primeiro.
@@ -29,7 +29,7 @@ export default async function AdminPostsPage() {
           posts.map((post) => (
             <li
               key={post.id}
-              className="flex items-center justify-between gap-4 py-3 border-b border-border last:border-0"
+              className="flex items-center justify-between gap-4 py-4 px-4 -mx-4 rounded-lg hover:bg-muted/50 transition-colors border-b border-border last:border-0"
             >
               <div className="min-w-0 flex-1">
                 <Link

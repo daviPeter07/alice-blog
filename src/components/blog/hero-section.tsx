@@ -4,9 +4,9 @@ import { LandingSection } from '@/components/blog/landing-section';
 
 export function HeroSection() {
   return (
-    <LandingSection variant="hero">
+    <LandingSection variant="hero" layout="text-left">
       <section
-        className="flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center px-6 text-center"
+        className="flex min-h-[calc(100vh-3.5rem)] flex-col justify-center px-6 md:py-12"
         aria-label="Apresentação"
       >
         <div className="space-y-7 max-w-xl">
@@ -18,7 +18,7 @@ export function HeroSection() {
           </p>
 
           <h1
-            className="animate-fade-up font-body text-5xl sm:text-6xl font-semibold text-foreground leading-[1.1]"
+            className="animate-fade-up font-body text-4xl sm:text-5xl md:text-6xl font-semibold text-foreground leading-[1.1]"
             style={{ animationDelay: '80ms' }}
           >
             Um espaço
@@ -27,7 +27,7 @@ export function HeroSection() {
           </h1>
 
           <p
-            className="animate-fade-up font-ui text-muted-foreground text-lg leading-relaxed max-w-sm mx-auto"
+            className="animate-fade-up font-ui text-muted-foreground text-lg leading-relaxed max-w-md"
             style={{ animationDelay: '160ms' }}
           >
             O que tenho escrito — textos, ensaios e reflexões sobre o que me move.
@@ -40,6 +40,12 @@ export function HeroSection() {
           </div>
         </div>
       </section>
+      <div
+        className="hidden md:flex items-center justify-center min-h-[calc(100vh-3.5rem)] px-6"
+        aria-hidden
+      >
+        <div className="w-48 h-48 rounded-full bg-brand-green/10" />
+      </div>
     </LandingSection>
   );
 }

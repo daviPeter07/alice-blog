@@ -12,7 +12,6 @@ export default async function BlogPage() {
 
   return (
     <main className="max-w-2xl mx-auto px-6 py-16">
-      {/* Cabeçalho da listagem */}
       <header className="mb-14">
         <p
           className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
@@ -34,11 +33,10 @@ export default async function BlogPage() {
         </p>
       </header>
 
-      {/* Lista de posts */}
       {posts.length === 0 ? (
         <p className="font-ui text-muted-foreground">Nenhum artigo publicado ainda.</p>
       ) : (
-        <section className="flex flex-col gap-4" aria-label="Lista de artigos">
+        <section className="flex flex-col gap-6" aria-label="Lista de artigos">
           {posts.map((post, index) => (
             <PostCard
               key={post.slug}

@@ -46,10 +46,15 @@ export function PostCard({
       >
         {/* Tags */}
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {tags.map((tag) => (
-              <Badge key={tag} variant="secondary" className="font-ui text-[11px]">
-                {tag}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {tags.slice(0, 6).map((tag) => (
+              <Badge
+                key={tag}
+                variant="secondary"
+                className="font-ui text-[11px] max-w-[120px] truncate"
+                title={tag}
+              >
+                {tag.length > 20 ? `${tag.slice(0, 18)}…` : tag}
               </Badge>
             ))}
           </div>

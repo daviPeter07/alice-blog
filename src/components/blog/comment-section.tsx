@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useForm, useWatch, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,6 +9,7 @@ import type { ActionResult, CommentWithReplies } from '@/lib/types';
 import { formatDate, getInitials, avatarHue } from '@/helpers';
 import { useCommentSection, useToastOnSuccess, type OptimisticComment } from '@/hooks';
 import { AdminCheck } from '@/components/ui/admin-check';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { cn } from '@/lib/utils';
 
 interface CommentSectionProps {
@@ -52,6 +53,7 @@ export function CommentSection({
 
   useToastOnSuccess(state, 'Comentário enviado com sucesso! Obrigado pela participação.');
 
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const topLevel = optimisticComments.filter((c) => !c.parentId);
 
   return (
@@ -82,22 +84,24 @@ export function CommentSection({
         </ul>
       )}
 
-      <div className="rounded-2xl border border-border bg-card px-7 py-6">
+      <div
+        className={cn(
+          'rounded-2xl border border-border bg-card px-7 py-6',
+          !isAuthenticated && 'opacity-50'
+        )}
+      >
         <h3 className="font-body text-lg font-semibold text-foreground mb-5">
           Deixe um comentário
         </h3>
 
         {!isAuthenticated && (
-          <div
-            role="alert"
-            className="rounded-xl border border-border bg-muted/50 px-4 py-3 font-ui text-sm text-foreground"
+          <button
+            type="button"
+            onClick={() => setLoginModalOpen(true)}
+            className="w-full rounded-xl border border-border bg-muted/50 px-4 py-6 font-ui text-sm text-foreground hover:bg-muted/70 transition-colors text-left cursor-pointer"
           >
-            Para comentar,{' '}
-            <Link href="/auth/login" className="text-brand-green font-medium hover:underline">
-              faça login
-            </Link>
-            .
-          </div>
+            Para comentar, faça login.
+          </button>
         )}
 
         {isAuthenticated && (
@@ -177,6 +181,16 @@ export function CommentSection({
           </>
         )}
       </div>
+
+      {!isAuthenticated && (
+        <ConfirmModal
+          open={loginModalOpen}
+          onOpenChange={setLoginModalOpen}
+          variant="login"
+          title="Faça login para comentar"
+          message="Entre na sua conta para deixar um comentário."
+        />
+      )}
     </section>
   );
 }

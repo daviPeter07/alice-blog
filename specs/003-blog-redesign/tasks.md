@@ -20,8 +20,8 @@
 
 **Purpose**: Verificar base e referências antes de implementar.
 
-- [ ] T001 Verificar que features 001 e 002 estão aplicadas (src/app, components, auth, tema) e que `specs/003-blog-redesign/research.md` está disponível com ≥10 referências
-- [ ] T002 [P] Adicionar `@radix-ui/react-dialog` em `package.json` para ConfirmModal acessível (ou usar `<dialog>` nativo se preferir sem dependência)
+- [x] T001 Verificar que features 001 e 002 estão aplicadas (src/app, components, auth, tema) e que `specs/003-blog-redesign/research.md` está disponível com ≥10 referências
+- [x] T002 [P] Adicionar `@radix-ui/react-dialog` em `package.json` para ConfirmModal acessível (ou usar `<dialog>` nativo se preferir sem dependência)
 
 ---
 
@@ -31,10 +31,10 @@
 
 **⚠️ CRÍTICO**: Nenhuma user story pode começar antes desta fase estar completa.
 
-- [ ] T003 [P] Criar `src/hooks/use-intersection-reveal.ts`: hook com Intersection Observer que adiciona classe `is-visible` ao entrar no viewport; respeitar `prefers-reduced-motion` (opção `disabled`)
-- [ ] T004 [P] Criar ou atualizar `src/components/blog/landing-section.tsx` com variantes `text-left`, `text-right`, `center` conforme `specs/003-blog-redesign/contracts/component-api.md`; estrutura extensível para seções futuras (personalizar layout, como funciona, etc.)
-- [ ] T005 Criar `src/components/ui/confirm-modal.tsx` com variantes `confirm`, `delete`, `login`; props `open`, `onOpenChange`, `variant`, `title`, `message`, `onConfirm`, `confirmLabel`, `cancelLabel`; variant `login` redireciona para `/auth/login` ao confirmar
-- [ ] T006 [P] Adicionar classes CSS para animação reveal em `src/app/globals.css`: `.reveal-section`, `.is-visible`, e `@media (prefers-reduced-motion: reduce)` para desativar animações
+- [x] T003 [P] Criar `src/hooks/use-intersection-reveal.ts`: hook com Intersection Observer que adiciona classe `is-visible` ao entrar no viewport; respeitar `prefers-reduced-motion` (opção `disabled`)
+- [x] T004 [P] Criar ou atualizar `src/components/blog/landing-section.tsx` com variantes `text-left`, `text-right`, `center` conforme `specs/003-blog-redesign/contracts/component-api.md`; estrutura extensível para seções futuras (personalizar layout, como funciona, etc.)
+- [x] T005 Criar `src/components/ui/confirm-modal.tsx` com variantes `confirm`, `delete`, `login`; props `open`, `onOpenChange`, `variant`, `title`, `message`, `onConfirm`, `confirmLabel`, `cancelLabel`; variant `login` redireciona para `/auth/login` ao confirmar
+- [x] T006 [P] Adicionar classes CSS para animação reveal em `src/app/globals.css`: `.reveal-section`, `.is-visible`, e `@media (prefers-reduced-motion: reduce)` para desativar animações
 
 **Checkpoint**: useIntersectionReveal, LandingSection, ConfirmModal e estilos de reveal prontos.
 
@@ -46,7 +46,7 @@
 
 **Independent Test**: Validar que `research.md` contém ≥10 referências com layout, animações e paleta (marrom, verde, branco, dark mode).
 
-- [ ] T007 [US6] Validar que `specs/003-blog-redesign/research.md` documenta ≥10 sites de referência com layout, animações e paleta; atualizar se faltar alguma referência
+- [x] T007 [US6] Validar que `specs/003-blog-redesign/research.md` documenta ≥10 sites de referência com layout, animações e paleta; atualizar se faltar alguma referência
 
 **Checkpoint**: Referências validadas — implementação pode seguir padrões definidos.
 
@@ -60,11 +60,11 @@
 
 ### Implementação — User Story 2
 
-- [ ] T008 [US2] Criar `src/components/layout/navbar.tsx`: logo à esquerda, itens de navegação ao centro (prop `navAnchors`), toggle de tema + person/auth à direita; quando não logado: ícone person (Lucide) + "Seja bem-vindo" + **Entre** ou **Cadastre-se** (dois links para `/auth/login` e `/auth/register`); "Entre" e "Cadastre-se" em bold; `navAnchors` extensível para seções futuras (personalizar layout, como funciona, etc.)
-- [ ] T009 [US2] Implementar dropdown no `src/components/layout/navbar.tsx` quando logado: ícone person + nome; itens "Configurações" → `/settings`, "Sair" → abre ConfirmModal (variant `confirm`), ao confirmar chama logout
-- [ ] T010 [US2] Implementar menu hamburger em `src/components/layout/navbar.tsx` para viewport &lt;768px (breakpoint Tailwind `md`); ao abrir, exibir itens e ações em overlay/drawer
-- [ ] T011 [US2] Criar `src/app/settings/page.tsx`: rota protegida (exige sessão, redirect `/auth/login`); conteúdo mínimo (título "Configurações"); estrutura base para 004
-- [ ] T012 [US2] Substituir ou refatorar `src/components/layout/header.tsx` e `src/components/layout/header-with-session.tsx` para usar Navbar; atualizar `src/app/layout.tsx` para renderizar Navbar em vez de Header/HeaderWithSession
+- [x] T008 [US2] Criar `src/components/layout/navbar.tsx`: logo à esquerda, itens de navegação ao centro (prop `navAnchors`), toggle de tema + person/auth à direita; quando não logado: ícone person (Lucide) + "Seja bem-vindo" + **Entre** ou **Cadastre-se** (dois links para `/auth/login` e `/auth/register`); "Entre" e "Cadastre-se" em bold; `navAnchors` extensível para seções futuras (personalizar layout, como funciona, etc.)
+- [x] T009 [US2] Implementar dropdown no `src/components/layout/navbar.tsx` quando logado: ícone person + nome; itens "Configurações" → `/settings`, "Sair" → abre ConfirmModal (variant `confirm`), ao confirmar chama logout
+- [x] T010 [US2] Implementar menu hamburger em `src/components/layout/navbar.tsx` para viewport &lt;768px (breakpoint Tailwind `md`); ao abrir, exibir itens e ações em overlay/drawer
+- [x] T011 [US2] Criar `src/app/settings/page.tsx`: rota protegida (exige sessão, redirect `/auth/login`); conteúdo mínimo (título "Configurações"); estrutura base para 004
+- [x] T012 [US2] Substituir ou refatorar `src/components/layout/header.tsx` e `src/components/layout/header-with-session.tsx` para usar Navbar; atualizar `src/app/layout.tsx` para renderizar Navbar em vez de Header/HeaderWithSession
 
 **Checkpoint**: Navbar funcional; hamburger em mobile; dropdown; settings page.
 
@@ -78,11 +78,11 @@
 
 ### Implementação — User Story 1
 
-- [ ] T013 [US1] Refatorar `src/components/blog/hero-section.tsx` para usar LandingSection com `layout="text-left"` (texto esq, CTA/visual dir) conforme `research.md`
-- [ ] T014 [US1] Refatorar `src/components/blog/featured-section.tsx` para usar LandingSection com `layout="text-right"` (texto dir, cards esq) conforme `research.md`
-- [ ] T015 [US1] Refatorar `src/components/blog/categories-section.tsx` para usar LandingSection com layout central ou grid conforme `research.md`
-- [ ] T016 [US1] Aplicar `useIntersectionReveal` e classes de animação nas seções da landing em `src/app/page.tsx`; garantir que `prefers-reduced-motion` desativa animações
-- [ ] T017 [US1] Revisar paleta em `src/app/globals.css` e seções da landing para consistência com marrom escuro, verde escuro, branco e dark mode conforme `research.md`; garantir que `src/app/page.tsx` e `navAnchors` permitam adicionar novas seções futuras (personalizar layout, como funciona, etc.) sem refatoração estrutural
+- [x] T013 [US1] Refatorar `src/components/blog/hero-section.tsx` para usar LandingSection com `layout="text-left"` (texto esq, CTA/visual dir) conforme `research.md`
+- [x] T014 [US1] Refatorar `src/components/blog/featured-section.tsx` para usar LandingSection com `layout="text-right"` (texto dir, cards esq) conforme `research.md`
+- [x] T015 [US1] Refatorar `src/components/blog/categories-section.tsx` para usar LandingSection com layout central ou grid conforme `research.md`
+- [x] T016 [US1] Aplicar `useIntersectionReveal` e classes de animação nas seções da landing em `src/app/page.tsx`; garantir que `prefers-reduced-motion` desativa animações
+- [x] T017 [US1] Revisar paleta em `src/app/globals.css` e seções da landing para consistência com marrom escuro, verde escuro, branco e dark mode conforme `research.md`; garantir que `src/app/page.tsx` e `navAnchors` permitam adicionar novas seções futuras (personalizar layout, como funciona, etc.) sem refatoração estrutural
 
 **Checkpoint**: Landing com layouts variados e animações; paleta aplicada; estrutura extensível.
 
@@ -96,10 +96,10 @@
 
 ### Implementação — User Story 3
 
-- [ ] T018 [US3] Atualizar `src/components/blog/like-button.tsx`: quando `isAuthenticated === false`, aplicar `opacity-50` e aparência desativada; ao clicar, abrir ConfirmModal variant `login` em vez de alerta; remover comportamento de alerta
-- [ ] T019 [US3] Atualizar `src/components/blog/comment-section.tsx`: quando `isAuthenticated === false`, área de comentário com opacidade baixa; ao tentar enviar ou focar em campo, abrir ConfirmModal variant `login` em vez de alerta; remover comportamento de alerta
-- [ ] T020 [P] [US3] Aplicar refinamentos visuais em `src/app/blog/page.tsx` (cards, tipografia, espaçamento) mantendo legibilidade
-- [ ] T021 [P] [US3] Aplicar refinamentos visuais em `src/app/blog/[slug]/page.tsx` (corpo do texto, comentários, hierarquia) mantendo legibilidade
+- [x] T018 [US3] Atualizar `src/components/blog/like-button.tsx`: quando `isAuthenticated === false`, aplicar `opacity-50` e aparência desativada; ao clicar, abrir ConfirmModal variant `login` em vez de alerta; remover comportamento de alerta
+- [x] T019 [US3] Atualizar `src/components/blog/comment-section.tsx`: quando `isAuthenticated === false`, área de comentário com opacidade baixa; ao tentar enviar ou focar em campo, abrir ConfirmModal variant `login` em vez de alerta; remover comportamento de alerta
+- [x] T020 [P] [US3] Aplicar refinamentos visuais em `src/app/blog/page.tsx` (cards, tipografia, espaçamento) mantendo legibilidade
+- [x] T021 [P] [US3] Aplicar refinamentos visuais em `src/app/blog/[slug]/page.tsx` (corpo do texto, comentários, hierarquia) mantendo legibilidade
 
 **Checkpoint**: Like e comentar usam modal de login; blog refinado.
 
@@ -113,9 +113,9 @@
 
 ### Implementação — User Story 4
 
-- [ ] T022 [P] [US4] Aplicar refinamentos visuais em `src/app/admin/posts/page.tsx` (listagem, espaçamento, tipografia)
-- [ ] T023 [US4] Aplicar refinamentos visuais em formulários em `src/app/admin/posts/new/new-post-form.tsx` e `src/app/admin/posts/[id]/edit/edit-post-form.tsx` (labels, inputs, mensagens de erro, hierarquia de botões primária/secundária/destrutiva)
-- [ ] T024 [US4] Integrar ConfirmModal para exclusão de post em `src/app/admin/posts/[id]/edit/edit-post-form.tsx` (variant `delete`) antes de chamar deletePost
+- [x] T022 [P] [US4] Aplicar refinamentos visuais em `src/app/admin/posts/page.tsx` (listagem, espaçamento, tipografia)
+- [x] T023 [US4] Aplicar refinamentos visuais em formulários em `src/app/admin/posts/new/new-post-form.tsx` e `src/app/admin/posts/[id]/edit/edit-post-form.tsx` (labels, inputs, mensagens de erro, hierarquia de botões primária/secundária/destrutiva)
+- [x] T024 [US4] Integrar ConfirmModal para exclusão de post em `src/app/admin/posts/[id]/edit/edit-post-form.tsx` (variant `delete`) antes de chamar deletePost
 
 **Checkpoint**: Admin com refinamentos visuais; exclusão com modal de confirmação.
 
@@ -129,8 +129,8 @@
 
 ### Implementação — User Story 5
 
-- [ ] T025 [P] [US5] Aplicar refinamentos visuais em `src/app/auth/login/login-form.tsx` e `src/app/auth/login/page.tsx`
-- [ ] T026 [P] [US5] Aplicar refinamentos visuais em `src/app/auth/register/register-form.tsx` e `src/app/auth/register/page.tsx`; garantir links entre login e registro com hover/focus
+- [x] T025 [P] [US5] Aplicar refinamentos visuais em `src/app/auth/login/login-form.tsx` e `src/app/auth/login/page.tsx`
+- [x] T026 [P] [US5] Aplicar refinamentos visuais em `src/app/auth/register/register-form.tsx` e `src/app/auth/register/page.tsx`; garantir links entre login e registro com hover/focus
 
 **Checkpoint**: Auth com refinamentos visuais.
 
@@ -144,9 +144,9 @@
 
 ### Implementação — User Story 7
 
-- [ ] T027 [P] [US7] Revisar `src/app/globals.css` e componentes para indicadores de foco visíveis (focus-visible, ring)
-- [ ] T028 [US7] Garantir que animações em toda a aplicação respeitam `@media (prefers-reduced-motion: reduce)` em `src/app/globals.css`
-- [ ] T029 [US7] Validar contraste em tema claro e dark; ajustar tokens se necessário para atender requisitos mínimos
+- [x] T027 [P] [US7] Revisar `src/app/globals.css` e componentes para indicadores de foco visíveis (focus-visible, ring)
+- [x] T028 [US7] Garantir que animações em toda a aplicação respeitam `@media (prefers-reduced-motion: reduce)` em `src/app/globals.css`
+- [x] T029 [US7] Validar contraste em tema claro e dark; ajustar tokens se necessário para atender requisitos mínimos
 
 **Checkpoint**: Acessibilidade e consistência mantidas ou melhoradas.
 
@@ -156,9 +156,9 @@
 
 **Purpose**: Qualidade e validação final.
 
-- [ ] T030 [P] Executar `pnpm typecheck` e corrigir erros até zero
-- [ ] T031 [P] Executar `pnpm lint` e corrigir warnings até zero
-- [ ] T032 Executar `pnpm build` e corrigir erros até sucesso
+- [x] T030 [P] Executar `pnpm typecheck` e corrigir erros até zero
+- [x] T031 [P] Executar `pnpm lint` e corrigir warnings até zero
+- [x] T032 Executar `pnpm build` e corrigir erros até sucesso
 - [ ] T033 Validar smoke tests manuais descritos em `specs/003-blog-redesign/quickstart.md`
 
 ---

@@ -1,10 +1,11 @@
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useState, useActionState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { updatePost, deletePost, publishPost, unpublishPost } from '@/actions/posts';
 import { Button } from '@/components/ui/button';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 
 interface EditPostFormProps {
   post: {
@@ -20,6 +21,7 @@ interface EditPostFormProps {
 
 export function EditPostForm({ post }: EditPostFormProps) {
   const router = useRouter();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [updateState, updateAction, isUpdatePending] = useActionState(updatePost, null);
   const [deleteState, deleteAction, isDeletePending] = useActionState(deletePost, null);
   const [publishState, publishAction, isPublishPending] = useActionState(publishPost, null);
@@ -171,24 +173,28 @@ export function EditPostForm({ post }: EditPostFormProps) {
             </Button>
           </form>
         )}
-        <form
-          action={deleteAction}
-          onSubmit={(e) => {
-            if (!confirm('Remover este post? Esta ação não pode ser desfeita.')) {
-              e.preventDefault();
-            }
-          }}
+        <Button
+          type="button"
+          disabled={isPending}
+          variant="outline"
+          className="text-destructive border-destructive hover:bg-destructive/10"
+          onClick={() => setDeleteModalOpen(true)}
         >
-          <input type="hidden" name="id" value={post.id} />
-          <Button
-            type="submit"
-            disabled={isPending}
-            variant="outline"
-            className="text-destructive border-destructive hover:bg-destructive/10"
-          >
-            {isDeletePending ? 'Removendo…' : 'Remover post'}
-          </Button>
-        </form>
+          {isDeletePending ? 'Removendo…' : 'Remover post'}
+        </Button>
+        <ConfirmModal
+          open={deleteModalOpen}
+          onOpenChange={setDeleteModalOpen}
+          variant="delete"
+          title="Remover post"
+          message="Esta ação não pode ser desfeita. Tem certeza?"
+          confirmLabel="Excluir"
+          onConfirm={() => {
+            const fd = new FormData();
+            fd.set('id', post.id);
+            deleteAction(fd);
+          }}
+        />
         <Link
           href="/admin/posts"
           className="font-ui text-sm text-muted-foreground hover:text-foreground px-4 py-2"

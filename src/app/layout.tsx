@@ -3,20 +3,24 @@ import { Suspense } from 'react';
 import { Inter, Lora } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import { Header } from '@/components/layout/header';
-import { HeaderWithSession } from '@/components/layout/header-with-session';
+import { Navbar } from '@/components/layout/navbar';
+import { NavbarWithSession } from '@/components/layout/navbar-with-session';
 import { Footer } from '@/components/layout/footer';
 import './globals.css';
 
 const LANDING_NAV_ANCHORS = [
   { href: '/#destaque', label: 'Destaques' },
   { href: '/#categorias', label: 'Categorias' },
+  { href: '/#personalizar', label: 'Personalizar' },
+  { href: '/#como-funciona', label: 'Como funciona' },
 ] as const;
 
 const FOOTER_TOPICS = [
   { href: '/blog', label: 'Blog' },
   { href: '/#destaque', label: 'Destaques' },
   { href: '/#categorias', label: 'Categorias' },
+  { href: '/#personalizar', label: 'Personalizar' },
+  { href: '/#como-funciona', label: 'Como funciona' },
 ] as const;
 
 const lora = Lora({
@@ -46,16 +50,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
           <Suspense
-            fallback={
-              <Header
-                navAnchors={[...LANDING_NAV_ANCHORS]}
-                showThemeToggle
-                showLoginButton
-                user={null}
-              />
-            }
+            fallback={<Navbar navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle user={null} />}
           >
-            <HeaderWithSession navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle />
+            <NavbarWithSession navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle />
           </Suspense>
           <div className="flex-1">{children}</div>
           <Footer

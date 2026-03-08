@@ -119,6 +119,14 @@
 }
 
 /* -------------------------------------------------------------------------
+   Focus visible (acessibilidade)
+   ------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------------------
    Base
    ------------------------------------------------------------------------- */
 html {
@@ -187,6 +195,33 @@ body {
   .animate-scale-in {
     animation-duration: 0.01ms;
     animation-timing-function: step-end;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Reveal (scroll-triggered) — useIntersectionReveal + .reveal-section
+   ------------------------------------------------------------------------- */
+.reveal-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .reveal-section.is-visible {
+    opacity: 1;
   }
 }
 
