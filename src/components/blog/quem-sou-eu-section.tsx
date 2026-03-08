@@ -43,8 +43,8 @@ const defaultText = (
 export function QuemSouEuSection({
   imageSrc = '/alice-marrom-bunita.jpeg',
   children = defaultText,
-  linkedinUrl = '#',
-  instagramUrl = '#',
+  linkedinUrl = 'https://www.linkedin.com/in/alice-sombra-764855243/',
+  instagramUrl = 'https://www.instagram.com/alicequely/',
 }: QuemSouEuSectionProps) {
   return (
     <LandingSection variant="categories-alt" layout="wide" id="quem-sou-eu">

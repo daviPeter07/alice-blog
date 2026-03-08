@@ -11,14 +11,15 @@ export const metadata: Metadata = {
 export default function RegisterPage() {
   return (
     <main className="w-full px-6 py-12 sm:py-16">
-      <div className="mx-auto max-w-6xl flex flex-col lg:flex-row-reverse lg:items-center lg:gap-16">
-        {/* Formulário à esquerda em desktop (primeiro em mobile) */}
-        <div className="flex-1 flex justify-center lg:justify-start">
-          <RegisterForm />
-        </div>
-
-        {/* Painel direito: por que criar conta (layout diferente do login) */}
-        <div className="hidden lg:flex lg:flex-1 lg:flex-col lg:justify-center lg:max-w-sm lg:pl-8">
+      <div className="mx-auto max-w-6xl flex flex-col lg:flex-row lg:items-center lg:gap-16">
+        {/* Painel esquerdo: por que criar conta (mesma direção do login: texto à esquerda) */}
+        <div className="hidden lg:flex lg:flex-1 lg:flex-col lg:justify-center lg:max-w-md">
+          <Link
+            href="/"
+            className="font-body text-xl font-semibold text-foreground hover:text-brand-green transition-colors mb-8"
+          >
+            Alice
+          </Link>
           <p className="font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
             Por que criar conta?
           </p>
@@ -63,6 +64,11 @@ export default function RegisterPage() {
           >
             ← Voltar ao blog
           </Link>
+        </div>
+
+        {/* Formulário à direita (mesmo alinhamento do login) */}
+        <div className="flex-1 flex justify-center lg:justify-end">
+          <RegisterForm />
         </div>
       </div>
     </main>

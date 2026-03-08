@@ -54,23 +54,34 @@ function getHashFromHref(href: string): string | null {
 function useActiveSection() {
   const pathname = usePathname();
   const [activeSection, setActiveSection] = React.useState<string | null>(null);
+  const ratiosRef = React.useRef<Record<string, number>>({});
 
   React.useEffect(() => {
     if (pathname !== '/') return;
-    const ids = ['destaque', 'categorias', 'personalizar', 'como-funciona'];
+    const ids = ['destaque', 'quem-sou-eu', 'categorias', 'personalizar', 'como-funciona'];
     const elements = ids.map((id) => document.getElementById(id)).filter(Boolean);
     if (elements.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
           const id = entry.target.getAttribute('id');
-          if (id) setActiveSection(id);
-          break;
+          if (!id) continue;
+          ratiosRef.current[id] = entry.isIntersecting ? entry.intersectionRatio : 0;
         }
+        const ratios = ratiosRef.current;
+        let bestId: string | null = null;
+        let bestRatio = 0;
+        for (const id of ids) {
+          const r = ratios[id] ?? 0;
+          if (r > bestRatio) {
+            bestRatio = r;
+            bestId = id;
+          }
+        }
+        setActiveSection(bestId);
       },
-      { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
+      { rootMargin: '-20% 0px -70% 0px', threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] }
     );
     elements.forEach((el) => el && observer.observe(el));
     return () => observer.disconnect();
@@ -245,11 +256,12 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
             {showThemeToggle && <ThemeToggle />}
             <button
               type="button"
-              onClick={() => setMenuOpen(true)}
-              aria-label="Abrir menu"
+              onClick={() => setMenuOpen((o) => !o)}
+              aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+              aria-expanded={menuOpen}
               className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-transparent text-foreground hover:bg-accent transition-colors"
             >
-              <Menu className="size-5" aria-hidden />
+              {menuOpen ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
             </button>
           </div>
         </div>
