@@ -9,54 +9,68 @@
    shadcn/ui design tokens — new-york, Tailwind v4
    ------------------------------------------------------------------------- */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --background: #ebe4dc;
+  --foreground: #3e2723;
+  --card: #f0eae2;
+  --card-foreground: #3e2723;
+  --popover: #f0eae2;
+  --popover-foreground: #3e2723;
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --secondary: #e2d6ca;
+  --secondary-foreground: #3e2723;
+  --muted: #e2d6ca;
+  --muted-foreground: #5d4037;
+  --accent: #d4c4b0;
+  --accent-foreground: #3e2723;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --border: #d4c8bc;
+  --input: #d4c8bc;
   --ring: oklch(0.708 0 0);
   --radius: 0.625rem;
 
-  /* Brand tokens — Alice Blog (marrom, cloud-dancer, verde + variantes para landing) */
+  /* Brand tokens — Alice Blog (marrom café, verde) */
   --brand-brown: #5d4037;
   --brand-brown-light: #8d6e63;
   --brand-green: #1b3022;
   --brand-green-light: #2e5c3e;
-  --cloud-dancer: #f0eee9;
-  --landing-cream: #f5f3ef;
-  --landing-sage: #e8efe9;
-  --landing-warm: #f4efe8;
+  /* Café palette — light theme (marrom claro → escuro, vibe café) */
+  --cafe-cream: #f0eae2;
+  --cafe-latte: #e2d6ca;
+  --cafe-mocha: #d4c4b0;
+  --cafe-card: #ebe4dc;
+  --cloud-dancer: #f0eae2;
+  --landing-cream: #f0eae2;
+  --landing-sage: #e2d6ca;
+  --landing-warm: #d4c4b0;
+  /* Fundo da área de leitura do artigo — editável pelo usuário (feature 004) */
+  --article-read-bg: var(--card);
+  --article-read-border: var(--border);
 }
 
-/* Tema light (padrão) — explícito para transição */
+/* Tema light — vibe café (marrom claro → mais escuro) */
 [data-theme='light'] {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --border: oklch(0.922 0 0);
+  --background: #ebe4dc;
+  --foreground: #3e2723;
+  --card: #f0eae2;
+  --card-foreground: #3e2723;
+  --muted: #e2d6ca;
+  --muted-foreground: #5d4037;
+  --border: #d4c8bc;
   --brand-brown: #5d4037;
   --brand-brown-light: #8d6e63;
   --brand-green: #1b3022;
   --brand-green-light: #2e5c3e;
-  --cloud-dancer: #f0eee9;
-  --landing-cream: #f5f3ef;
-  --landing-sage: #e8efe9;
-  --landing-warm: #f4efe8;
+  --cloud-dancer: #f0eae2;
+  --cafe-cream: #f0eae2;
+  --cafe-latte: #e2d6ca;
+  --cafe-mocha: #d4c4b0;
+  --cafe-card: #ebe4dc;
+  --landing-cream: #f0eae2;
+  --landing-sage: #e2d6ca;
+  --landing-warm: #d4c4b0;
+  --article-read-bg: var(--card);
+  --article-read-border: var(--border);
 }
 
 /* Tema dark */
@@ -65,8 +79,12 @@
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.18 0 0);
   --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.18 0 0);
+  --popover-foreground: oklch(0.985 0 0);
   --muted: oklch(0.25 0 0);
   --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.28 0 0);
+  --accent-foreground: oklch(0.985 0 0);
   --border: oklch(0.28 0 0);
   --brand-brown: #8d6e63;
   --brand-brown-light: #a1887f;
@@ -112,10 +130,23 @@
   --color-landing-cream: var(--landing-cream);
   --color-landing-sage: var(--landing-sage);
   --color-landing-warm: var(--landing-warm);
+  --color-cafe-cream: var(--cafe-cream);
+  --color-cafe-latte: var(--cafe-latte);
+  --color-cafe-mocha: var(--cafe-mocha);
+  --color-cafe-card: var(--cafe-card);
 
-  /* Typography */
-  --font-body: var(--font-lora);
-  --font-ui: var(--font-inter);
+  /* Typography — vibe lofi */
+  --font-body: var(--font-nunito);
+  --font-ui: var(--font-nunito-sans);
+  --font-heading: var(--font-bricolage);
+}
+
+/* -------------------------------------------------------------------------
+   Focus visible (acessibilidade)
+   ------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 /* -------------------------------------------------------------------------
@@ -126,7 +157,7 @@ html {
 }
 
 body {
-  background-color: var(--cloud-dancer);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), Georgia, serif;
   line-height: 1.75;
@@ -141,11 +172,33 @@ body {
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fade-left {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-right {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -170,7 +223,7 @@ body {
 }
 
 .animate-fade-up {
-  animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-fade-in {
@@ -191,19 +244,263 @@ body {
 }
 
 /* -------------------------------------------------------------------------
-   Prose — estilo de leitura para o corpo do post
+   Reveal (scroll-triggered) — useIntersectionReveal + .reveal-section
+   ------------------------------------------------------------------------- */
+.reveal-section {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Itens que aparecem em stagger quando a seção entra no viewport */
+.reveal-section .reveal-item {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.reveal-section .reveal-item.reveal-from-left {
+  transform: translateX(28px);
+}
+
+.reveal-section .reveal-item.reveal-from-right {
+  transform: translateX(-28px);
+}
+
+.reveal-section.is-visible .reveal-item {
+  animation: fade-up 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal-section.is-visible .reveal-item.reveal-from-left {
+  animation-name: fade-left;
+}
+
+.reveal-section.is-visible .reveal-item.reveal-from-right {
+  animation-name: fade-right;
+}
+
+.reveal-section.is-visible .reveal-delay-0 {
+  animation-delay: 0ms;
+}
+.reveal-section.is-visible .reveal-delay-1 {
+  animation-delay: 100ms;
+}
+.reveal-section.is-visible .reveal-delay-2 {
+  animation-delay: 200ms;
+}
+.reveal-section.is-visible .reveal-delay-3 {
+  animation-delay: 300ms;
+}
+.reveal-section.is-visible .reveal-delay-4 {
+  animation-delay: 400ms;
+}
+.reveal-section.is-visible .reveal-delay-5 {
+  animation-delay: 500ms;
+}
+.reveal-section.is-visible .reveal-delay-6 {
+  animation-delay: 600ms;
+}
+.reveal-section.is-visible .reveal-delay-7 {
+  animation-delay: 700ms;
+}
+.reveal-section.is-visible .reveal-delay-8 {
+  animation-delay: 800ms;
+}
+.reveal-section.is-visible .reveal-delay-9 {
+  animation-delay: 900ms;
+}
+.reveal-section.is-visible .reveal-delay-10 {
+  animation-delay: 1000ms;
+}
+.reveal-section.is-visible .reveal-delay-11 {
+  animation-delay: 1100ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .reveal-section.is-visible {
+    opacity: 1;
+  }
+  .reveal-section .reveal-item {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-section.is-visible .reveal-item {
+    animation: none;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Prose — estilo de leitura para o corpo do post (espaçamento compacto)
    ------------------------------------------------------------------------- */
 .prose-alice {
   font-family: var(--font-body), Georgia, serif;
   font-size: 1.125rem;
-  line-height: 1.85;
+  line-height: 1.75;
   color: var(--foreground);
 }
 
 .prose-alice p {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .prose-alice p:last-child {
   margin-bottom: 0;
+}
+
+.prose-alice h1,
+.prose-alice h2,
+.prose-alice h3 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-weight: 600;
+  margin-top: 0.75em;
+  margin-bottom: 0.35em;
+}
+
+.prose-alice h1 {
+  font-size: 1.75rem;
+}
+.prose-alice h2 {
+  font-size: 1.5rem;
+}
+.prose-alice h3 {
+  font-size: 1.25rem;
+}
+
+.prose-alice ul,
+.prose-alice ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose-alice li {
+  margin-bottom: 0.25rem;
+}
+
+.prose-alice blockquote {
+  border-left: 4px solid var(--border);
+  padding-left: 1rem;
+  margin: 0.75rem 0;
+  color: var(--muted-foreground);
+}
+
+.prose-alice code {
+  background: var(--muted);
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+.prose-alice pre {
+  background: var(--muted);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+
+.prose-alice pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose-alice a {
+  color: var(--brand-green);
+  text-decoration: underline;
+}
+
+/* Prose compacto para comentários — menos espaçamento entre texto e markdown */
+.prose-alice-comment {
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+.prose-alice-comment p {
+  margin-bottom: 0.2rem;
+}
+
+.prose-alice-comment p:last-child {
+  margin-bottom: 0;
+}
+
+.prose-alice-comment h1,
+.prose-alice-comment h2,
+.prose-alice-comment h3 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-weight: 600;
+  margin-top: 0.35em;
+  margin-bottom: 0.15em;
+}
+
+.prose-alice-comment h1 {
+  font-size: 1.05rem;
+}
+.prose-alice-comment h2 {
+  font-size: 1rem;
+}
+.prose-alice-comment h3 {
+  font-size: 0.95rem;
+}
+
+.prose-alice-comment ul,
+.prose-alice-comment ol {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+.prose-alice-comment li {
+  margin-bottom: 0.15rem;
+}
+
+.prose-alice-comment blockquote {
+  border-left: 4px solid var(--border);
+  padding-left: 0.75rem;
+  margin: 0.35rem 0;
+  color: var(--muted-foreground);
+}
+
+.prose-alice-comment code {
+  background: var(--muted);
+  padding: 0.15em 0.35em;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+.prose-alice-comment pre {
+  background: var(--muted);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 0.35rem 0;
+}
+
+.prose-alice-comment pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose-alice-comment a {
+  color: var(--brand-green);
+  text-decoration: underline;
+}
+
+/* Container de leitura do artigo — background editável (--article-read-bg) */
+.article-read-container {
+  background: var(--article-read-bg);
+  border: 1px solid var(--article-read-border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 3.5rem;
 }

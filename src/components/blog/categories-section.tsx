@@ -3,71 +3,36 @@ import { Badge } from '@/components/ui/badge';
 import { LandingSection } from '@/components/blog/landing-section';
 import type { CategoryItem } from '@/types/landing';
 
-export interface CategoryPillBlockProps {
-  categories: CategoryItem[];
-  title: string;
-  subtitle?: string;
-  /** Estilo: pills com hover verde ou marrom */
-  accent?: 'green' | 'brown';
-}
+/** Estilo idêntico às tags dos cards de artigo (post-card) */
+const TAG_BADGE_CLASS =
+  'font-ui text-[11px] max-w-[120px] truncate border border-brand-green/20 bg-brand-green/5 text-foreground ' +
+  'hover:border-brand-green/35 hover:bg-brand-green/8 ' +
+  'theme-dark:border-brand-green-light/50 theme-dark:bg-brand-green-light/25 theme-dark:text-foreground ' +
+  'theme-dark:hover:border-brand-green-light/60 theme-dark:hover:bg-brand-green-light/35 ' +
+  'transition-colors';
 
-export function CategoryPillBlock({
-  categories,
-  title,
-  subtitle,
-  accent = 'green',
-}: CategoryPillBlockProps) {
-  const hoverClass =
-    accent === 'brown'
-      ? 'hover:bg-brand-brown/10 hover:text-brand-brown'
-      : 'hover:bg-brand-green/10 hover:text-brand-green';
-
-  return (
-    <div>
-      <h3 className="font-body text-xl font-semibold text-foreground mb-1">{title}</h3>
-      {subtitle && <p className="font-ui text-sm text-muted-foreground mb-4">{subtitle}</p>}
-      <div className="flex flex-wrap gap-2" role="list" aria-label={title}>
-        {categories.map((cat, index) => (
-          <Link
-            key={cat.slug}
-            href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
-            className={`animate-fade-up font-ui text-sm py-1.5 px-3 rounded-md border border-border bg-card/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${hoverClass}`}
-            style={{ animationDelay: `${index * 40}ms` }}
-            role="listitem"
-          >
-            {cat.label}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export interface CategoryBadgeBlockProps {
+export interface CategoryBlockProps {
   categories: CategoryItem[];
   title: string;
   subtitle?: string;
 }
 
-export function CategoryBadgeBlock({ categories, title, subtitle }: CategoryBadgeBlockProps) {
+function CategoryBlock({ categories, title, subtitle }: CategoryBlockProps) {
   return (
-    <div>
-      <h3 className="font-body text-xl font-semibold text-foreground mb-1">{title}</h3>
+    <div className="text-center">
+      <h3 className="font-heading text-xl font-semibold text-foreground mb-1">{title}</h3>
       {subtitle && <p className="font-ui text-sm text-muted-foreground mb-4">{subtitle}</p>}
-      <div className="flex flex-wrap gap-2" role="list" aria-label={title}>
+      <div className="flex flex-wrap justify-center gap-2" role="list" aria-label={title}>
         {categories.map((cat, index) => (
           <Link
             key={cat.slug}
             href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
-            className="animate-fade-up focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
-            style={{ animationDelay: `${index * 30}ms` }}
+            title={cat.label}
+            className={`reveal-item ${index % 2 === 0 ? 'reveal-from-left' : 'reveal-from-right'} reveal-delay-${Math.min(index + 3, 11)} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md inline-flex`}
             role="listitem"
           >
-            <Badge
-              variant="secondary"
-              className="font-ui text-sm py-1.5 px-3 hover:bg-brand-brown/10 hover:text-brand-brown transition-colors"
-            >
-              {cat.label}
+            <Badge variant="secondary" className={TAG_BADGE_CLASS}>
+              {cat.label.length > 20 ? `${cat.label.slice(0, 18)}…` : cat.label}
             </Badge>
           </Link>
         ))}
@@ -87,55 +52,52 @@ export function CategoriesSection({ categories, featuredCount = 4 }: CategoriesS
   const featured = categories.slice(0, featuredCount);
   const rest = categories.slice(featuredCount);
 
-  return (
-    <>
-      <LandingSection variant="categories">
-        <section id="categorias" aria-labelledby="categories-heading">
-          <header className="mb-10">
-            <p
-              className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
-              style={{ animationDelay: '0ms' }}
-            >
-              explore
-            </p>
-            <h2
-              id="categories-heading"
-              className="animate-fade-up font-body text-3xl sm:text-4xl font-semibold text-foreground leading-tight"
-              style={{ animationDelay: '60ms' }}
-            >
-              Temas e assuntos
-            </h2>
-            <p
-              className="animate-fade-up font-ui text-muted-foreground mt-2 leading-relaxed"
-              style={{ animationDelay: '120ms' }}
-            >
-              Navegue por tópicos que aparecem nos textos.
-            </p>
-          </header>
+  const headerEl = (
+    <header className="mb-10 w-full">
+      <p className="reveal-item reveal-from-right reveal-delay-0 font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none">
+        explore
+      </p>
+      <h2
+        id="categories-heading"
+        className="reveal-item reveal-from-left reveal-delay-1 font-heading text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
+      >
+        Temas e assuntos
+      </h2>
+      <p className="reveal-item reveal-from-right reveal-delay-2 font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl">
+        Navegue por tópicos que aparecem nos textos. Clique em um tema para filtrar os artigos do
+        blog.
+      </p>
+    </header>
+  );
 
-          {categories.length === 0 ? (
-            <p className="font-ui text-muted-foreground">Nenhuma categoria ainda.</p>
-          ) : (
-            <div className="space-y-10">
-              {featured.length > 0 && (
-                <CategoryPillBlock
-                  categories={featured}
-                  title="Em destaque"
-                  subtitle="Alguns tópicos que aparecem com frequência."
-                  accent="green"
-                />
-              )}
-              {rest.length > 0 && (
-                <CategoryBadgeBlock
-                  categories={rest}
-                  title="Todos os temas"
-                  subtitle="Lista completa para filtrar no blog."
-                />
-              )}
-            </div>
-          )}
-        </section>
-      </LandingSection>
-    </>
+  const contentEl =
+    categories.length === 0 ? (
+      <p className="font-ui text-muted-foreground">Nenhuma categoria ainda.</p>
+    ) : (
+      <div className="reveal-item reveal-from-left reveal-delay-3 rounded-2xl border border-border bg-card p-8 sm:p-10 space-y-10">
+        {featured.length > 0 && (
+          <CategoryBlock
+            categories={featured}
+            title="Em destaque"
+            subtitle="Alguns tópicos que aparecem com frequência."
+          />
+        )}
+        {rest.length > 0 && (
+          <CategoryBlock
+            categories={rest}
+            title="Todos os temas"
+            subtitle="Lista completa para filtrar no blog."
+          />
+        )}
+      </div>
+    );
+
+  return (
+    <LandingSection variant="categories" layout="wide" id="categorias">
+      <section aria-labelledby="categories-heading" className="w-full flex flex-col">
+        {headerEl}
+        {contentEl}
+      </section>
+    </LandingSection>
   );
 }

@@ -21,7 +21,7 @@ export interface PostPreview {
   excerpt: string | null;
   publishedAt: Date | null;
   tags: string[];
-  readingTime: number | null;
+  readingTime: number;
   author: { name: string; image: string | null };
   _count: { likes: number; comments: number };
 }

@@ -1,9 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { useActionState } from 'react';
-import Link from 'next/link';
 import { Heart } from 'lucide-react';
 import { toggleLike } from '@/actions/likes';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { cn } from '@/lib/utils';
 
 export interface LikeButtonProps {
@@ -19,6 +20,7 @@ export function LikeButton({
   initialLiked,
   isAuthenticated = true,
 }: LikeButtonProps) {
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [state, formAction, isPending] = useActionState(toggleLike, null);
 
   const count = state?.success ? (state.data?.count ?? initialCount) : initialCount;
@@ -26,23 +28,24 @@ export function LikeButton({
 
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center gap-2">
+      <>
         <button
           type="button"
-          onClick={() => window.alert('Faça login para curtir.')}
-          className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 font-ui text-sm text-muted-foreground hover:bg-accent transition-colors"
+          onClick={() => setLoginModalOpen(true)}
+          className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 font-ui text-sm text-muted-foreground opacity-50 hover:opacity-70 transition-opacity"
+          aria-label="Faça login para curtir"
         >
           <Heart size={18} aria-hidden />
           <span>{count}</span>
         </button>
-        <span className="font-ui text-xs text-muted-foreground">
-          Faça{' '}
-          <Link href="/auth/login" className="text-brand-green underline">
-            login
-          </Link>{' '}
-          para curtir.
-        </span>
-      </div>
+        <ConfirmModal
+          open={loginModalOpen}
+          onOpenChange={setLoginModalOpen}
+          variant="login"
+          title="Faça login para curtir"
+          message="Entre na sua conta para curtir este artigo."
+        />
+      </>
     );
   }
 

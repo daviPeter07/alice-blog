@@ -1,34 +1,49 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { Inter, Lora } from 'next/font/google';
+import { Nunito, Nunito_Sans, Bricolage_Grotesque } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import { Header } from '@/components/layout/header';
-import { HeaderWithSession } from '@/components/layout/header-with-session';
+import { Navbar } from '@/components/layout/navbar';
+import { NavbarWithSession } from '@/components/layout/navbar-with-session';
 import { Footer } from '@/components/layout/footer';
 import './globals.css';
 
 const LANDING_NAV_ANCHORS = [
   { href: '/#destaque', label: 'Destaques' },
+  { href: '/#quem-sou-eu', label: 'Quem sou eu' },
   { href: '/#categorias', label: 'Categorias' },
+  { href: '/#personalizar', label: 'Personalizar' },
+  { href: '/#como-funciona', label: 'Como funciona' },
 ] as const;
 
 const FOOTER_TOPICS = [
   { href: '/blog', label: 'Blog' },
   { href: '/#destaque', label: 'Destaques' },
+  { href: '/#quem-sou-eu', label: 'Quem sou eu' },
   { href: '/#categorias', label: 'Categorias' },
+  { href: '/#personalizar', label: 'Personalizar' },
+  { href: '/#como-funciona', label: 'Como funciona' },
 ] as const;
 
-const lora = Lora({
-  variable: '--font-lora',
+const nunito = Nunito({
+  variable: '--font-nunito',
   subsets: ['latin'],
   display: 'swap',
+  weight: ['400', '500', '600', '700'],
 });
 
-const inter = Inter({
-  variable: '--font-inter',
+const nunitoSans = Nunito_Sans({
+  variable: '--font-nunito-sans',
   subsets: ['latin'],
   display: 'swap',
+  weight: ['700'],
+});
+
+const bricolage = Bricolage_Grotesque({
+  variable: '--font-bricolage',
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -42,20 +57,17 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${lora.variable} ${inter.variable}`} suppressHydrationWarning>
+    <html
+      lang="pt-BR"
+      className={`${nunito.variable} ${nunitoSans.variable} ${bricolage.variable}`}
+      suppressHydrationWarning
+    >
       <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
           <Suspense
-            fallback={
-              <Header
-                navAnchors={[...LANDING_NAV_ANCHORS]}
-                showThemeToggle
-                showLoginButton
-                user={null}
-              />
-            }
+            fallback={<Navbar navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle user={null} />}
           >
-            <HeaderWithSession navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle />
+            <NavbarWithSession navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle />
           </Suspense>
           <div className="flex-1">{children}</div>
           <Footer

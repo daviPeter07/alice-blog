@@ -1,18 +1,80 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { getRecentPosts } from '@/data-access/posts';
+import { getPostsPaginated } from '@/data-access/posts';
 import { PostCard } from '@/components/blog/post-card';
+import { Pagination } from '@/components/blog/pagination';
+
+const PER_PAGE = 12; // 3 colunas × 4 linhas
 
 export const metadata: Metadata = {
   title: 'Artigos',
   description: 'Ensaios sobre filosofia, história, crítica social e a condição humana.',
 };
 
-export default async function BlogPage() {
-  const posts = await getRecentPosts(20);
+interface BlogPageProps {
+  searchParams: Promise<{ page?: string; tag?: string }>;
+}
+
+async function BlogContent({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; tag?: string }>;
+}) {
+  const { page: pageParam, tag } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? '1', 10) || 1);
+  const { posts, totalPages, currentPage } = await getPostsPaginated(page, PER_PAGE, tag);
+  const searchParamsForUrl = tag ? { tag } : undefined;
+
+  if (posts.length === 0) {
+    return <p className="font-ui text-muted-foreground">Nenhum artigo publicado ainda.</p>;
+  }
 
   return (
-    <main className="max-w-2xl mx-auto px-6 py-16">
-      {/* Cabeçalho da listagem */}
+    <>
+      <section
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+        aria-label="Lista de artigos"
+      >
+        {posts.map((post, index) => (
+          <PostCard
+            key={post.slug}
+            slug={post.slug}
+            title={post.title}
+            excerpt={post.excerpt ?? ''}
+            publishedAt={post.publishedAt}
+            tags={post.tags}
+            readingTime={post.readingTime}
+            author={post.author}
+            likesCount={post._count.likes}
+            commentsCount={post._count.comments}
+            index={index}
+          />
+        ))}
+      </section>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        baseUrl="/blog"
+        searchParams={searchParamsForUrl}
+      />
+    </>
+  );
+}
+
+function BlogFallback() {
+  return (
+    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="animate-pulse rounded-2xl border border-border bg-card h-56" />
+      ))}
+    </section>
+  );
+}
+
+export default function BlogPage({ searchParams }: BlogPageProps) {
+  return (
+    <main className="max-w-6xl mx-auto px-6 py-16">
       <header className="mb-14">
         <p
           className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
@@ -21,7 +83,7 @@ export default async function BlogPage() {
           por Alice
         </p>
         <h1
-          className="animate-fade-up font-body text-5xl font-semibold text-foreground mb-4 leading-tight"
+          className="animate-fade-up font-heading text-5xl font-semibold text-foreground mb-4 leading-tight"
           style={{ animationDelay: '60ms' }}
         >
           Artigos
@@ -34,28 +96,9 @@ export default async function BlogPage() {
         </p>
       </header>
 
-      {/* Lista de posts */}
-      {posts.length === 0 ? (
-        <p className="font-ui text-muted-foreground">Nenhum artigo publicado ainda.</p>
-      ) : (
-        <section className="flex flex-col gap-4" aria-label="Lista de artigos">
-          {posts.map((post, index) => (
-            <PostCard
-              key={post.slug}
-              slug={post.slug}
-              title={post.title}
-              excerpt={post.excerpt ?? ''}
-              publishedAt={post.publishedAt}
-              tags={post.tags}
-              readingTime={post.readingTime}
-              author={post.author}
-              likesCount={post._count.likes}
-              commentsCount={post._count.comments}
-              index={index}
-            />
-          ))}
-        </section>
-      )}
+      <Suspense fallback={<BlogFallback />}>
+        <BlogContent searchParams={searchParams} />
+      </Suspense>
     </main>
   );
 }

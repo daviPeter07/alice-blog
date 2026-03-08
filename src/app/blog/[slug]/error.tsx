@@ -16,8 +16,8 @@ export default function BlogPostError({
   }, [error]);
 
   return (
-    <main className="max-w-2xl mx-auto px-6 py-16 text-center">
-      <h1 className="font-body text-2xl font-semibold text-foreground mb-3">Algo deu errado</h1>
+    <main className="max-w-4xl mx-auto px-6 py-16 text-center">
+      <h1 className="font-heading text-2xl font-semibold text-foreground mb-3">Algo deu errado</h1>
       <p className="font-ui text-muted-foreground mb-8 max-w-md mx-auto">
         Não foi possível carregar este artigo.
       </p>

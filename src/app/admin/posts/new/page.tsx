@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { NewPostForm } from './new-post-form';
+import { PostForm } from '@/components/admin/post-form';
 
 export default function NewPostPage() {
   return (
@@ -11,7 +11,7 @@ export default function NewPostPage() {
         ← Voltar aos posts
       </Link>
       <h1 className="font-body text-2xl font-semibold text-foreground mb-8">Novo post</h1>
-      <NewPostForm />
+      <PostForm />
     </main>
   );
 }
