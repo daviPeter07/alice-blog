@@ -3,32 +3,72 @@
 **Feature Branch**: `003-blog-redesign`
 **Created**: 2026-03-07
 **Status**: Draft
-**Input**: User description: "Comece a nova spec 003 que vai ser o re-design — refinamento visual de todo o blog, sem novas funcionalidades."
+**Input**: User description: "Comece a nova spec 003 que vai ser o re-design — refinamento visual de todo o blog, layouts variados na landing, navbar nova, animações e referências. Preparar componentes para extensibilidade da feature 004 (acessibilidade)."
+
+### Prioridade de referências
+
+A **prioridade central** desta feature é a pesquisa de sites de landing page como referência, focando em:
+
+1. **Layout** — como as seções são dispostas (esquerda/direita, alternância, hierarquia)
+2. **Animações** — aparição de texto, transições entre seções, microinterações
+3. **Paleta de cores** — marrom escuro, verde escuro, branco e dark mode (equivalente aos tokens `brand-brown`, `brand-green`, `cloud-dancer` e tema dark)
+
+Os layouts, animações e uso de cores da landing devem ser guiados por essa análise de referências antes da implementação.
+
+---
+
+## Clarifications
+
+### Session 2026-03-07
+
+- Q: Escopo — 003 vs feature futura (tempo de leitura, split de artigo, navbar sidebar)? → A: 003 foca em navbar nova, layouts variados, animações e referências; preparar extensibilidade. Tempo de leitura, split e sidebar em feature futura (004). Componentes devem estar prontos para a acessibilidade da 004.
+- Q: Padrão de layouts na landing — alternado, fixo por seção ou outro? → A: Variação por categoria de seção (hero sempre X, destaque sempre Y, categorias sempre Z etc.). A definição de layout por tipo de seção depende da análise dos sites de inspiração, que informam: paleta de cores, animações e layouts de seções.
+- Q: "Entre ou Cadastre-se" — um link ou dois? → A: Dois links separados: "Entre" → login, "Cadastre-se" → registro. Estilo: "Entre" e "Cadastre-se" em bold; "ou" sem bold (texto: **Entre** ou **Cadastre-se**).
+- Q: Navbar quando usuário está logado — o que exibir? → A: Ícone person + nome + dropdown (perfil/configurações, sair). Dropdown inclui link para nova página de configuração e botão de logout. Criar modal reutilizável de confirmação (logout, exclusão de post/comentário, aviso de login). Curtir e comentar: quando não logado, botões com opacidade baixa/aparentam desativados; ao clicar → modal redirecionando para login (remover estados atuais que exibem necessidade de login).
 
 ---
 
 ## User Scenarios & Testing *(mandatory)*
 
-Esta feature é exclusivamente de **redesign visual**. Nenhuma nova funcionalidade será adicionada. O foco é melhorar aparência, consistência, acessibilidade e sensação de polish em todas as áreas já existentes do blog.
+Esta feature combina **redesign visual** com **nova navbar** e **preparação para extensibilidade**. O foco é: layouts variados na landing (textos à esquerda/direita, não tudo centralizado), navbar redesenhada (hamburger responsivo, logo à esquerda, itens centrais, "Seja bem-vindo"/"Entre ou Cadastre-se" à direita com ícone de person e toggle de tema), animações de aparição de texto e pesquisa de referências (≥10 sites com design atraente e paleta similar). Os componentes (navbar, layout de leitura etc.) devem estar preparados para a feature 004 de acessibilidade (sidebar configurável, paleta, layout de leitura, split de artigo, tempo de leitura — fora do escopo desta spec).
 
-### User Story 1 — Visitante percebe landing mais refinada e consistente (Priority: P1)
+### User Story 1 — Visitante percebe landing com layouts variados e refinados (Priority: P1)
 
-Um visitante acessa a raiz do site (`/`). A landing page mantém todas as funcionalidades atuais (hero, destaque, categorias, navbar, voltar ao topo) mas apresenta refinamentos visuais: hierarquia tipográfica mais clara, espaçamentos harmoniosos, paleta de cores consistente, microinterações suaves em hover/focus e transições mais polidas entre seções.
+Um visitante acessa a raiz do site (`/`). A landing page mantém funcionalidades (hero, destaque, categorias, navbar, voltar ao topo) mas apresenta **layouts variados por seção** (informações à esquerda em algumas, à direita em outras; não tudo centralizado), inspirados em referências de blogs com design atraente. Inclui animações de aparição de texto, hierarquia tipográfica mais clara, espaçamentos harmoniosos, paleta consistente com os tokens existentes e microinterações em hover/focus. **A landing terá mais seções no futuro**, como: personalizar o layout à vontade, como funciona o software, e outras conforme necessário; a estrutura e o componente `LandingSection` devem suportar extensão sem refatoração.
 
-**Why this priority**: A landing é a primeira impressão; refinamentos aqui impactam diretamente a percepção de qualidade do blog.
+**Why this priority**: A landing é a primeira impressão; layouts variados e animações elevam a percepção de qualidade.
 
-**Independent Test**: Acessar `/`, comparar visualmente com estado anterior; verificar que nenhuma funcionalidade foi removida; validar hierarquia visual, contraste e responsividade.
+**Independent Test**: Acessar `/`, verificar layouts alternados (esq/dir), animações de texto, referências visuais aplicadas; validar hierarquia, contraste e responsividade.
 
 **Acceptance Scenarios**:
 
-1. **Given** um visitante na raiz do site, **When** ele acessa `/`, **Then** a página exibe refinamentos visuais (tipografia, espaçamento, cores) sem alterar funcionalidades existentes.
-2. **Given** a landing, **When** o visitante interage com links e botões, **Then** há feedback visual claro (hover, focus) e transições suaves.
-3. **Given** a landing em diferentes larguras de tela, **When** o visitante redimensiona a janela, **Then** o layout permanece legível e equilibrado em mobile, tablet e desktop.
-4. **Given** a landing, **When** o visitante usa tema claro e tema escuro, **Then** ambos apresentam refinamentos visuais consistentes.
+1. **Given** um visitante na raiz do site, **When** ele acessa `/`, **Then** cada categoria de seção (hero, destaque, categorias) tem layout fixo próprio (ex.: hero esq/dir, destaque dir/esq) definido pela análise dos sites de referência (paleta, animações, layouts).
+2. **Given** a landing, **When** o visitante rola a página, **Then** textos e seções têm animações de aparição suaves e respeitam `prefers-reduced-motion`.
+3. **Given** a landing, **When** o visitante interage com links e botões, **Then** há feedback visual claro (hover, focus) e transições suaves.
+4. **Given** a landing em diferentes larguras de tela, **When** o visitante redimensiona, **Then** o layout permanece legível em mobile, tablet e desktop.
+5. **Given** a landing, **When** o visitante usa tema claro e tema escuro, **Then** ambos apresentam refinamentos consistentes.
 
 ---
 
-### User Story 2 — Leitor experimenta páginas de blog mais agradáveis (Priority: P2)
+### User Story 2 — Navbar redesenhada e preparada para extensibilidade (Priority: P1)
+
+Um visitante ou usuário acessa qualquer página. A navbar é **redesenhada** com: logo à esquerda; itens de navegação (âncoras da landing e outras seções) ao centro; à direita: toggle de tema; quando **não logado**: ícone person + "Seja bem-vindo" + **Entre** ou **Cadastre-se** (dois links); quando **logado**: ícone person + nome + dropdown com link para página de configuração e botão Sair. Em viewports responsivas, exibe **menu hamburger** em vez da barra completa. A estrutura da navbar deve estar **pronta para extensibilidade** da feature 004 (acessibilidade), permitindo futura configuração de sidebar à esquerda ou direita, sem refatoração estrutural.
+
+**Why this priority**: A navbar é interface crítica; urgência citada pelo usuário.
+
+**Independent Test**: Acessar qualquer página, verificar layout da navbar; em mobile, abrir hamburger; clicar em "Entre ou Cadastre-se" e verificar redirecionamento para login.
+
+**Acceptance Scenarios**:
+
+1. **Given** qualquer página, **When** o visitante visualiza a navbar, **Then** logo está à esquerda, itens de navegação ao centro, e toggle de tema + ícone person + "Seja bem-vindo" + "Entre ou Cadastre-se" à direita.
+2. **Given** viewport responsiva (ex.: &lt;768px), **When** o visitante acessa, **Then** a navbar exibe menu hamburger; ao abrir, itens e ações são acessíveis.
+3. **Given** o visitante clica em "Entre" ou "Cadastre-se", **When** a ação é acionada, **Then** "Entre" leva a `/auth/login` e "Cadastre-se" a `/auth/register`. Quando logado, **Then** ícone person + nome + dropdown (configurações, sair).
+4. **Given** a navbar, **When** planejamento da 004, **Then** a estrutura permite extensão para sidebar configurável sem reescrita estrutural.
+5. **Given** um usuário logado, **When** abre o dropdown do person, **Then** vê link para página de configuração e botão Sair (logout abre modal de confirmação).
+
+---
+
+### User Story 3 — Leitor experimenta páginas de blog mais agradáveis (Priority: P2)
 
 Um visitante acessa a listagem de posts (`/blog`) ou a página de um post (`/blog/[slug]`). O conteúdo e funcionalidades permanecem idênticos, mas a apresentação visual é refinada: melhor legibilidade do corpo do texto, espaçamento adequado entre blocos, cards e badges mais polidos, seção de comentários com hierarquia visual mais clara e botões/ações com estados visuais bem definidos.
 
@@ -41,11 +81,12 @@ Um visitante acessa a listagem de posts (`/blog`) ou a página de um post (`/blo
 1. **Given** a página de listagem de posts, **When** o visitante visualiza os cards, **Then** há refinamentos visuais (tipografia, espaçamento, hover) sem perda de informação ou funcionalidade.
 2. **Given** a página de um post, **When** o visitante lê o conteúdo, **Then** o corpo do texto oferece boa legibilidade (tamanho, linha, contraste).
 3. **Given** a seção de comentários, **When** o visitante interage (formulário, replies, avatar), **Then** a hierarquia visual é clara e os estados de foco/hover são visíveis.
-4. **Given** botões de like e ações, **When** o visitante interage, **Then** há feedback visual imediato e consistente.
+4. **Given** botões de like e comentar, **When** o visitante **não está logado**, **Then** os botões têm opacidade baixa e parecem desativados; ao clicar, abre modal que redireciona para login (remover estados atuais que exibem necessidade de login).
+5. **Given** botões de like e ações, **When** o visitante **está logado**, **Then** há feedback visual imediato e consistente.
 
 ---
 
-### User Story 3 — Admin percebe área administrativa mais profissional (Priority: P3)
+### User Story 4 — Admin percebe área administrativa mais profissional (Priority: P3)
 
 Um administrador acessa a área restrita (`/admin/posts` e subpáginas). A funcionalidade de CRUD e publicação permanece inalterada, mas a interface é refinada: formulários mais claros, tabelas/listas mais legíveis, botões e ações com hierarquia visual definida e consistência com o restante do blog.
 
@@ -61,7 +102,7 @@ Um administrador acessa a área restrita (`/admin/posts` e subpáginas). A funci
 
 ---
 
-### User Story 4 — Usuário encontra telas de auth mais acolhedoras (Priority: P4)
+### User Story 5 — Usuário encontra telas de auth mais acolhedoras (Priority: P4)
 
 Um visitante acessa as páginas de login (`/auth/login`) e registro (`/auth/register`). A autenticação e validação permanecem idênticas, mas a apresentação é refinada: formulários mais limpos, mensagens de erro mais visíveis, links e botões com feedback visual adequado e alinhamento com a identidade visual do blog.
 
@@ -77,7 +118,22 @@ Um visitante acessa as páginas de login (`/auth/login`) e registro (`/auth/regi
 
 ---
 
-### User Story 5 — Todos os usuários se beneficiam de acessibilidade e consistência (Priority: P5)
+### User Story 6 — Referências de design e preparação para 004 (Priority: P5)
+
+**Prioridade central da feature.** A implementação deve ser guiada por pesquisa de **≥10 sites de landing page** como referência, focando em: **layout** (disposição de seções, esquerda/direita), **animações** (aparição de texto, transições) e **paleta** (marrom escuro, verde escuro, branco e dark mode — equivalentes a `brand-brown`, `brand-green`, `cloud-dancer` e tema dark). A apresentação da landing deve seguir padrões identificados nesses exemplos antes de implementar. Os componentes (navbar, layout de leitura) devem estar estruturados para a feature 004 de acessibilidade.
+
+**Why this priority**: Garante qualidade visual baseada em referências e facilita a 004.
+
+**Independent Test**: Documentar referências usadas; validar que componentes permitem extensão para sidebar/layout configurável.
+
+**Acceptance Scenarios**:
+
+1. **Given** o planejamento, **When** o redesign é implementado, **Then** há documentação de ≥10 sites de referência com design atraente e paleta similar.
+2. **Given** os componentes navbar e layout de leitura, **When** a feature 004 for planejada, **Then** não é necessária refatoração estrutural para sidebar ou layout configurável.
+
+---
+
+### User Story 7 — Todos os usuários se beneficiam de acessibilidade e consistência (Priority: P6)
 
 Em todas as páginas, o redesign mantém ou melhora acessibilidade: contraste adequado em ambos os temas, indicadores de foco visíveis para navegação por teclado, respeito a `prefers-reduced-motion` (redução ou desativação de animações quando o usuário preferir) e consistência de padrões visuais (cores, espaçamentos, componentes) em todo o site.
 
@@ -106,16 +162,19 @@ Em todas as páginas, o redesign mantém ou melhora acessibilidade: contraste ad
 
 ### Functional Requirements
 
-- **FR-001**: O sistema DEVE aplicar refinamentos visuais na landing (`/`) sem adicionar nem remover funcionalidades.
-- **FR-002**: O sistema DEVE aplicar refinamentos visuais nas páginas de blog (`/blog`, `/blog/[slug]`) mantendo legibilidade e usabilidade.
-- **FR-003**: O sistema DEVE aplicar refinamentos visuais na área admin (`/admin/posts` e subpáginas) mantendo todas as ações existentes.
-- **FR-004**: O sistema DEVE aplicar refinamentos visuais nas páginas de auth (`/auth/login`, `/auth/register`) mantendo fluxo e validação.
-- **FR-005**: O sistema DEVE manter ou melhorar contraste de texto/fundo em ambos os temas (light e dark).
-- **FR-006**: O sistema DEVE exibir indicadores de foco visíveis em todos os elementos interativos para navegação por teclado.
-- **FR-007**: O sistema DEVE respeitar a preferência do usuário `prefers-reduced-motion` (reduzir ou desativar animações quando aplicável).
-- **FR-008**: O sistema DEVE manter consistência visual de componentes (botões, inputs, badges, cards) em todas as páginas.
-- **FR-009**: O sistema DEVE preservar comportamento responsivo em mobile, tablet e desktop após refinamentos.
-- **FR-010**: O redesign NÃO DEVE introduzir novas funcionalidades; apenas alterações visuais e de apresentação.
+- **FR-001**: O sistema DEVE aplicar layouts variados na landing (`/`): cada categoria de seção (hero, destaque, categorias) tem layout próprio (texto à esquerda ou direita) definido pela análise dos sites de referência (paleta de cores, animações, layouts de seções).
+- **FR-002**: O sistema DEVE incluir animações de aparição de texto na landing e demais páginas, respeitando `prefers-reduced-motion`.
+- **FR-003**: O sistema DEVE redesenhar a navbar: logo à esquerda; itens ao centro; à direita: toggle de tema; quando não logado: ícone person + "Seja bem-vindo" + **Entre** ou **Cadastre-se** (dois links); quando logado: ícone person + nome + dropdown (configurações, sair).
+- **FR-004**: O sistema DEVE exibir menu hamburger na navbar em viewports responsivas (&lt;768px ou breakpoint definido).
+- **FR-005**: O sistema DEVE estruturar navbar e layout de leitura para extensibilidade da feature 004 (sidebar configurável, layout de leitura, split de artigo, tempo de leitura — fora do escopo desta spec).
+- **FR-006**: O sistema DEVE documentar ≥10 sites de landing page como referência (prioridade central), focando em: **layout** (disposição de seções), **animações** e **paleta** (marrom escuro, verde escuro, branco e dark mode). A análise deve orientar layouts por categoria (hero, destaque, categorias) e animações antes da implementação.
+- **FR-007**: O sistema DEVE aplicar refinamentos visuais nas páginas de blog (`/blog`, `/blog/[slug]`) mantendo legibilidade e usabilidade.
+- **FR-008**: O sistema DEVE aplicar refinamentos visuais na área admin e auth mantendo ações e fluxos existentes.
+- **FR-009**: O sistema DEVE manter ou melhorar contraste e indicadores de foco para navegação por teclado; respeitar `prefers-reduced-motion`.
+- **FR-010**: O sistema DEVE criar modal reutilizável de confirmação para: logout, exclusão de post/comentário e aviso de login (redirecionamento para login quando visitante tenta curtir ou comentar sem estar logado).
+- **FR-011**: O sistema DEVE criar página de configuração do usuário (link no dropdown da navbar; conteúdo mínimo na 003, extensível na 004).
+- **FR-012**: O sistema DEVE, quando visitante não está logado, exibir botões de curtir e comentar com opacidade baixa/aparentando desativados; ao clicar, abrir modal que redireciona para login (substituir comportamento atual de alerta/estados explícitos).
+- **FR-013**: O sistema NÃO DEVE implementar na 003: tempo de leitura, split de artigo em páginas, sidebar configurável — esses itens pertencem à feature 004.
 
 ### Key Entities
 
@@ -138,10 +197,12 @@ Nenhuma entidade de dados nova. O redesign atua sobre entidades já existentes (
 
 ## Assumptions
 
+- **Prioridade**: A pesquisa de referências (layout, animação, paleta marrom escuro/verde escuro/branco/dark) antecede e orienta a implementação.
 - O redesign utiliza o sistema de design e tokens existentes (variáveis CSS, temas) como base; extensões são permitidas para refinamento.
 - Não há mudança de identidade de marca (nome, conceito); apenas refinamento da apresentação atual.
 - Testes de acessibilidade podem ser manuais ou com ferramentas assistivas; testes automatizados de contraste/foco são opcionais conforme recursos.
 - O footer e o header seguem os mesmos critérios de refinamento das demais seções.
+- A landing terá **mais seções futuras** (ex.: personalizar layout à vontade, como funciona o software); o `LandingSection` e a navbar devem ser extensíveis para incluir âncoras dessas novas seções.
 
 ---
 
@@ -149,3 +210,4 @@ Nenhuma entidade de dados nova. O redesign atua sobre entidades já existentes (
 
 - **Feature 001 (Blog Foundation)**: Base funcional do blog.
 - **Feature 002 (Tela Inicial, Admin e Tema)**: Landing, tema light/dark, auth, admin e footer já implementados. O redesign atua sobre essas implementações.
+- **Feature 004 (Acessibilidade e Personalização)** — planejada: tempo de leitura, split de artigo, sidebar configurável, paleta configurável, layout de leitura configurável. A 003 prepara componentes para extensão sem refatoração estrutural.
