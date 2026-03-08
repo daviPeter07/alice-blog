@@ -1,6 +1,10 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { LandingSection } from '@/components/blog/landing-section';
+
+const HERO_IMAGE_WIDTH = 600;
+const HERO_IMAGE_HEIGHT = 600;
 
 export function HeroSection() {
   return (
@@ -44,7 +48,15 @@ export function HeroSection() {
         className="hidden md:flex items-center justify-center min-h-[calc(100vh-3.5rem)] px-6"
         aria-hidden
       >
-        <div className="w-48 h-48 rounded-full bg-brand-green/10" />
+        <Image
+          src="/menina-gato-livro-removebg.png"
+          alt=""
+          width={HERO_IMAGE_WIDTH}
+          height={HERO_IMAGE_HEIGHT}
+          className="object-contain"
+          style={{ maxWidth: HERO_IMAGE_WIDTH, maxHeight: HERO_IMAGE_HEIGHT }}
+          priority
+        />
       </div>
     </LandingSection>
   );
