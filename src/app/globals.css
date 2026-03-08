@@ -348,3 +348,64 @@ body {
 .prose-alice p:last-child {
   margin-bottom: 0;
 }
+
+.prose-alice h1,
+.prose-alice h2,
+.prose-alice h3 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose-alice h1 {
+  font-size: 1.75rem;
+}
+.prose-alice h2 {
+  font-size: 1.5rem;
+}
+.prose-alice h3 {
+  font-size: 1.25rem;
+}
+
+.prose-alice ul,
+.prose-alice ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose-alice li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-alice blockquote {
+  border-left: 4px solid var(--border);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: var(--muted-foreground);
+}
+
+.prose-alice code {
+  background: var(--muted);
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+.prose-alice pre {
+  background: var(--muted);
+  padding: 1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.prose-alice pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose-alice a {
+  color: var(--brand-green);
+  text-decoration: underline;
+}

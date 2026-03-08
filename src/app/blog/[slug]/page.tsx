@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
 import type { Metadata } from 'next';
 
 import { getPostBySlug, getPublishedPostSlugs } from '@/data-access/posts';
@@ -105,8 +107,10 @@ async function PostContent({ slug }: { slug: string }) {
         </div>
       </header>
 
-      {/* Corpo do post */}
-      <article className="prose-alice mb-14 whitespace-pre-wrap">{post.content}</article>
+      {/* Corpo do post — Markdown renderizado */}
+      <article className="prose-alice mb-14">
+        <ReactMarkdown remarkPlugins={[remarkBreaks]}>{post.content}</ReactMarkdown>
+      </article>
 
       {/* Divisor */}
       <hr className="border-border mb-10" />

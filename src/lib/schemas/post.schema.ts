@@ -44,6 +44,19 @@ export const postIdSchema = z.object({
   id: z.string().cuid('ID do post inválido.'),
 });
 
+/** Schema do formulário de criar/editar post (slug omitido — derivado do título) */
+export const createPostFormSchema = z.object({
+  title: z.string().min(1, 'Título obrigatório.').max(300, 'Título muito longo.'),
+  excerpt: z.string().max(500, 'Resumo muito longo.'),
+  content: z.string().min(1, 'Conteúdo obrigatório.'),
+  tags: z.string(),
+});
+
+/** Schema do formulário de editar post */
+export const updatePostFormSchema = createPostFormSchema;
+
 export type PostSlugParams = z.infer<typeof postSlugParamsSchema>;
 export type CreatePostInput = z.infer<typeof createPostSchema>;
 export type UpdatePostInput = z.infer<typeof updatePostSchema>;
+export type CreatePostFormInput = z.infer<typeof createPostFormSchema>;
+export type UpdatePostFormInput = z.infer<typeof updatePostFormSchema>;

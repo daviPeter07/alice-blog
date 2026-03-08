@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getPostById } from '@/data-access/posts';
-import { EditPostForm } from './edit-post-form';
+import { PostForm } from '@/components/admin/post-form';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -23,7 +23,7 @@ export default async function EditPostPage({ params }: PageProps) {
       <h1 className="font-body text-2xl font-semibold text-foreground mb-8">
         Editar: {post.title}
       </h1>
-      <EditPostForm post={post} />
+      <PostForm post={post} />
     </main>
   );
 }
