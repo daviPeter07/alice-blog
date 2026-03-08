@@ -134,7 +134,7 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
   }, [menuOpen]);
 
   const defaultLogo = (
-    <span className="font-body text-lg font-semibold text-foreground hover:text-brand-green transition-colors duration-200">
+    <span className="font-heading text-lg font-semibold text-foreground hover:text-brand-green transition-colors duration-200">
       Alice
     </span>
   );

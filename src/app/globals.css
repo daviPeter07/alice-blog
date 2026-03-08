@@ -126,9 +126,10 @@
   --color-cafe-mocha: var(--cafe-mocha);
   --color-cafe-card: var(--cafe-card);
 
-  /* Typography */
-  --font-body: var(--font-lora);
-  --font-ui: var(--font-inter);
+  /* Typography — vibe lofi */
+  --font-body: var(--font-nunito);
+  --font-ui: var(--font-nunito-sans);
+  --font-heading: var(--font-bricolage);
 }
 
 /* -------------------------------------------------------------------------
@@ -227,6 +228,29 @@ body {
   transform: translateY(0);
 }
 
+/* Itens que aparecem em stagger quando a seção entra no viewport */
+.reveal-section .reveal-item {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.reveal-section.is-visible .reveal-item {
+  animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-section.is-visible .reveal-delay-0 { animation-delay: 0ms; }
+.reveal-section.is-visible .reveal-delay-1 { animation-delay: 60ms; }
+.reveal-section.is-visible .reveal-delay-2 { animation-delay: 120ms; }
+.reveal-section.is-visible .reveal-delay-3 { animation-delay: 180ms; }
+.reveal-section.is-visible .reveal-delay-4 { animation-delay: 240ms; }
+.reveal-section.is-visible .reveal-delay-5 { animation-delay: 300ms; }
+.reveal-section.is-visible .reveal-delay-6 { animation-delay: 360ms; }
+.reveal-section.is-visible .reveal-delay-7 { animation-delay: 420ms; }
+.reveal-section.is-visible .reveal-delay-8 { animation-delay: 480ms; }
+.reveal-section.is-visible .reveal-delay-9 { animation-delay: 540ms; }
+.reveal-section.is-visible .reveal-delay-10 { animation-delay: 600ms; }
+.reveal-section.is-visible .reveal-delay-11 { animation-delay: 660ms; }
+
 @media (prefers-reduced-motion: reduce) {
   .reveal-section {
     opacity: 1;
@@ -235,6 +259,13 @@ body {
   }
   .reveal-section.is-visible {
     opacity: 1;
+  }
+  .reveal-section .reveal-item {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-section.is-visible .reveal-item {
+    animation: none;
   }
 }
 

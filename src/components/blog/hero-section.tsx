@@ -22,7 +22,7 @@ export function HeroSection() {
           </p>
 
           <h1
-            className="animate-fade-up font-body text-4xl sm:text-5xl md:text-6xl font-semibold text-foreground leading-[1.1]"
+            className="animate-fade-up font-heading text-4xl sm:text-5xl md:text-6xl font-semibold text-foreground leading-[1.1]"
             style={{ animationDelay: '80ms' }}
           >
             Um espaço

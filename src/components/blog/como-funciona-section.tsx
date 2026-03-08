@@ -41,27 +41,24 @@ export function ComoFuncionaSection() {
       <section aria-labelledby="como-funciona-heading" className="w-full">
         <header className="mb-10 w-full">
           <p
-            className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
-            style={{ animationDelay: '0ms' }}
+            className="reveal-item reveal-delay-0 font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
           >
             saiba mais
           </p>
           <h2
             id="como-funciona-heading"
-            className="animate-fade-up font-body text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
-            style={{ animationDelay: '60ms' }}
+            className="reveal-item reveal-delay-1 font-heading text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
           >
             Como funciona o software
           </h2>
           <p
-            className="animate-fade-up font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl"
-            style={{ animationDelay: '120ms' }}
+            className="reveal-item reveal-delay-2 font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl"
           >
             O Alice é um blog minimalista focado em textos e reflexões. Cadastre-se para comentar e curtir. Em breve, mais recursos de personalização.
           </p>
         </header>
 
-        <div className="rounded-2xl border border-border bg-card p-8 sm:p-10 w-full">
+        <div className="reveal-item reveal-delay-3 rounded-2xl border border-border bg-card p-8 sm:p-10 w-full">
           <div className="relative">
             <div
               className="absolute top-6 left-0 right-0 hidden h-px bg-linear-to-r from-transparent via-border to-transparent sm:block"
@@ -71,8 +68,7 @@ export function ComoFuncionaSection() {
               {steps.map(({ icon: Icon, title, text }, i) => (
                 <div
                   key={title}
-                  className="relative flex flex-col items-center text-center sm:pt-6"
-                  style={{ animationDelay: `${(i + 1) * 60}ms` }}
+                  className={`reveal-item reveal-delay-${Math.min(i + 3, 11)} relative flex flex-col items-center text-center sm:pt-6`}
                 >
                   <div
                     className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-border bg-background text-muted-foreground
@@ -81,7 +77,7 @@ export function ComoFuncionaSection() {
                   >
                     <Icon className="size-5" strokeWidth={1.5} />
                   </div>
-                  <h3 className="font-body text-lg font-semibold text-foreground mt-4 mb-2">
+                  <h3 className="font-heading text-lg font-semibold text-foreground mt-4 mb-2">
                     {title}
                   </h3>
                   <p className="font-ui text-sm text-muted-foreground leading-relaxed max-w-[240px]">

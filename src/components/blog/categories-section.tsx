@@ -20,7 +20,7 @@ export interface CategoryBlockProps {
 function CategoryBlock({ categories, title, subtitle }: CategoryBlockProps) {
   return (
     <div className="text-center">
-      <h3 className="font-body text-xl font-semibold text-foreground mb-1">{title}</h3>
+      <h3 className="font-heading text-xl font-semibold text-foreground mb-1">{title}</h3>
       {subtitle && <p className="font-ui text-sm text-muted-foreground mb-4">{subtitle}</p>}
       <div className="flex flex-wrap justify-center gap-2" role="list" aria-label={title}>
         {categories.map((cat, index) => (
@@ -28,8 +28,7 @@ function CategoryBlock({ categories, title, subtitle }: CategoryBlockProps) {
             key={cat.slug}
             href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
             title={cat.label}
-            className="animate-fade-up focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md inline-flex"
-            style={{ animationDelay: `${index * 30}ms` }}
+            className={`reveal-item reveal-delay-${Math.min(index + 3, 11)} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md inline-flex`}
             role="listitem"
           >
             <Badge variant="secondary" className={TAG_BADGE_CLASS}>
@@ -56,21 +55,18 @@ export function CategoriesSection({ categories, featuredCount = 4 }: CategoriesS
   const headerEl = (
     <header className="mb-10 w-full">
       <p
-        className="animate-fade-up font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
-        style={{ animationDelay: '0ms' }}
+        className="reveal-item reveal-delay-0 font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none"
       >
         explore
       </p>
       <h2
         id="categories-heading"
-        className="animate-fade-up font-body text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
-        style={{ animationDelay: '60ms' }}
+        className="reveal-item reveal-delay-1 font-heading text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
       >
         Temas e assuntos
       </h2>
       <p
-        className="animate-fade-up font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl"
-        style={{ animationDelay: '120ms' }}
+        className="reveal-item reveal-delay-2 font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl"
       >
         Navegue por tópicos que aparecem nos textos. Clique em um tema para filtrar os artigos do blog.
       </p>
@@ -81,7 +77,7 @@ export function CategoriesSection({ categories, featuredCount = 4 }: CategoriesS
     categories.length === 0 ? (
       <p className="font-ui text-muted-foreground">Nenhuma categoria ainda.</p>
     ) : (
-      <div className="rounded-2xl border border-border bg-card p-8 sm:p-10 space-y-10">
+      <div className="reveal-item reveal-delay-3 rounded-2xl border border-border bg-card p-8 sm:p-10 space-y-10">
         {featured.length > 0 && (
           <CategoryBlock
             categories={featured}

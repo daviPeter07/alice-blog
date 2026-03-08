@@ -83,7 +83,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
           por Alice
         </p>
         <h1
-          className="animate-fade-up font-body text-5xl font-semibold text-foreground mb-4 leading-tight"
+          className="animate-fade-up font-heading text-5xl font-semibold text-foreground mb-4 leading-tight"
           style={{ animationDelay: '60ms' }}
         >
           Artigos

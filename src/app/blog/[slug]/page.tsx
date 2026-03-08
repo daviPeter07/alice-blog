@@ -66,7 +66,7 @@ async function PostContent({ slug }: { slug: string }) {
         )}
 
         {/* Título */}
-        <h1 className="font-body text-4xl font-semibold text-foreground leading-snug mb-5">
+        <h1 className="font-heading text-4xl font-semibold text-foreground leading-snug mb-5">
           {post.title}
         </h1>
 

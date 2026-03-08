@@ -58,7 +58,7 @@ export function CommentSection({
 
   return (
     <section className="mt-16 pt-10 border-t border-border">
-      <h2 className="font-body text-2xl font-semibold text-foreground mb-8">
+      <h2 className="font-heading text-2xl font-semibold text-foreground mb-8">
         {topLevel.length === 0
           ? 'Comentários'
           : `${topLevel.length} comentário${topLevel.length > 1 ? 's' : ''}`}
@@ -90,7 +90,7 @@ export function CommentSection({
           !isAuthenticated && 'opacity-50'
         )}
       >
-        <h3 className="font-body text-lg font-semibold text-foreground mb-5">
+        <h3 className="font-heading text-lg font-semibold text-foreground mb-5">
           Deixe um comentário
         </h3>
 

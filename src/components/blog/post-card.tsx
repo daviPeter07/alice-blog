@@ -32,8 +32,7 @@ export function PostCard({
   return (
     <Link
       href={`/blog/${slug}`}
-      className="group block animate-fade-up focus-visible:outline-none"
-      style={{ animationDelay: `${index * 90}ms` }}
+      className={`group block reveal-item focus-visible:outline-none reveal-delay-${Math.min(index, 11)}`}
     >
       <article
         className="
@@ -66,7 +65,7 @@ export function PostCard({
 
         {/* Título */}
         <h2
-          className="font-body text-[1.25rem] font-semibold text-foreground leading-snug mb-2 line-clamp-2 group-hover:text-brand-green transition-colors duration-200 overflow-hidden"
+          className="font-heading text-[1.25rem] font-semibold text-foreground leading-snug mb-2 line-clamp-2 group-hover:text-brand-green transition-colors duration-200 overflow-hidden"
           title={title}
         >
           {title}
