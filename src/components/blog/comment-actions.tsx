@@ -43,7 +43,13 @@ export function CommentActions({
 }: CommentActionsProps) {
   const isOwn = currentUserEmail === authorEmail;
   const createdAtDate = typeof createdAt === 'string' ? new Date(createdAt) : createdAt;
-  const canEdit = isOwn && Date.now() - createdAtDate.getTime() < EDIT_WINDOW_MS;
+
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => {
+    const t = Date.now();
+    queueMicrotask(() => setNow(t));
+  }, []);
+  const canEdit = isOwn && now !== null && now - createdAtDate.getTime() < EDIT_WINDOW_MS;
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);

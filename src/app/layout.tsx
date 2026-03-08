@@ -10,6 +10,7 @@ import './globals.css';
 
 const LANDING_NAV_ANCHORS = [
   { href: '/#destaque', label: 'Destaques' },
+  { href: '/#quem-sou-eu', label: 'Quem sou eu' },
   { href: '/#categorias', label: 'Categorias' },
   { href: '/#personalizar', label: 'Personalizar' },
   { href: '/#como-funciona', label: 'Como funciona' },
@@ -18,6 +19,7 @@ const LANDING_NAV_ANCHORS = [
 const FOOTER_TOPICS = [
   { href: '/blog', label: 'Blog' },
   { href: '/#destaque', label: 'Destaques' },
+  { href: '/#quem-sou-eu', label: 'Quem sou eu' },
   { href: '/#categorias', label: 'Categorias' },
   { href: '/#personalizar', label: 'Personalizar' },
   { href: '/#como-funciona', label: 'Como funciona' },

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { getRecentPosts, getPostsPaginated } from '@/data-access/posts';
 import { HeroSection } from '@/components/blog/hero-section';
 import { FeaturedSection } from '@/components/blog/featured-section';
+import { QuemSouEuSection } from '@/components/blog/quem-sou-eu-section';
 import { CategoriesSection } from '@/components/blog/categories-section';
 import { PersonalizarSection } from '@/components/blog/personalizar-section';
 import { ComoFuncionaSection } from '@/components/blog/como-funciona-section';
@@ -53,6 +54,9 @@ export default async function HomePage({
         <Suspense fallback={<div className="min-h-[400px] animate-pulse bg-muted/30" />}>
           <FeaturedContent searchParams={searchParams} />
         </Suspense>
+      </RevealSectionWrapper>
+      <RevealSectionWrapper>
+        <QuemSouEuSection />
       </RevealSectionWrapper>
       <RevealSectionWrapper>
         <CategoriesSection categories={categories} />
