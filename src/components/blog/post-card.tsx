@@ -51,7 +51,11 @@ export function PostCard({
               <Badge
                 key={tag}
                 variant="secondary"
-                className="font-ui text-[11px] max-w-[120px] truncate"
+                className="font-ui text-[11px] max-w-[120px] truncate border border-brand-green/20 bg-brand-green/5 text-foreground
+                  group-hover:border-brand-green/35 group-hover:bg-brand-green/8
+                  theme-dark:border-brand-green-light/50 theme-dark:bg-brand-green-light/25 theme-dark:text-foreground
+                  theme-dark:group-hover:border-brand-green-light/60 theme-dark:group-hover:bg-brand-green-light/35
+                  transition-colors"
                 title={tag}
               >
                 {tag.length > 20 ? `${tag.slice(0, 18)}…` : tag}

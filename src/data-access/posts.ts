@@ -108,7 +108,7 @@ export async function getPostsPaginated(
         author: { select: { name: true, image: true, role: true } },
         _count: { select: { likes: true, comments: true } },
       },
-      orderBy: { publishedAt: 'desc' },
+      orderBy: [{ likes: { _count: 'desc' } }, { publishedAt: 'desc' }],
       skip: (page - 1) * perPage,
       take: perPage,
     }),

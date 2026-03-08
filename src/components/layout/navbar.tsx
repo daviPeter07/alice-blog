@@ -28,10 +28,10 @@ export interface NavbarProps {
 
 function NavLink({ href, label, isActive }: NavAnchor & { isActive?: boolean }) {
   const baseClass =
-    'font-ui text-sm transition-colors duration-200 flex items-center h-8 border-b-2 border-transparent -mb-[1px]';
+    'font-ui text-sm transition-colors duration-200 flex items-center h-8';
   const activeClass = isActive
-    ? 'text-foreground font-medium border-foreground'
-    : 'text-muted-foreground hover:text-foreground';
+    ? 'text-foreground font-medium underline decoration-brand-green decoration-2 underline-offset-4'
+    : 'text-muted-foreground hover:text-foreground no-underline';
   const className = `${baseClass} ${activeClass}`;
   if (href.startsWith('#')) {
     return (
@@ -219,29 +219,27 @@ export function Navbar({ navAnchors, showThemeToggle = false, user = null, logo 
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b border-border bg-cloud-dancer/85 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           <Link href="/" className="shrink-0">
             {logo ?? defaultLogo}
           </Link>
 
-          <nav
-            className="hidden md:flex items-center gap-5 flex-1 justify-center"
-            aria-label="Navegação principal"
-          >
-            {navContent}
-          </nav>
-
-          <div className="hidden md:flex items-center gap-3 shrink-0">
-            {user?.role === 'ADMIN' && (
-              <Link
-                href="/admin/posts"
-                className="flex items-center h-8 rounded-lg bg-brand-green px-3 font-medium text-white hover:bg-brand-green/90 transition-colors duration-200 text-sm font-ui"
-              >
-                Lançar artigo
-              </Link>
-            )}
-            {showThemeToggle && <ThemeToggle />}
-            {authContent}
+          <div className="hidden md:flex items-center gap-5 shrink-0 ml-auto">
+            <nav className="flex items-center gap-5" aria-label="Navegação principal">
+              {navContent}
+            </nav>
+            <div className="flex items-center gap-3">
+              {user?.role === 'ADMIN' && (
+                <Link
+                  href="/admin/posts"
+                  className="flex items-center h-8 rounded-lg bg-brand-green px-3 font-medium text-white hover:bg-brand-green/90 transition-colors duration-200 text-sm font-ui"
+                >
+                  Lançar artigo
+                </Link>
+              )}
+              {showThemeToggle && <ThemeToggle />}
+              {authContent}
+            </div>
           </div>
 
           <div className="flex md:hidden items-center gap-2">

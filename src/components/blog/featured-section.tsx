@@ -39,7 +39,7 @@ export function FeaturedSection({
             className="animate-fade-up font-ui text-muted-foreground mt-2 leading-relaxed"
             style={{ animationDelay: '120ms' }}
           >
-            Os textos mais recentes.
+            Ordenados por curtidas.
           </p>
         </header>
 
