@@ -3,73 +3,37 @@ import { Badge } from '@/components/ui/badge';
 import { LandingSection } from '@/components/blog/landing-section';
 import type { CategoryItem } from '@/types/landing';
 
-export interface CategoryPillBlockProps {
-  categories: CategoryItem[];
-  title: string;
-  subtitle?: string;
-  /** Estilo: pills com hover verde ou marrom */
-  accent?: 'green' | 'brown';
-}
+/** Estilo idêntico às tags dos cards de artigo (post-card) */
+const TAG_BADGE_CLASS =
+  'font-ui text-[11px] max-w-[120px] truncate border border-brand-green/20 bg-brand-green/5 text-foreground ' +
+  'hover:border-brand-green/35 hover:bg-brand-green/8 ' +
+  'theme-dark:border-brand-green-light/50 theme-dark:bg-brand-green-light/25 theme-dark:text-foreground ' +
+  'theme-dark:hover:border-brand-green-light/60 theme-dark:hover:bg-brand-green-light/35 ' +
+  'transition-colors';
 
-export function CategoryPillBlock({
-  categories,
-  title,
-  subtitle,
-  accent = 'green',
-}: CategoryPillBlockProps) {
-  const hoverClass =
-    accent === 'brown'
-      ? 'hover:bg-brand-brown/10 hover:text-brand-brown'
-      : 'hover:bg-brand-green/10 hover:text-brand-green';
-
-  return (
-    <div className="text-center">
-      <h3 className="font-body text-xl font-semibold text-foreground mb-1">{title}</h3>
-      {subtitle && <p className="font-ui text-sm text-muted-foreground mb-4">{subtitle}</p>}
-      <div className="flex flex-wrap justify-center gap-x-3 gap-y-2" role="list" aria-label={title}>
-        {categories.map((cat, index) => (
-          <Link
-            key={cat.slug}
-            href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
-            title={cat.label}
-            className={`animate-fade-up font-ui text-sm py-2 px-4 rounded-lg border border-border bg-card/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring max-w-[180px] truncate inline-block ${hoverClass}`}
-            style={{ animationDelay: `${index * 40}ms` }}
-            role="listitem"
-          >
-            {cat.label.length > 24 ? `${cat.label.slice(0, 22)}…` : cat.label}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export interface CategoryBadgeBlockProps {
+export interface CategoryBlockProps {
   categories: CategoryItem[];
   title: string;
   subtitle?: string;
 }
 
-export function CategoryBadgeBlock({ categories, title, subtitle }: CategoryBadgeBlockProps) {
+function CategoryBlock({ categories, title, subtitle }: CategoryBlockProps) {
   return (
     <div className="text-center">
       <h3 className="font-body text-xl font-semibold text-foreground mb-1">{title}</h3>
       {subtitle && <p className="font-ui text-sm text-muted-foreground mb-4">{subtitle}</p>}
-      <div className="flex flex-wrap justify-center gap-x-3 gap-y-2" role="list" aria-label={title}>
+      <div className="flex flex-wrap justify-center gap-2" role="list" aria-label={title}>
         {categories.map((cat, index) => (
           <Link
             key={cat.slug}
             href={`/blog?tag=${encodeURIComponent(cat.slug)}`}
             title={cat.label}
-            className="animate-fade-up focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg inline-flex"
+            className="animate-fade-up focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md inline-flex"
             style={{ animationDelay: `${index * 30}ms` }}
             role="listitem"
           >
-            <Badge
-              variant="secondary"
-              className="font-ui text-sm py-2 px-4 hover:bg-brand-brown/10 hover:text-brand-brown transition-colors max-w-[180px] truncate"
-            >
-              {cat.label.length > 24 ? `${cat.label.slice(0, 22)}…` : cat.label}
+            <Badge variant="secondary" className={TAG_BADGE_CLASS}>
+              {cat.label.length > 20 ? `${cat.label.slice(0, 18)}…` : cat.label}
             </Badge>
           </Link>
         ))}
@@ -118,17 +82,16 @@ export function CategoriesSection({ categories, featuredCount = 4 }: CategoriesS
           {categories.length === 0 ? (
             <p className="font-ui text-muted-foreground">Nenhuma categoria ainda.</p>
           ) : (
-            <div className="space-y-10">
+            <div className="rounded-2xl border border-border bg-card/50 p-8 sm:p-10 space-y-10">
               {featured.length > 0 && (
-                <CategoryPillBlock
+                <CategoryBlock
                   categories={featured}
                   title="Em destaque"
                   subtitle="Alguns tópicos que aparecem com frequência."
-                  accent="green"
                 />
               )}
               {rest.length > 0 && (
-                <CategoryBadgeBlock
+                <CategoryBlock
                   categories={rest}
                   title="Todos os temas"
                   subtitle="Lista completa para filtrar no blog."
