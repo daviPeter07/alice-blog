@@ -92,7 +92,7 @@ export function PostCard({
           </div>
 
           <div className="flex items-center justify-between gap-4 text-[0.75rem] text-muted-foreground font-ui min-w-0">
-            <div className="flex items-center gap-2 min-w-0 overflow-hidden">
+            <div className="flex items-center gap-2 min-w-0">
               {publishedAt ? (
                 <time
                   dateTime={publishedAt.toISOString()}

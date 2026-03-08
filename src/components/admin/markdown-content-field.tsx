@@ -92,7 +92,7 @@ export function MarkdownContentField({
           className="min-h-[280px] rounded-lg border border-input bg-background px-4 py-2.5 font-ui text-sm text-foreground overflow-auto"
           aria-hidden
         >
-          <div className="prose-alice prose-alice-preview">
+          <div className="prose prose-sm prose-alice prose-alice-comment max-w-none">
             {displayValue ? (
               <ReactMarkdown remarkPlugins={[remarkBreaks]}>{displayValue}</ReactMarkdown>
             ) : (

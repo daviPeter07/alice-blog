@@ -341,17 +341,17 @@ body {
 }
 
 /* -------------------------------------------------------------------------
-   Prose — estilo de leitura para o corpo do post
+   Prose — estilo de leitura para o corpo do post (espaçamento compacto)
    ------------------------------------------------------------------------- */
 .prose-alice {
   font-family: var(--font-body), Georgia, serif;
   font-size: 1.125rem;
-  line-height: 1.85;
+  line-height: 1.75;
   color: var(--foreground);
 }
 
 .prose-alice p {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .prose-alice p:last-child {
@@ -363,8 +363,8 @@ body {
 .prose-alice h3 {
   font-family: var(--font-heading), system-ui, sans-serif;
   font-weight: 600;
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
+  margin-top: 0.75em;
+  margin-bottom: 0.35em;
 }
 
 .prose-alice h1 {
@@ -379,18 +379,18 @@ body {
 
 .prose-alice ul,
 .prose-alice ol {
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   padding-left: 1.5rem;
 }
 
 .prose-alice li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .prose-alice blockquote {
   border-left: 4px solid var(--border);
   padding-left: 1rem;
-  margin: 1.5rem 0;
+  margin: 0.75rem 0;
   color: var(--muted-foreground);
 }
 
@@ -403,10 +403,10 @@ body {
 
 .prose-alice pre {
   background: var(--muted);
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   border-radius: var(--radius);
   overflow-x: auto;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .prose-alice pre code {

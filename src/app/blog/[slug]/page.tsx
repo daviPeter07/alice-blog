@@ -106,9 +106,9 @@ async function PostContent({ slug }: { slug: string }) {
         </div>
       </header>
 
-      {/* Corpo do post — Markdown renderizado (--article-read-bg editável pelo usuário) */}
+      {/* Corpo do post — mesmo estilo de espaçamento dos comentários */}
       <div className="article-read-container" data-article-read>
-        <article className="prose-alice">
+        <article className="prose-alice prose-alice-comment max-w-none">
           <ReactMarkdown remarkPlugins={[remarkBreaks]}>{post.content}</ReactMarkdown>
         </article>
       </div>

@@ -66,6 +66,12 @@ export function CommentSection({
           : `${topLevel.length} comentário${topLevel.length > 1 ? 's' : ''}`}
       </h2>
 
+      {topLevel.length === 0 && (
+        <p className="font-ui text-sm text-muted-foreground mb-6">
+          Ninguém comentou ainda. Que tal ser o primeiro?
+        </p>
+      )}
+
       {formOpen && (
         <CommentForm
           mainForm={mainForm}
