@@ -1,6 +1,7 @@
 import { cacheTag } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import type { PostWithRelations } from '@/lib/types';
+import { computeReadingTime } from '@/helpers';
 
 export async function getPostBySlug(slug: string): Promise<PostWithRelations | null> {
   'use cache';
@@ -50,12 +51,13 @@ export async function getRecentPosts(limit = 10) {
 
   cacheTag('posts:list');
 
-  return prisma.post.findMany({
+  const rows = await prisma.post.findMany({
     where: { status: 'PUBLISHED' },
     select: {
       slug: true,
       title: true,
       excerpt: true,
+      content: true,
       publishedAt: true,
       tags: true,
       readingTime: true,
@@ -65,6 +67,11 @@ export async function getRecentPosts(limit = 10) {
     orderBy: { publishedAt: 'desc' },
     take: limit,
   });
+
+  return rows.map(({ content, readingTime, ...post }) => ({
+    ...post,
+    readingTime: readingTime ?? computeReadingTime(content ?? ''),
+  }));
 }
 
 /** Lista posts paginados (backend). 12 por página (3 colunas × 4 linhas). */
@@ -87,13 +94,14 @@ export async function getPostsPaginated(
       ? { status: 'PUBLISHED' as const, tags: { has: tag.trim() } }
       : { status: 'PUBLISHED' as const };
 
-  const [posts, total] = await Promise.all([
+  const [rawPosts, total] = await Promise.all([
     prisma.post.findMany({
       where,
       select: {
         slug: true,
         title: true,
         excerpt: true,
+        content: true,
         publishedAt: true,
         tags: true,
         readingTime: true,
@@ -106,6 +114,11 @@ export async function getPostsPaginated(
     }),
     prisma.post.count({ where }),
   ]);
+
+  const posts = rawPosts.map(({ content, readingTime, ...post }) => ({
+    ...post,
+    readingTime: readingTime ?? computeReadingTime(content ?? ''),
+  }));
 
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   const currentPage = Math.max(1, Math.min(page, totalPages));

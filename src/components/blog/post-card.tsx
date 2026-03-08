@@ -10,7 +10,7 @@ export interface PostCardProps {
   excerpt: string;
   publishedAt: Date | null;
   tags: string[];
-  readingTime: number | null;
+  readingTime: number;
   author: { name: string; image: string | null; role?: 'ADMIN' | 'READER' };
   likesCount: number;
   commentsCount: number;
@@ -61,55 +61,66 @@ export function PostCard({
         )}
 
         {/* Título */}
-        <h2 className="font-body text-[1.25rem] font-semibold text-foreground leading-snug mb-2 line-clamp-2 group-hover:text-brand-green transition-colors duration-200">
+        <h2
+          className="font-body text-[1.25rem] font-semibold text-foreground leading-snug mb-2 line-clamp-2 group-hover:text-brand-green transition-colors duration-200 overflow-hidden"
+          title={title}
+        >
           {title}
         </h2>
 
         {/* Excerpt */}
-        <p className="font-ui text-muted-foreground text-[0.9rem] leading-relaxed line-clamp-2 mb-4 flex-1 min-h-0">
+        <p
+          className="font-ui text-muted-foreground text-[0.9rem] leading-relaxed line-clamp-2 mb-4 flex-1 min-h-0 overflow-hidden"
+          title={excerpt}
+        >
           {excerpt}
         </p>
 
-        {/* Rodapé */}
-        <div className="flex items-center justify-between shrink-0">
-          <div className="flex flex-wrap items-center gap-2 text-[0.8rem] text-muted-foreground font-ui min-w-0">
-            <span className="font-medium text-foreground/80 truncate">{author.name}</span>
+        {/* Header/rodapé: autor em cima, demais info embaixo */}
+        <div className="flex flex-col gap-2 shrink-0 min-w-0">
+          <div className="flex items-center gap-2 min-w-0 overflow-hidden">
+            <span
+              className="font-medium text-foreground/80 text-[0.9rem] truncate"
+              title={author.name}
+            >
+              {author.name}
+            </span>
             {author.role === 'ADMIN' && <AdminCheck size={12} className="shrink-0" />}
-            {publishedAt && (
-              <>
-                <span aria-hidden className="text-border shrink-0">
-                  ·
-                </span>
-                <time dateTime={publishedAt.toISOString()}>{formatDate(publishedAt)}</time>
-              </>
-            )}
-            {readingTime && (
-              <>
-                <span aria-hidden className="text-border shrink-0">
-                  ·
-                </span>
-                <span className="shrink-0">{readingTime} min</span>
-              </>
-            )}
           </div>
 
-          <div className="flex items-center gap-3 text-[0.75rem] text-muted-foreground font-ui shrink-0 ml-3">
-            {likesCount > 0 && (
+          <div className="flex items-center justify-between gap-4 text-[0.75rem] text-muted-foreground font-ui min-w-0">
+            <div className="flex items-center gap-2 min-w-0 overflow-hidden">
+              {publishedAt ? (
+                <time
+                  dateTime={publishedAt.toISOString()}
+                  className="shrink-0"
+                  title={formatDate(publishedAt)}
+                >
+                  {formatDate(publishedAt)}
+                </time>
+              ) : (
+                <span className="shrink-0">—</span>
+              )}
+              <span aria-hidden className="text-border shrink-0">
+                ·
+              </span>
+              <span className="shrink-0">{readingTime} min</span>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0">
               <span className="flex items-center gap-1" title="Curtidas">
                 <Heart size={12} className="shrink-0" aria-hidden />
                 {likesCount}
               </span>
-            )}
-            {commentsCount > 0 && (
               <span className="flex items-center gap-1" title="Comentários">
                 <MessageCircle size={12} className="shrink-0" aria-hidden />
                 {commentsCount}
               </span>
-            )}
-            <ArrowRight
-              size={14}
-              className="text-brand-green opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
-            />
+              <ArrowRight
+                size={14}
+                className="text-brand-green opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
+              />
+            </div>
           </div>
         </div>
       </article>
