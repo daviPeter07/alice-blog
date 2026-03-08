@@ -81,7 +81,7 @@ export function ReplyForm({
                 value={field.value}
                 onChange={field.onChange}
                 required
-                placeholder="Sua resposta… (Markdown: **negrito**, *itálico*, listas…)"
+                placeholder={`Sua resposta. Markdown: **negrito**, *itálico*, listas. HTML: <strong>, <em>, <br>, <a href="url">link</a>.`}
                 rows={3}
               />
             )}

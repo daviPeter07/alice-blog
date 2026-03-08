@@ -173,7 +173,7 @@ export function CommentActions({
                   value={field.value}
                   onChange={field.onChange}
                   required
-                  placeholder="Seu comentário…"
+                  placeholder={`Edite seu comentário. Markdown: **negrito**, *itálico*. HTML: <strong>, <em>, <br>, <a href="url">link</a>.`}
                   rows={3}
                 />
               )}

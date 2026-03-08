@@ -69,7 +69,7 @@ export function PostFormFields({ register, control, errors }: PostFormFieldsProp
               value={field.value}
               onChange={field.onChange}
               required
-              placeholder="Escreva seu artigo em Markdown. Use **negrito**, *itálico*, # título, - lista..."
+              placeholder={`Escreva seu artigo. Markdown: **negrito**, *itálico*, # título, - lista. HTML: <strong>, <em>, <br>, <a href="url">link</a>.`}
             />
           )}
         />

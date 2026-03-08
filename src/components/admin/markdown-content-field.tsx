@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
+import rehypeRaw from 'rehype-raw';
 import { FileText, Eye } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -27,7 +28,7 @@ export function MarkdownContentField({
   onChange,
   defaultValue,
   required,
-  placeholder = 'Escreva seu artigo em Markdown. Use **negrito**, *itálico*, # título, - lista...',
+  placeholder = 'Escreva em Markdown: **negrito**, *itálico*, # título, - lista. HTML também funciona: <strong>negrito</strong>, <em>itálico</em>, <br> quebra de linha, <a href="url">link</a>, <span class="...">texto</span>.',
   rows = 14,
   className,
 }: MarkdownContentFieldProps) {
@@ -92,9 +93,11 @@ export function MarkdownContentField({
           className="min-h-[280px] rounded-lg border border-input bg-background px-4 py-2.5 font-ui text-sm text-foreground overflow-auto"
           aria-hidden
         >
-          <div className="prose prose-sm prose-alice prose-alice-comment max-w-none">
+          <div className="prose-alice max-w-none min-h-0">
             {displayValue ? (
-              <ReactMarkdown remarkPlugins={[remarkBreaks]}>{displayValue}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkBreaks]} rehypePlugins={[rehypeRaw]}>
+                {displayValue}
+              </ReactMarkdown>
             ) : (
               <p className="text-muted-foreground italic">Nenhum conteúdo para visualizar.</p>
             )}

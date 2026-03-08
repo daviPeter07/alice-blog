@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 import { Nunito, Nunito_Sans, Bricolage_Grotesque } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import { Navbar } from '@/components/layout/navbar';
 import { NavbarWithSession } from '@/components/layout/navbar-with-session';
 import { Footer } from '@/components/layout/footer';
 import './globals.css';
@@ -15,6 +14,30 @@ const LANDING_NAV_ANCHORS = [
   { href: '/#personalizar', label: 'Personalizar' },
   { href: '/#como-funciona', label: 'Como funciona' },
 ] as const;
+
+/** Fallback estático (sem client components) para não acessar dados que bloqueiam. */
+function LayoutFallback() {
+  return (
+    <>
+      <header
+        className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-md"
+        aria-hidden
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center">
+          <a
+            href="/"
+            className="font-heading text-lg font-semibold text-foreground hover:text-brand-green transition-colors duration-200"
+          >
+            Alice
+          </a>
+        </div>
+      </header>
+      <div className="flex-1 flex items-center justify-center min-h-[50vh]">
+        <p className="font-ui text-sm text-muted-foreground">Carregando…</p>
+      </div>
+    </>
+  );
+}
 
 const FOOTER_TOPICS = [
   { href: '/blog', label: 'Blog' },
@@ -55,7 +78,7 @@ export const metadata: Metadata = {
     'Reflexões sobre filosofia, história, crítica social e a condição humana. Por Alice.',
 };
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="pt-BR"
@@ -64,12 +87,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     >
       <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
-          <Suspense
-            fallback={<Navbar navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle user={null} />}
-          >
+          <Suspense fallback={<LayoutFallback />}>
             <NavbarWithSession navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle />
+            <div className="flex-1">{children}</div>
           </Suspense>
-          <div className="flex-1">{children}</div>
           <Footer
             topics={[...FOOTER_TOPICS]}
             contactEmail={process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'alice@example.com'}

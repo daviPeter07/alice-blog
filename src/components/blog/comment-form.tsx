@@ -74,7 +74,7 @@ export function CommentForm({
                     value={field.value}
                     onChange={field.onChange}
                     required
-                    placeholder="Escreva aqui suas reflexões… (Markdown: **negrito**, *itálico*, listas…)"
+                    placeholder={`Escreva aqui suas reflexões. Markdown: **negrito**, *itálico*, listas. HTML: <strong>, <em>, <br>, <a href="url">link</a>.`}
                     rows={4}
                   />
                 )}

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
+import rehypeRaw from 'rehype-raw';
 import type { Metadata } from 'next';
 
 import { getPostBySlug, getPublishedPostSlugs } from '@/data-access/posts';
@@ -106,10 +107,12 @@ async function PostContent({ slug }: { slug: string }) {
         </div>
       </header>
 
-      {/* Corpo do post — mesmo estilo de espaçamento dos comentários */}
+      {/* Corpo do post — prose-alice (espaçamento e estilo próprio) */}
       <div className="article-read-container" data-article-read>
-        <article className="prose-alice prose-alice-comment max-w-none">
-          <ReactMarkdown remarkPlugins={[remarkBreaks]}>{post.content}</ReactMarkdown>
+        <article className="prose-alice max-w-none">
+          <ReactMarkdown remarkPlugins={[remarkBreaks]} rehypePlugins={[rehypeRaw]}>
+            {post.content}
+          </ReactMarkdown>
         </article>
       </div>
 
