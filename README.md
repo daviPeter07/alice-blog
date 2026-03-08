@@ -6,6 +6,7 @@ Blog de reflexões sobre filosofia, história, crítica social e a condição hu
 
 - **Next.js 16** (App Router) + **React 19**
 - **Prisma** + **PostgreSQL** — persistência
+- **Docker** — PostgreSQL em container (opcional)
 - **Tailwind CSS v4** — estilos
 - **react-markdown** + **remark-breaks** + **rehype-raw** — Markdown e HTML em posts e comentários
 - **next-themes** — tema claro/escuro
@@ -16,7 +17,28 @@ Blog de reflexões sobre filosofia, história, crítica social e a condição hu
 
 - Node.js 18+
 - pnpm (recomendado)
-- PostgreSQL
+- PostgreSQL (local ou via Docker)
+
+## Docker
+
+O projeto inclui um `docker-compose.yml` com PostgreSQL 16 para desenvolvimento local:
+
+```bash
+# Subir apenas o banco
+docker compose up -d postgres
+```
+
+- **Imagem:** `postgres:16-alpine`
+- **Porta:** `5433` (host) → `5432` (container)
+- **Banco:** `alice_blog_dev` | **Usuário:** `alice` | **Senha:** definida no `docker-compose.yml`
+
+Exemplo de `DATABASE_URL` no `.env`:
+
+```
+DATABASE_URL="postgresql://alice:SENHA@localhost:5433/alice_blog_dev"
+```
+
+Volume nomeado `alice_postgres_data` persiste os dados entre reinícios.
 
 ## Como rodar
 
