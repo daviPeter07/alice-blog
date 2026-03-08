@@ -43,6 +43,9 @@
   --landing-cream: #f0eae2;
   --landing-sage: #e2d6ca;
   --landing-warm: #d4c4b0;
+  /* Fundo da área de leitura do artigo — editável pelo usuário (feature 004) */
+  --article-read-bg: var(--card);
+  --article-read-border: var(--border);
 }
 
 /* Tema light — vibe café (marrom claro → mais escuro) */
@@ -66,6 +69,8 @@
   --landing-cream: #f0eae2;
   --landing-sage: #e2d6ca;
   --landing-warm: #d4c4b0;
+  --article-read-bg: var(--card);
+  --article-read-border: var(--border);
 }
 
 /* Tema dark */
@@ -408,4 +413,13 @@ body {
 .prose-alice a {
   color: var(--brand-green);
   text-decoration: underline;
+}
+
+/* Container de leitura do artigo — background editável (--article-read-bg) */
+.article-read-container {
+  background: var(--article-read-bg);
+  border: 1px solid var(--article-read-border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 3.5rem;
 }

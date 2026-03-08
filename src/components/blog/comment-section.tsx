@@ -1,15 +1,18 @@
 'use client';
 
-import { forwardRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useForm, useWatch, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
 import { createCommentSchema, type CreateCommentInput } from '@/lib/schemas/comment.schema';
 import type { ActionResult, CommentWithReplies } from '@/lib/types';
 import { formatDate, getInitials, avatarHue } from '@/helpers';
 import { useCommentSection, useToastOnSuccess, type OptimisticComment } from '@/hooks';
 import { AdminCheck } from '@/components/ui/admin-check';
 import { ConfirmModal } from '@/components/ui/confirm-modal';
+import { MarkdownContentField } from '@/components/admin/markdown-content-field';
 import { cn } from '@/lib/utils';
 
 interface CommentSectionProps {
@@ -17,6 +20,8 @@ interface CommentSectionProps {
   initialComments: CommentWithReplies[];
   isAuthenticated?: boolean;
   currentUser?: { name: string; email: string; role?: 'ADMIN' | 'READER' } | null;
+  formOpen?: boolean;
+  onFormOpenChange?: (open: boolean) => void;
 }
 
 export function CommentSection({
@@ -24,6 +29,8 @@ export function CommentSection({
   initialComments,
   isAuthenticated = true,
   currentUser = null,
+  formOpen = false,
+  onFormOpenChange,
 }: CommentSectionProps) {
   const {
     mainForm,
@@ -32,29 +39,22 @@ export function CommentSection({
     optimisticComments,
     replyingToId,
     setReplyingToId,
-    replyFormRef,
     onMainSubmit,
     handleReplySubmit,
   } = useCommentSection({ postId, initialComments, currentUser });
 
-  const authorName = useWatch({ control: mainForm.control, name: 'authorName', defaultValue: '' });
-  const authorEmail = useWatch({
-    control: mainForm.control,
-    name: 'authorEmail',
-    defaultValue: '',
-  });
   const body = useWatch({ control: mainForm.control, name: 'body', defaultValue: '' });
 
-  const canSubmitMain =
-    (isAuthenticated && currentUser
-      ? true
-      : String(authorName ?? '').trim() !== '' && String(authorEmail ?? '').trim() !== '') &&
-    String(body ?? '').trim() !== '';
+  const canSubmitMain = String(body ?? '').trim() !== '';
 
   useToastOnSuccess(state, 'Comentário enviado com sucesso! Obrigado pela participação.');
 
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const topLevel = optimisticComments.filter((c) => !c.parentId);
+
+  const handleReplyClick = (commentId: string | null) => {
+    setReplyingToId(commentId);
+  };
 
   return (
     <section className="mt-16 pt-10 border-t border-border">
@@ -64,8 +64,87 @@ export function CommentSection({
           : `${topLevel.length} comentário${topLevel.length > 1 ? 's' : ''}`}
       </h2>
 
+      {/* Formulário acima dos comentários — só aparece quando formOpen */}
+      {formOpen && (
+        <div
+          className={cn(
+            'rounded-2xl border border-border bg-card px-7 py-6 mb-10',
+            !isAuthenticated && 'opacity-50'
+          )}
+        >
+          <h3 className="font-heading text-lg font-semibold text-foreground mb-5">
+            Deixe um comentário
+          </h3>
+
+          {!isAuthenticated && (
+            <button
+              type="button"
+              onClick={() => setLoginModalOpen(true)}
+              className="w-full rounded-xl border border-border bg-muted/50 px-4 py-6 font-ui text-sm text-foreground hover:bg-muted/70 transition-colors text-left cursor-pointer"
+            >
+              Para comentar, faça login.
+            </button>
+          )}
+
+          {isAuthenticated && (
+            <>
+              {state?.success === false && state.error === 'login_required' && (
+                <p className="font-ui text-sm text-destructive mb-4">
+                  <Link href="/auth/login" className="underline">
+                    Faça login
+                  </Link>{' '}
+                  para comentar.
+                </p>
+              )}
+
+              {state?.success === false &&
+                !state.fieldErrors &&
+                state.error !== 'login_required' && (
+                  <p className="font-ui text-sm text-destructive mb-4">{state.error}</p>
+                )}
+
+              <form onSubmit={mainForm.handleSubmit(onMainSubmit)} className="space-y-4">
+                <div>
+                  <Controller
+                    control={mainForm.control}
+                    name="body"
+                    render={({ field }) => (
+                      <MarkdownContentField
+                        id="body"
+                        name="body"
+                        value={field.value}
+                        onChange={field.onChange}
+                        required
+                        placeholder="Escreva aqui suas reflexões… (Markdown: **negrito**, *itálico*, listas…)"
+                        rows={4}
+                      />
+                    )}
+                  />
+                  {mainForm.formState.errors.body && (
+                    <p className="mt-1 font-ui text-xs text-destructive">
+                      {mainForm.formState.errors.body.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex justify-end pt-1">
+                  <button
+                    type="submit"
+                    disabled={isPending || !canSubmitMain || !isAuthenticated}
+                    className="font-ui text-sm font-medium px-5 py-2.5 rounded-xl bg-brand-green text-white hover:bg-brand-green/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/60"
+                  >
+                    {isPending ? 'Enviando…' : 'Enviar comentário'}
+                  </button>
+                </div>
+              </form>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Lista de comentários */}
       {topLevel.length > 0 && (
-        <ul className="flex flex-col gap-6 mb-10">
+        <ul className="flex flex-col gap-6">
           {topLevel.map((comment) => (
             <CommentItem
               key={comment.id}
@@ -73,114 +152,16 @@ export function CommentSection({
               allComments={optimisticComments}
               postId={postId}
               replyingToId={replyingToId}
-              onReplyClick={setReplyingToId}
+              onReplyClick={handleReplyClick}
               onReplySubmit={handleReplySubmit}
-              replyFormRef={replyFormRef}
               isPending={isPending}
               state={state}
               currentUser={currentUser}
+              isAuthenticated={isAuthenticated}
             />
           ))}
         </ul>
       )}
-
-      <div
-        className={cn(
-          'rounded-2xl border border-border bg-card px-7 py-6',
-          !isAuthenticated && 'opacity-50'
-        )}
-      >
-        <h3 className="font-heading text-lg font-semibold text-foreground mb-5">
-          Deixe um comentário
-        </h3>
-
-        {!isAuthenticated && (
-          <button
-            type="button"
-            onClick={() => setLoginModalOpen(true)}
-            className="w-full rounded-xl border border-border bg-muted/50 px-4 py-6 font-ui text-sm text-foreground hover:bg-muted/70 transition-colors text-left cursor-pointer"
-          >
-            Para comentar, faça login.
-          </button>
-        )}
-
-        {isAuthenticated && (
-          <>
-            {state?.success === false && state.error === 'login_required' && (
-              <p className="font-ui text-sm text-destructive mb-4">
-                <Link href="/auth/login" className="underline">
-                  Faça login
-                </Link>{' '}
-                para comentar.
-              </p>
-            )}
-
-            {state?.success === false && !state.fieldErrors && state.error !== 'login_required' && (
-              <p className="font-ui text-sm text-destructive mb-4">{state.error}</p>
-            )}
-
-            <form onSubmit={mainForm.handleSubmit(onMainSubmit)} className="space-y-4">
-              {!currentUser ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <RHFField
-                    control={mainForm.control}
-                    name="authorName"
-                    label="Nome"
-                    placeholder="Seu nome"
-                    required
-                    errorMessage={mainForm.formState.errors.authorName?.message}
-                  />
-                  <RHFField
-                    control={mainForm.control}
-                    name="authorEmail"
-                    label="E-mail"
-                    type="email"
-                    placeholder="seu@email.com"
-                    required
-                    errorMessage={mainForm.formState.errors.authorEmail?.message}
-                  />
-                </div>
-              ) : null}
-
-              <div>
-                <label
-                  htmlFor="body"
-                  className="block font-ui text-sm font-medium text-foreground mb-1.5"
-                >
-                  Comentário <span className="text-destructive">*</span>
-                </label>
-                <textarea
-                  id="body"
-                  rows={4}
-                  placeholder="Escreva aqui suas reflexões…"
-                  className={cn(
-                    'w-full rounded-lg border border-input bg-background px-4 py-3 font-ui text-sm',
-                    'text-foreground placeholder:text-muted-foreground resize-none',
-                    'focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green/50',
-                    mainForm.formState.errors.body && 'border-destructive'
-                  )}
-                  {...mainForm.register('body')}
-                />
-                {mainForm.formState.errors.body && (
-                  <p className="mt-1 font-ui text-xs text-destructive">
-                    {mainForm.formState.errors.body.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex justify-end pt-1">
-                <button
-                  type="submit"
-                  disabled={isPending || !canSubmitMain || !isAuthenticated}
-                  className="font-ui text-sm font-medium px-5 py-2.5 rounded-xl bg-brand-green text-white hover:bg-brand-green/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/60"
-                >
-                  {isPending ? 'Enviando…' : 'Enviar comentário'}
-                </button>
-              </div>
-            </form>
-          </>
-        )}
-      </div>
 
       {!isAuthenticated && (
         <ConfirmModal
@@ -196,47 +177,6 @@ export function CommentSection({
 }
 
 /* ------------------------------------------------------------------ */
-/* Campo controlado por React Hook Form                                  */
-/* ------------------------------------------------------------------ */
-
-function RHFField<T extends FieldValues>({
-  control,
-  name,
-  label,
-  type = 'text',
-  placeholder,
-  required,
-  errorMessage,
-}: {
-  control: Control<T>;
-  name: FieldPath<T>;
-  label: string;
-  type?: string;
-  placeholder: string;
-  required?: boolean;
-  errorMessage?: string;
-}) {
-  return (
-    <div>
-      <label htmlFor={name} className="block font-ui text-sm font-medium text-foreground mb-1.5">
-        {label} {required && <span className="text-destructive">*</span>}
-      </label>
-      <input
-        id={name}
-        type={type}
-        placeholder={placeholder}
-        className={cn(
-          'w-full rounded-lg border border-input bg-background px-4 py-2.5 font-ui text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green/50 transition-all',
-          errorMessage && 'border-destructive'
-        )}
-        {...control.register(name)}
-      />
-      {errorMessage && <p className="mt-1 font-ui text-xs text-destructive">{errorMessage}</p>}
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* Item de comentário + formulário de reply                              */
 /* ------------------------------------------------------------------ */
 
@@ -247,10 +187,10 @@ function CommentItem({
   replyingToId,
   onReplyClick,
   onReplySubmit,
-  replyFormRef,
   isPending,
   state,
   currentUser,
+  isAuthenticated = true,
 }: {
   comment: OptimisticComment;
   allComments: OptimisticComment[];
@@ -258,10 +198,10 @@ function CommentItem({
   replyingToId: string | null;
   onReplyClick: (id: string | null) => void;
   onReplySubmit: (parentId: string, data: CreateCommentInput) => void;
-  replyFormRef: React.RefObject<HTMLFormElement | null>;
   isPending: boolean;
   state: ActionResult | null;
   currentUser?: { name: string; email: string; role?: 'ADMIN' | 'READER' } | null;
+  isAuthenticated?: boolean;
 }) {
   const isAdmin =
     comment.author?.role === 'ADMIN' ||
@@ -305,31 +245,32 @@ function CommentItem({
           )}
         </div>
 
-        <p className="font-ui text-sm text-foreground/85 leading-relaxed whitespace-pre-wrap">
-          {comment.body}
-        </p>
+        <div className="font-ui text-sm text-foreground/85 leading-relaxed prose prose-sm prose-alice max-w-none">
+          <ReactMarkdown remarkPlugins={[remarkBreaks]}>{comment.body}</ReactMarkdown>
+        </div>
 
-        {!comment.parentId && (
+        {!comment.parentId && isAuthenticated && (
           <div className="mt-2">
             <button
               type="button"
               onClick={() => onReplyClick(isReplying ? null : comment.id)}
               className="font-ui text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              {isReplying ? 'Cancelar' : 'Responder'}
+              Responder
             </button>
           </div>
         )}
 
         {isReplying && (
           <ReplyForm
-            ref={replyFormRef}
             postId={postId}
             parentId={comment.id}
+            parentAuthorName={comment.authorName}
             onSubmit={onReplySubmit}
             onCancel={() => onReplyClick(null)}
             isPending={isPending}
             state={state}
+            currentUser={currentUser}
           />
         )}
 
@@ -344,10 +285,10 @@ function CommentItem({
                 replyingToId={replyingToId}
                 onReplyClick={onReplyClick}
                 onReplySubmit={onReplySubmit}
-                replyFormRef={replyFormRef}
                 isPending={isPending}
                 state={state}
                 currentUser={currentUser}
+                isAuthenticated={isAuthenticated}
               />
             ))}
           </ul>
@@ -357,40 +298,43 @@ function CommentItem({
   );
 }
 
-const ReplyForm = forwardRef<
-  HTMLFormElement,
-  {
-    postId: string;
-    parentId: string;
-    onSubmit: (parentId: string, data: CreateCommentInput) => void;
-    onCancel: () => void;
-    isPending: boolean;
-    state: ActionResult | null;
-  }
->(function ReplyForm({ postId, parentId, onSubmit, onCancel, isPending, state }, ref) {
+/* ------------------------------------------------------------------ */
+/* Formulário de resposta — aparece embaixo do comentário               */
+/* ------------------------------------------------------------------ */
+
+function ReplyForm({
+  postId,
+  parentId,
+  parentAuthorName,
+  onSubmit,
+  onCancel,
+  isPending,
+  state,
+  currentUser,
+}: {
+  postId: string;
+  parentId: string;
+  parentAuthorName: string;
+  onSubmit: (parentId: string, data: CreateCommentInput) => void;
+  onCancel: () => void;
+  isPending: boolean;
+  state: ActionResult | null;
+  currentUser?: { name: string; email: string; role?: 'ADMIN' | 'READER' } | null;
+}) {
   const form = useForm<CreateCommentInput>({
     resolver: zodResolver(createCommentSchema),
     mode: 'onChange',
     defaultValues: {
       postId,
       parentId,
-      authorName: '',
-      authorEmail: '',
+      authorName: currentUser?.name ?? '',
+      authorEmail: currentUser?.email ?? '',
       body: '',
     },
   });
 
-  const replyAuthorName = useWatch({ control: form.control, name: 'authorName', defaultValue: '' });
-  const replyAuthorEmail = useWatch({
-    control: form.control,
-    name: 'authorEmail',
-    defaultValue: '',
-  });
   const replyBody = useWatch({ control: form.control, name: 'body', defaultValue: '' });
-  const canSubmitReply =
-    String(replyAuthorName ?? '').trim() !== '' &&
-    String(replyAuthorEmail ?? '').trim() !== '' &&
-    String(replyBody ?? '').trim() !== '';
+  const canSubmitReply = String(replyBody ?? '').trim() !== '';
 
   useEffect(() => {
     if (state?.success === false && state.fieldErrors) {
@@ -409,43 +353,25 @@ const ReplyForm = forwardRef<
 
   return (
     <div className="mt-4 p-4 rounded-xl border border-border bg-muted/30">
-      <h4 className="font-ui text-sm font-semibold text-foreground mb-3">Responder</h4>
-      <form ref={ref} onSubmit={form.handleSubmit(handleSubmit)} className="space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <RHFField
-            control={form.control}
-            name="authorName"
-            label="Nome"
-            placeholder="Seu nome"
-            required
-            errorMessage={form.formState.errors.authorName?.message}
-          />
-          <RHFField
-            control={form.control}
-            name="authorEmail"
-            label="E-mail"
-            type="email"
-            placeholder="seu@email.com"
-            required
-            errorMessage={form.formState.errors.authorEmail?.message}
-          />
-        </div>
+      <h4 className="font-ui text-sm font-semibold text-foreground mb-3">
+        Respondendo a {parentAuthorName}
+      </h4>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-3">
         <div>
-          <label
-            htmlFor={`reply-body-${parentId}`}
-            className="block font-ui text-sm font-medium text-foreground mb-1"
-          >
-            Resposta <span className="text-destructive">*</span>
-          </label>
-          <textarea
-            id={`reply-body-${parentId}`}
-            rows={3}
-            placeholder="Sua resposta…"
-            className={cn(
-              'w-full rounded-lg border border-input bg-background px-4 py-2.5 font-ui text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-green/40 resize-none',
-              form.formState.errors.body && 'border-destructive'
+          <Controller
+            control={form.control}
+            name="body"
+            render={({ field }) => (
+              <MarkdownContentField
+                id={`reply-body-${parentId}`}
+                name="body"
+                value={field.value}
+                onChange={field.onChange}
+                required
+                placeholder="Sua resposta… (Markdown: **negrito**, *itálico*, listas…)"
+                rows={3}
+              />
             )}
-            {...form.register('body')}
           />
           {form.formState.errors.body && (
             <p className="mt-1 font-ui text-xs text-destructive">
@@ -472,4 +398,4 @@ const ReplyForm = forwardRef<
       </form>
     </div>
   );
-});
+}

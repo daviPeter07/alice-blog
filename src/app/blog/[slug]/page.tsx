@@ -10,8 +10,7 @@ import { getLikeByPostAndFingerprint } from '@/data-access/likes';
 import { getSession } from '@/lib/auth';
 import { postSlugParamsSchema } from '@/lib/schemas/post.schema';
 import { Badge } from '@/components/ui/badge';
-import { CommentSection } from '@/components/blog/comment-section';
-import { LikeButton } from '@/components/blog/like-button';
+import { PostFooter } from '@/components/blog/post-footer';
 import { AdminCheck } from '@/components/ui/admin-check';
 import { formatDate, getInitials } from '@/helpers';
 
@@ -35,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 function PostSkeleton() {
   return (
-    <main className="max-w-2xl mx-auto px-6 py-16">
+    <main className="max-w-4xl mx-auto px-6 py-16">
       <div className="animate-pulse space-y-6">
         <div className="h-6 bg-muted rounded w-1/3" />
         <div className="h-10 bg-muted rounded w-full" />
@@ -54,7 +53,7 @@ async function PostContent({ slug }: { slug: string }) {
   const initialLiked = session ? await getLikeByPostAndFingerprint(post.id, session.userId) : false;
 
   return (
-    <main className="max-w-2xl mx-auto px-6 py-16">
+    <main className="max-w-4xl mx-auto px-6 py-16">
       <header className="mb-10">
         {/* Tags */}
         {post.tags.length > 0 && (
@@ -107,27 +106,18 @@ async function PostContent({ slug }: { slug: string }) {
         </div>
       </header>
 
-      {/* Corpo do post — Markdown renderizado */}
-      <article className="prose-alice mb-14">
-        <ReactMarkdown remarkPlugins={[remarkBreaks]}>{post.content}</ReactMarkdown>
-      </article>
-
-      {/* Divisor */}
-      <hr className="border-border mb-10" />
-
-      {/* LikeButton */}
-      <div className="mb-10">
-        <LikeButton
-          postId={post.id}
-          initialCount={post._count.likes}
-          initialLiked={initialLiked}
-          isAuthenticated={!!session}
-        />
+      {/* Corpo do post — Markdown renderizado (--article-read-bg editável pelo usuário) */}
+      <div className="article-read-container" data-article-read>
+        <article className="prose-alice">
+          <ReactMarkdown remarkPlugins={[remarkBreaks]}>{post.content}</ReactMarkdown>
+        </article>
       </div>
 
-      {/* CommentSection */}
-      <CommentSection
+      <PostFooter
         postId={post.id}
+        postUrl={`/blog/${post.slug}`}
+        initialLikeCount={post._count.likes}
+        initialLiked={initialLiked}
         initialComments={post.comments}
         isAuthenticated={!!session}
         currentUser={
