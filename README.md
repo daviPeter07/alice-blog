@@ -77,6 +77,15 @@ Acesse [http://localhost:3000](http://localhost:3000).
 | `pnpm db:studio`  | Abrir Prisma Studio                |
 | `pnpm db:reset`   | Resetar banco e rodar migrações    |
 
+## Deploy
+
+O cliente Prisma é gerado em `src/generated/prisma/` (pasta **ignorada pelo Git**). Sem rodar `prisma generate` antes do build, o Next falha com `Can't resolve '@/generated/prisma/client'`.
+
+- **`postinstall`** — após `pnpm install` / `npm install`, o Prisma gera o client automaticamente.
+- **`build`** — inclui `prisma generate && next build` para ambientes que não executam `postinstall`.
+
+Configure `DATABASE_URL` (e `SESSION_SECRET`, etc.) nas variáveis de ambiente da plataforma. Em builds que usam só `dependencies` (sem devDependencies), instale o pacote `prisma` em `dependencies` ou use um comando de build explícito que inclua `prisma generate`.
+
 ## Estrutura
 
 ```

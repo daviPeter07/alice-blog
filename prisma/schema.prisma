@@ -7,39 +7,16 @@ datasource db {
   provider = "postgresql"
 }
 
-// ---------------------------------------------------------------------------
-// Enums
-// ---------------------------------------------------------------------------
-
-enum Role {
-  ADMIN
-  READER
-
-  @@map("role")
-}
-
-enum PostStatus {
-  DRAFT
-  PUBLISHED
-
-  @@map("post_status")
-}
-
-// ---------------------------------------------------------------------------
-// Entities
-// ---------------------------------------------------------------------------
-
 model User {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   name         String
-  email        String   @unique
-  passwordHash String?  @map("password_hash")
+  email        String    @unique
   image        String?
-  role         Role     @default(READER)
-  createdAt    DateTime @default(now()) @map("created_at")
-
-  posts    Post[]
-  comments Comment[]
+  role         Role      @default(READER)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  passwordHash String?   @map("password_hash")
+  comments     Comment[]
+  posts        Post[]
 
   @@map("users")
 }
@@ -57,12 +34,10 @@ model Post {
   readingTime Int?       @map("reading_time")
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
-
-  authorId String  @map("author_id")
-  author   User    @relation(fields: [authorId], references: [id])
-
-  comments Comment[]
-  likes    Like[]
+  authorId    String     @map("author_id")
+  comments    Comment[]
+  likes       Like[]
+  author      User       @relation(fields: [authorId], references: [id])
 
   @@index([status, publishedAt(sort: Desc)])
   @@index([slug])
@@ -70,23 +45,21 @@ model Post {
 }
 
 model Comment {
-  id          String   @id @default(cuid())
-  body        String   @db.VarChar(5000)
-  authorName  String   @map("author_name")
-  authorEmail String   @map("author_email")
-  approved    Boolean  @default(false)
-  createdAt   DateTime @default(now()) @map("created_at")
+  id          String    @id @default(cuid())
+  body        String    @db.VarChar(5000)
+  authorName  String    @map("author_name")
+  authorEmail String    @map("author_email")
+  approved    Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  postId      String    @map("post_id")
+  parentId    String?   @map("parent_id")
+  authorId    String?   @map("author_id")
+  author      User?     @relation(fields: [authorId], references: [id])
+  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies     Comment[] @relation("CommentReplies")
+  post        Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  postId   String  @map("post_id")
-  post     Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  authorId String? @map("author_id")
-  author   User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
-
-  parentId String?   @map("parent_id")
-  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies  Comment[] @relation("CommentReplies")
-
-  @@index([postId, createdAt(sort: Asc)])
+  @@index([postId, createdAt])
   @@map("comments")
 }
 
@@ -94,11 +67,24 @@ model Like {
   id          String   @id @default(cuid())
   fingerprint String
   createdAt   DateTime @default(now()) @map("created_at")
-
-  postId String @map("post_id")
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      String   @map("post_id")
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, fingerprint])
   @@index([postId])
   @@map("likes")
+}
+
+enum Role {
+  ADMIN
+  READER
+
+  @@map("role")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+
+  @@map("post_status")
 }
