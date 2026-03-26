@@ -25,6 +25,29 @@ function getCategoriesFromPosts(posts: Awaited<ReturnType<typeof getRecentPosts>
     .map((label) => ({ slug: label, label }));
 }
 
+async function HomeCategoriesSection() {
+  const postsForCategories = await getRecentPosts(50);
+  const categories = getCategoriesFromPosts(postsForCategories);
+  return (
+    <RevealSectionWrapper>
+      <CategoriesSection categories={categories} />
+    </RevealSectionWrapper>
+  );
+}
+
+function CategoriesSectionFallback() {
+  return (
+    <RevealSectionWrapper>
+      <div
+        className="flex min-h-[280px] items-center justify-center text-muted-foreground"
+        aria-hidden
+      >
+        <LoadingDots size="lg" />
+      </div>
+    </RevealSectionWrapper>
+  );
+}
+
 async function FeaturedContent({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const { page: pageParam } = await searchParams;
   const page = Math.max(1, parseInt(pageParam ?? '1', 10) || 1);
@@ -40,14 +63,11 @@ async function FeaturedContent({ searchParams }: { searchParams: Promise<{ page?
   );
 }
 
-export default async function HomePage({
+export default function HomePage({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string }>;
 }) {
-  const postsForCategories = await getRecentPosts(50);
-  const categories = getCategoriesFromPosts(postsForCategories);
-
   return (
     <main className="flex flex-col min-h-[calc(100vh-3.5rem)]">
       <HeroSection />
@@ -65,9 +85,9 @@ export default async function HomePage({
       <RevealSectionWrapper>
         <QuemSouEuSection />
       </RevealSectionWrapper>
-      <RevealSectionWrapper>
-        <CategoriesSection categories={categories} />
-      </RevealSectionWrapper>
+      <Suspense fallback={<CategoriesSectionFallback />}>
+        <HomeCategoriesSection />
+      </Suspense>
       <RevealSectionWrapper>
         <PersonalizarSection />
       </RevealSectionWrapper>

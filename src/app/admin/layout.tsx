@@ -3,6 +3,9 @@ import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
 import { LoadingDots } from '@/components/ui/loading-dots';
 
+/** Admin sempre dinâmico: evita Prisma/cookies durante `next build` sem DB. */
+export const dynamic = 'force-dynamic';
+
 async function AdminAuthGuard({ children }: { children: React.ReactNode }) {
   const session = await getSession().catch(() => null);
   if (!session) {

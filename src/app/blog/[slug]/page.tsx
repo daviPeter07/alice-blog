@@ -21,8 +21,13 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = await getPublishedPostSlugs();
-  return slugs.map(({ slug }) => ({ slug }));
+  try {
+    const slugs = await getPublishedPostSlugs();
+    return slugs.map(({ slug }) => ({ slug }));
+  } catch {
+    // Build sem banco (CI local) ou DB indisponível: páginas de post ficam sob demanda
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
