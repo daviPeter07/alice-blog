@@ -103,7 +103,7 @@ O cliente Prisma é gerado em `src/generated/prisma/` (pasta **ignorada pelo Git
 
 Configure `DATABASE_URL` (e `SESSION_SECRET`, etc.) nas variáveis de ambiente da plataforma. Em builds que usam só `dependencies` (sem devDependencies), instale o pacote `prisma` em `dependencies` ou use um comando de build explícito que inclua `prisma generate`.
 
-**Build sem banco acessível:** o projeto evita consultar o Postgres na fase de *collect page data* quando possível (home com categorias em `Suspense`, `generateStaticParams` de posts tolerante a falha, admin com `force-dynamic`). Para **pré-renderizar** slugs de posts no build, o banco precisa estar acessível em `DATABASE_URL` nessa hora; caso contrário as rotas `/blog/[slug]` são geradas na primeira requisição.
+**Build sem banco acessível:** o projeto evita consultar o Postgres na fase de *collect page data* quando possível (categorias da home dentro de `Suspense`; `generateStaticParams` dos posts retorna lista vazia se o banco falhar, e as páginas de slug são geradas sob demanda). Para **pré-renderizar** todos os slugs no build, o Postgres precisa estar acessível em `DATABASE_URL` nessa hora.
 
 **Erro `P1001` / "Can't reach database server":** em desenvolvimento, suba o Postgres (ex.: `docker compose up -d postgres`) antes de `pnpm dev` ou `pnpm build` se quiser dados reais em todas as rotas.
 
