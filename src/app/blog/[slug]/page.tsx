@@ -6,7 +6,7 @@ import remarkBreaks from 'remark-breaks';
 import rehypeRaw from 'rehype-raw';
 import type { Metadata } from 'next';
 
-import { getPostBySlug, getPublishedPostSlugs } from '@/data-access/posts';
+import { getPostBySlug } from '@/data-access/posts';
 import { getLikeByPostAndFingerprint } from '@/data-access/likes';
 import { getSession } from '@/lib/auth';
 import { postSlugParamsSchema } from '@/lib/schemas/post.schema';
@@ -20,14 +20,12 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  try {
-    const slugs = await getPublishedPostSlugs();
-    return slugs.map(({ slug }) => ({ slug }));
-  } catch {
-    // Build sem banco (CI local) ou DB indisponível: páginas de post ficam sob demanda
-    return [];
-  }
+/** Sem generateStaticParams: params são runtime; await só dentro de Suspense (Cache Components). */
+async function PostContentLoader({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const parsed = postSlugParamsSchema.safeParse({ slug });
+  if (!parsed.success) notFound();
+  return <PostContent slug={parsed.data.slug} />;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -132,14 +130,10 @@ async function PostContent({ slug }: { slug: string }) {
   );
 }
 
-export default async function BlogPostPage({ params }: PageProps) {
-  const { slug } = await params;
-  const parsed = postSlugParamsSchema.safeParse({ slug });
-  if (!parsed.success) notFound();
-
+export default function BlogPostPage({ params }: PageProps) {
   return (
     <Suspense fallback={<PostSkeleton />}>
-      <PostContent slug={slug} />
+      <PostContentLoader params={params} />
     </Suspense>
   );
 }
