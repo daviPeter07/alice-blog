@@ -77,6 +77,23 @@ Acesse [http://localhost:3000](http://localhost:3000).
 | `pnpm db:studio`  | Abrir Prisma Studio                |
 | `pnpm db:reset`   | Resetar banco e rodar migrações    |
 
+## Antes do deploy (testar como na CI)
+
+O ambiente de produção roda o mesmo comando de build. Na máquina local:
+
+```bash
+pnpm run build
+```
+
+Isso executa `prisma generate` + `next build` (Turbopack) e costuma reproduzir erros como `module not found` ou falhas de TypeScript **antes** de enviar para a plataforma.
+
+Comandos úteis em conjunto:
+
+```bash
+pnpm run typecheck   # só TypeScript, mais rápido
+pnpm run lint
+```
+
 ## Deploy
 
 O cliente Prisma é gerado em `src/generated/prisma/` (pasta **ignorada pelo Git**). Sem rodar `prisma generate` antes do build, o Next falha com `Can't resolve '@/generated/prisma/client'`.
