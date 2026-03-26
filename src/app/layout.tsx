@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/providers/theme-provider';
 import { NavbarWithSession } from '@/components/layout/navbar-with-session';
 import { Footer } from '@/components/layout/footer';
 import { LoadingDots } from '@/components/ui/loading-dots';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 const LANDING_NAV_ANCHORS = [
@@ -98,6 +99,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             contactLabel="Entrar em contato"
           />
           <Toaster position="bottom-right" closeButton={false} />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
