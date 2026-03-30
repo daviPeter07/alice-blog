@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -12,6 +13,13 @@ import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 export function Toaster(props: ToasterProps) {
   const { theme = 'system' } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <Sonner

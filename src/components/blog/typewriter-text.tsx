@@ -47,9 +47,13 @@ export function TypewriterText({
   const [displayed, setDisplayed] = useState('');
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [started, setStarted] = useState(false);
-  const [skipAnimation] = useState(() =>
-    typeof window !== 'undefined' ? prefersReducedMotion() : false
-  );
+  const [skipAnimation, setSkipAnimation] = useState(false);
+  useEffect(() => {
+    if (typeof window !== 'undefined' && prefersReducedMotion()) {
+      const id = requestAnimationFrame(() => setSkipAnimation(true));
+      return () => cancelAnimationFrame(id);
+    }
+  }, []);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const phraseIndexRef = useRef(0);
 

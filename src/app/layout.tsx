@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import Link from 'next/link';
 import { Nunito, Nunito_Sans, Bricolage_Grotesque } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { NavbarWithSession } from '@/components/layout/navbar-with-session';
 import { Footer } from '@/components/layout/footer';
 import { LoadingDots } from '@/components/ui/loading-dots';
-import { Analytics } from '@vercel/analytics/next';
+import { ClientAnalytics } from '@/components/ui/analytics';
 import './globals.css';
 
 const LANDING_NAV_ANCHORS = [
@@ -26,12 +27,12 @@ function LayoutFallback() {
         aria-hidden
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center">
-          <a
+          <Link
             href="/"
             className="font-heading text-lg font-semibold text-foreground hover:text-brand-green transition-colors duration-200"
           >
             Alice
-          </a>
+          </Link>
         </div>
       </header>
       <div className="flex-1 flex items-center justify-center min-h-[50vh] text-muted-foreground">
@@ -76,8 +77,7 @@ export const metadata: Metadata = {
     default: 'Alice',
     template: '%s — Alice',
   },
-  description:
-    'Reflexões, histórias e experiências do cotidiano. Um blog pessoal por Alice.',
+  description: 'Reflexões, histórias e experiências do cotidiano. Um blog pessoal por Alice.',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -99,7 +99,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             contactLabel="Entrar em contato"
           />
           <Toaster position="bottom-right" closeButton={false} />
-          <Analytics />
+          <ClientAnalytics />
         </ThemeProvider>
       </body>
     </html>
