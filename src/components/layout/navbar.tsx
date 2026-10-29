@@ -180,7 +180,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
       aria-label="Personalizar aparência"
       title="Personalizar"
     >
-      <SlidersHorizontal className="size-4" aria-hidden />
+      <SlidersHorizontal size={16} aria-hidden />
     </button>
   );
 
@@ -222,7 +222,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
               onClick={() => setDropdownOpen(false)}
               className="flex items-center gap-2.5 px-4 py-2 font-ui text-sm text-foreground hover:bg-accent"
             >
-              <Settings className="size-4 text-muted-foreground" aria-hidden />
+              <Settings size={16} className="text-muted-foreground" aria-hidden />
               Configurações
             </Link>
             <button
@@ -231,7 +231,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
               onClick={handleOpenPreferences}
               className="flex w-full items-center gap-2.5 px-4 py-2 text-left font-ui text-sm text-foreground hover:bg-accent"
             >
-              <SlidersHorizontal className="size-4 text-muted-foreground" aria-hidden />
+              <SlidersHorizontal size={16} className="text-muted-foreground" aria-hidden />
               Personalizar
             </button>
           </div>
@@ -242,7 +242,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
               onClick={() => setLogoutModalOpen(true)}
               className="flex w-full items-center gap-2.5 px-4 py-2 text-left font-ui text-sm text-destructive transition-colors hover:bg-destructive/10"
             >
-              <LogOut className="size-4" aria-hidden />
+              <LogOut size={16} aria-hidden />
               Sair
             </button>
           </div>
@@ -296,7 +296,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
                 aria-label="Lançar artigo"
                 title="Lançar artigo"
               >
-                <PenLine className="size-4" aria-hidden />
+                <PenLine size={16} aria-hidden />
               </Link>
             )}
             {preferencesButton}
@@ -313,11 +313,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
               aria-expanded={menuOpen}
               className={ICON_BUTTON_CLASS}
             >
-              {menuOpen ? (
-                <X className="size-5" aria-hidden />
-              ) : (
-                <Menu className="size-5" aria-hidden />
-              )}
+              {menuOpen ? <X size={20} aria-hidden /> : <Menu size={20} aria-hidden />}
             </button>
           </div>
         </div>
@@ -342,7 +338,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
                   className={ICON_BUTTON_CLASS}
                   aria-label="Fechar menu"
                 >
-                  <X className="size-5" aria-hidden />
+                  <X size={20} aria-hidden />
                 </button>
               </div>
             </div>
@@ -381,7 +377,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
                   onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 font-ui text-sm text-foreground hover:bg-accent"
                 >
-                  <PenLine className="size-4 text-muted-foreground" aria-hidden />
+                  <PenLine size={16} className="text-muted-foreground" aria-hidden />
                   Lançar artigo
                 </Link>
               )}
@@ -390,7 +386,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
                 onClick={handleOpenPreferences}
                 className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left font-ui text-sm text-foreground hover:bg-accent"
               >
-                <SlidersHorizontal className="size-4 text-muted-foreground" aria-hidden />
+                <SlidersHorizontal size={16} className="text-muted-foreground" aria-hidden />
                 Personalizar
               </button>
               {user ? (
@@ -400,7 +396,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
                     onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 font-ui text-sm text-foreground hover:bg-accent"
                   >
-                    <Settings className="size-4 text-muted-foreground" aria-hidden />
+                    <Settings size={16} className="text-muted-foreground" aria-hidden />
                     Configurações
                   </Link>
                   <button
@@ -411,7 +407,7 @@ export function Navbar({ showThemeToggle = false, user = null, logo }: NavbarPro
                     }}
                     className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left font-ui text-sm text-destructive hover:bg-destructive/10"
                   >
-                    <LogOut className="size-4" aria-hidden />
+                    <LogOut size={16} aria-hidden />
                     Sair
                   </button>
                 </>

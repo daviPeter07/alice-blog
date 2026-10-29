@@ -52,7 +52,7 @@ export function PersonalizarSection() {
                   aria-hidden
                 />
                 <span className="relative mb-5 flex size-12 items-center justify-center rounded-2xl bg-brand-green text-white shadow-md">
-                  <Icon className="size-5" strokeWidth={1.75} aria-hidden />
+                  <Icon size={20} strokeWidth={1.75} aria-hidden />
                 </span>
                 <span className="relative mb-2 block font-heading text-xl font-semibold text-foreground">
                   {title}
@@ -63,7 +63,8 @@ export function PersonalizarSection() {
                 <span className="relative mt-5 inline-flex items-center gap-1.5 font-ui text-sm font-semibold text-brand-green theme-dark:text-brand-green-light">
                   Ajustar
                   <ArrowRight
-                    className="size-4 transition-transform group-hover:translate-x-1"
+                    size={16}
+                    className="transition-transform group-hover:translate-x-1"
                     aria-hidden
                   />
                 </span>
@@ -74,7 +75,7 @@ export function PersonalizarSection() {
 
         <div className="reveal-item reveal-delay-6 mt-10 flex justify-center">
           <OpenPreferencesButton className="inline-flex items-center gap-2 rounded-full bg-brand-green px-6 py-3 font-ui text-sm font-bold text-white shadow-md transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <SlidersHorizontal className="size-4" aria-hidden />
+            <SlidersHorizontal size={16} aria-hidden />
             Abrir painel de personalização
           </OpenPreferencesButton>
         </div>

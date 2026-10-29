@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Clock, Monitor, Moon, RotateCcw, Sun, Check } from 'lucide-react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { Check, Clock, Monitor, Moon, RotateCcw, Sun } from 'lucide-react';
 import { usePreferences } from '@/hooks/use-preferences';
 import { useThemeMode } from '@/hooks/use-theme-mode';
 import {
@@ -25,7 +25,7 @@ const THEME_OPTIONS: { value: ThemeMode; label: string; hint: string; icon: type
 interface SegmentedProps<T extends string> {
   label: string;
   value: T;
-  options: { value: T; label: string }[];
+  options: readonly { value: T; label: string }[];
   onChange: (value: T) => void;
 }
 
@@ -84,8 +84,12 @@ export interface PreferencesPanelProps {
 }
 
 export function PreferencesPanel({ initialSection }: PreferencesPanelProps) {
-  const { preferences, updatePreferences, resetPreferences } = usePreferences();
-  const { themeMode, setThemeMode } = useThemeMode();
+  const { preferences, updatePreferences } = usePreferences();
+  const { themeMode, setThemeMode, resetPreferences } = useThemeMode();
+  // O painel pode existir duas vezes na página (/settings + diálogo): ids e rolagem por instância
+  const idPrefix = useId();
+  const sectionId = (section: PreferencesSection) => `${idPrefix}-${section}`;
+  const containerRef = useRef<HTMLDivElement>(null);
   // O servidor não conhece o localStorage: só mostra a seleção real após montar
   const [mounted, setMounted] = useState(false);
 
@@ -93,8 +97,8 @@ export function PreferencesPanel({ initialSection }: PreferencesPanelProps) {
     const id = requestAnimationFrame(() => {
       setMounted(true);
       if (initialSection) {
-        document
-          .getElementById(`pref-${initialSection}`)
+        containerRef.current
+          ?.querySelector(`[data-pref-section="${initialSection}"]`)
           ?.scrollIntoView({ block: 'start', behavior: 'smooth' });
       }
     });
@@ -108,16 +112,11 @@ export function PreferencesPanel({ initialSection }: PreferencesPanelProps) {
     });
   };
 
-  const handleReset = () => {
-    resetPreferences();
-    setThemeMode('system');
-  };
-
   return (
-    <div className={cn('space-y-10', !mounted && 'opacity-0')}>
-      <section aria-labelledby="pref-paleta">
+    <div ref={containerRef} className={cn('space-y-10', !mounted && 'opacity-0')}>
+      <section aria-labelledby={sectionId('paleta')} data-pref-section="paleta">
         <SectionTitle
-          id="pref-paleta"
+          id={sectionId('paleta')}
           title="Paleta"
           description="Escolha como o site deve aparecer para você."
         />
@@ -144,7 +143,7 @@ export function PreferencesPanel({ initialSection }: PreferencesPanelProps) {
                     selected ? 'bg-brand-green text-white' : 'bg-muted text-muted-foreground'
                   )}
                 >
-                  <Icon className="size-4" aria-hidden />
+                  <Icon size={16} aria-hidden />
                 </span>
                 <span className="min-w-0">
                   <span className="block font-ui text-sm font-semibold text-foreground">
@@ -160,9 +159,9 @@ export function PreferencesPanel({ initialSection }: PreferencesPanelProps) {
         </div>
       </section>
 
-      <section aria-labelledby="pref-navbar">
+      <section aria-labelledby={sectionId('navbar')} data-pref-section="navbar">
         <SectionTitle
-          id="pref-navbar"
+          id={sectionId('navbar')}
           title="Navbar"
           description="Mostre só os links que você usa."
         />
@@ -202,9 +201,9 @@ export function PreferencesPanel({ initialSection }: PreferencesPanelProps) {
         </ul>
       </section>
 
-      <section aria-labelledby="pref-leitura">
+      <section aria-labelledby={sectionId('leitura')} data-pref-section="leitura">
         <SectionTitle
-          id="pref-leitura"
+          id={sectionId('leitura')}
           title="Leitura"
           description="Ajuste o texto dos artigos para ler com conforto."
         />
@@ -242,15 +241,15 @@ export function PreferencesPanel({ initialSection }: PreferencesPanelProps) {
 
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6">
         <p className="flex items-center gap-1.5 font-ui text-xs text-muted-foreground">
-          <Check className="size-3.5 text-brand-green" aria-hidden />
+          <Check size={14} className="text-brand-green" aria-hidden />
           Salvo automaticamente neste navegador
         </p>
         <button
           type="button"
-          onClick={handleReset}
+          onClick={resetPreferences}
           className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-ui text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
-          <RotateCcw className="size-3.5" aria-hidden />
+          <RotateCcw size={14} aria-hidden />
           Restaurar padrão
         </button>
       </div>

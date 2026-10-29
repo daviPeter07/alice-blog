@@ -8,10 +8,32 @@ export const PREFERENCES_STORAGE_KEY = 'alice-prefs';
 /** Mesma chave usada pelo ThemeProvider (next-themes) */
 export const THEME_STORAGE_KEY = 'alice-theme';
 
-export type ThemeMode = 'light' | 'dark' | 'system' | 'auto';
-export type FontSizePref = 'sm' | 'md' | 'lg' | 'xl';
-export type ReadingWidthPref = 'narrow' | 'normal' | 'wide';
-export type LineHeightPref = 'compact' | 'normal' | 'relaxed';
+export const THEME_MODES = ['light', 'dark', 'system', 'auto'] as const;
+
+// Cada lista de opções é a fonte única dos valores aceitos, rótulos e valor CSS aplicado
+export const FONT_SIZE_OPTIONS = [
+  { value: 'sm', label: 'Pequena', css: '1rem' },
+  { value: 'md', label: 'Média', css: '1.125rem' },
+  { value: 'lg', label: 'Grande', css: '1.25rem' },
+  { value: 'xl', label: 'Extra', css: '1.375rem' },
+] as const;
+
+export const READING_WIDTH_OPTIONS = [
+  { value: 'narrow', label: 'Estreita', css: '42rem' },
+  { value: 'normal', label: 'Normal', css: '56rem' },
+  { value: 'wide', label: 'Larga', css: '72rem' },
+] as const;
+
+export const LINE_HEIGHT_OPTIONS = [
+  { value: 'compact', label: 'Compacto', css: '1.55' },
+  { value: 'normal', label: 'Normal', css: '1.75' },
+  { value: 'relaxed', label: 'Arejado', css: '2' },
+] as const;
+
+export type ThemeMode = (typeof THEME_MODES)[number];
+export type FontSizePref = (typeof FONT_SIZE_OPTIONS)[number]['value'];
+export type ReadingWidthPref = (typeof READING_WIDTH_OPTIONS)[number]['value'];
+export type LineHeightPref = (typeof LINE_HEIGHT_OPTIONS)[number]['value'];
 
 export interface Preferences {
   themeMode: ThemeMode;
@@ -39,26 +61,10 @@ export const NAV_ITEMS = [
   { key: 'artigos', href: '/blog', label: 'Artigos' },
 ] as const;
 
-export const FONT_SIZE_OPTIONS: { value: FontSizePref; label: string }[] = [
-  { value: 'sm', label: 'Pequena' },
-  { value: 'md', label: 'Média' },
-  { value: 'lg', label: 'Grande' },
-  { value: 'xl', label: 'Extra' },
-];
-
-export const READING_WIDTH_OPTIONS: { value: ReadingWidthPref; label: string }[] = [
-  { value: 'narrow', label: 'Estreita' },
-  { value: 'normal', label: 'Normal' },
-  { value: 'wide', label: 'Larga' },
-];
-
-export const LINE_HEIGHT_OPTIONS: { value: LineHeightPref; label: string }[] = [
-  { value: 'compact', label: 'Compacto' },
-  { value: 'normal', label: 'Normal' },
-  { value: 'relaxed', label: 'Arejado' },
-];
-
-/** Horário em que o modo automático usa o tema escuro: 18h–6h */
+/**
+ * Horário em que o modo automático usa o tema escuro: 18h–6h.
+ * Também é serializada no script inline, então precisa ser autocontida.
+ */
 export const isNightHour = (hour: number) => hour >= 18 || hour < 6;
 
 const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
@@ -66,45 +72,63 @@ const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback:
     ? (value as T)
     : fallback;
 
+const valuesOf = <T extends string>(options: readonly { value: T }[]) =>
+  options.map((o) => o.value);
+
 /** Valida o JSON vindo do localStorage — qualquer campo inválido volta ao padrão */
 export const parsePreferences = (raw: unknown): Preferences => {
   const obj = raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : {};
   const navKeys = NAV_ITEMS.map((i) => i.key as string);
   return {
-    themeMode: pick(obj.themeMode, ['light', 'dark', 'system', 'auto'], 'system'),
+    themeMode: pick(obj.themeMode, THEME_MODES, DEFAULT_PREFERENCES.themeMode),
     hiddenNavLinks: Array.isArray(obj.hiddenNavLinks)
       ? obj.hiddenNavLinks.filter((k): k is string => typeof k === 'string' && navKeys.includes(k))
       : [],
-    fontSize: pick(obj.fontSize, ['sm', 'md', 'lg', 'xl'], 'md'),
-    readingWidth: pick(obj.readingWidth, ['narrow', 'normal', 'wide'], 'normal'),
-    lineHeight: pick(obj.lineHeight, ['compact', 'normal', 'relaxed'], 'normal'),
+    fontSize: pick(obj.fontSize, valuesOf(FONT_SIZE_OPTIONS), DEFAULT_PREFERENCES.fontSize),
+    readingWidth: pick(
+      obj.readingWidth,
+      valuesOf(READING_WIDTH_OPTIONS),
+      DEFAULT_PREFERENCES.readingWidth
+    ),
+    lineHeight: pick(obj.lineHeight, valuesOf(LINE_HEIGHT_OPTIONS), DEFAULT_PREFERENCES.lineHeight),
   };
+};
+
+type ReadingKey = 'fontSize' | 'readingWidth' | 'lineHeight';
+type ReadingScale = Record<ReadingKey, { values: Record<string, string>; fallback: string }>;
+
+const toScale = (options: readonly { value: string; css: string }[], fallback: string) => ({
+  values: Object.fromEntries(options.map((o) => [o.value, o.css])),
+  fallback: options.find((o) => o.value === fallback)?.css ?? options[0].css,
+});
+
+/** Valores CSS por opção — vai como JSON para o script inline */
+export const READING_SCALE: ReadingScale = {
+  fontSize: toScale(FONT_SIZE_OPTIONS, DEFAULT_PREFERENCES.fontSize),
+  readingWidth: toScale(READING_WIDTH_OPTIONS, DEFAULT_PREFERENCES.readingWidth),
+  lineHeight: toScale(LINE_HEIGHT_OPTIONS, DEFAULT_PREFERENCES.lineHeight),
 };
 
 /**
  * Aplica as preferências de leitura e navbar no <html>.
  * Precisa ser autocontida (sem referências externas): é serializada com toString()
- * para o script inline que roda antes da hidratação.
+ * para o script inline que roda antes da hidratação — por isso tolera entrada não validada.
  */
-export function applyPreferences(prefs: {
-  hiddenNavLinks: string[];
-  fontSize: string;
-  readingWidth: string;
-  lineHeight: string;
-}) {
-  const fontSizes: Record<string, string> = {
-    sm: '1rem',
-    md: '1.125rem',
-    lg: '1.25rem',
-    xl: '1.375rem',
-  };
-  const widths: Record<string, string> = { narrow: '42rem', normal: '56rem', wide: '72rem' };
-  const lineHeights: Record<string, string> = { compact: '1.55', normal: '1.75', relaxed: '2' };
+export const applyPreferences = (
+  prefs: { hiddenNavLinks: readonly unknown[] } & Record<ReadingKey, unknown>,
+  scale: ReadingScale
+) => {
+  const vars = {
+    fontSize: '--read-font-size',
+    readingWidth: '--read-max-width',
+    lineHeight: '--read-line-height',
+  } as const;
 
   const root = document.documentElement;
-  root.style.setProperty('--read-font-size', fontSizes[prefs.fontSize] ?? fontSizes.md);
-  root.style.setProperty('--read-max-width', widths[prefs.readingWidth] ?? widths.normal);
-  root.style.setProperty('--read-line-height', lineHeights[prefs.lineHeight] ?? lineHeights.normal);
+  (Object.keys(vars) as ReadingKey[]).forEach((key) => {
+    const value = scale[key].values[String(prefs[key])];
+    root.style.setProperty(vars[key], typeof value === 'string' ? value : scale[key].fallback);
+  });
 
   // Links ocultos via CSS: evita o "pisca" de links que somem só após a hidratação
   let style = document.getElementById('alice-nav-prefs');
@@ -114,17 +138,19 @@ export function applyPreferences(prefs: {
     document.head.appendChild(style);
   }
   style.textContent = prefs.hiddenNavLinks
+    .filter((key): key is string => typeof key === 'string')
     .map((key) => `[data-nav-key="${key.replace(/[^a-z-]/g, '')}"]{display:none!important}`)
     .join('');
-}
+};
 
 /**
  * Roda logo após o script do next-themes: aplica leitura/navbar e, no modo automático,
- * sobrescreve o tema conforme o horário antes do primeiro paint.
+ * sobrescreve o tema conforme o horário antes do primeiro paint. Cada etapa tem seu
+ * próprio try para que um valor corrompido numa não impeça a outra.
  */
-export const PREFERENCES_INIT_SCRIPT = `(function(){try{
-var p=JSON.parse(localStorage.getItem('${PREFERENCES_STORAGE_KEY}')||'{}')||{};
-(${applyPreferences.toString()})({hiddenNavLinks:Array.isArray(p.hiddenNavLinks)?p.hiddenNavLinks:[],fontSize:p.fontSize,readingWidth:p.readingWidth,lineHeight:p.lineHeight});
-if(p.themeMode==='auto'){var h=new Date().getHours();var t=(h>=18||h<6)?'dark':'light';
-localStorage.setItem('${THEME_STORAGE_KEY}',t);var r=document.documentElement;r.setAttribute('data-theme',t);r.style.colorScheme=t;}
-}catch(e){}})();`;
+export const PREFERENCES_INIT_SCRIPT = `(function(){
+var p={};try{p=JSON.parse(localStorage.getItem('${PREFERENCES_STORAGE_KEY}')||'{}')||{};}catch(e){}
+try{(${applyPreferences.toString()})({hiddenNavLinks:Array.isArray(p.hiddenNavLinks)?p.hiddenNavLinks:[],fontSize:p.fontSize,readingWidth:p.readingWidth,lineHeight:p.lineHeight},${JSON.stringify(READING_SCALE)});}catch(e){}
+try{if(p.themeMode==='auto'){var t=(${isNightHour.toString()})(new Date().getHours())?'dark':'light';
+localStorage.setItem('${THEME_STORAGE_KEY}',t);var r=document.documentElement;r.setAttribute('data-theme',t);r.style.colorScheme=t;}}catch(e){}
+})();`;

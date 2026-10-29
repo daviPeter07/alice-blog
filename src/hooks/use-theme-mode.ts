@@ -2,11 +2,13 @@
 
 import { useCallback } from 'react';
 import { useTheme } from 'next-themes';
-import { isNightHour, type ThemeMode } from '@/lib/preferences';
+import { DEFAULT_PREFERENCES, isNightHour, type ThemeMode } from '@/lib/preferences';
 import { usePreferences } from './use-preferences';
 
 export const resolveAutoTheme = (date = new Date()) =>
   isNightHour(date.getHours()) ? 'dark' : 'light';
+
+const toNextTheme = (mode: ThemeMode) => (mode === 'auto' ? resolveAutoTheme() : mode);
 
 /**
  * Une o next-themes (claro/escuro/sistema) ao modo "automático por horário",
@@ -19,10 +21,16 @@ export const useThemeMode = () => {
   const setThemeMode = useCallback(
     (mode: ThemeMode) => {
       updatePreferences({ themeMode: mode });
-      setTheme(mode === 'auto' ? resolveAutoTheme() : mode);
+      setTheme(toNextTheme(mode));
     },
     [setTheme, updatePreferences]
   );
 
-  return { themeMode: preferences.themeMode, resolvedTheme, setThemeMode };
+  /** Volta todas as preferências ao padrão, inclusive o tema aplicado */
+  const resetPreferences = useCallback(() => {
+    updatePreferences(DEFAULT_PREFERENCES);
+    setTheme(toNextTheme(DEFAULT_PREFERENCES.themeMode));
+  }, [setTheme, updatePreferences]);
+
+  return { themeMode: preferences.themeMode, resolvedTheme, setThemeMode, resetPreferences };
 };
