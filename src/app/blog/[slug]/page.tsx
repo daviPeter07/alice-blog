@@ -53,7 +53,7 @@ async function PostContent({ slug }: { slug: string }) {
   const initialLiked = session ? await getLikeByPostAndFingerprint(post.id, session.userId) : false;
 
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16">
+    <main className="max-w-(--read-max-width) mx-auto px-6 py-16 transition-[max-width] duration-300">
       <header className="mb-10">
         {/* Tags */}
         {post.tags.length > 0 && (

@@ -4,19 +4,13 @@ import Link from 'next/link';
 import { Nunito, Nunito_Sans, Bricolage_Grotesque } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { PreferencesProvider } from '@/components/preferences/preferences-dialog';
+import { PREFERENCES_INIT_SCRIPT } from '@/lib/preferences';
 import { NavbarWithSession } from '@/components/layout/navbar-with-session';
 import { Footer } from '@/components/layout/footer';
 import { LoadingDots } from '@/components/ui/loading-dots';
 import { ClientAnalytics } from '@/components/ui/analytics';
 import './globals.css';
-
-const LANDING_NAV_ANCHORS = [
-  { href: '/#destaque', label: 'Destaques' },
-  { href: '/#quem-sou-eu', label: 'Quem sou eu' },
-  { href: '/#categorias', label: 'Categorias' },
-  { href: '/#personalizar', label: 'Personalizar' },
-  { href: '/#como-funciona', label: 'Como funciona' },
-] as const;
 
 /** Fallback estático (sem client components) para não acessar dados que bloqueiam. */
 function LayoutFallback() {
@@ -89,17 +83,21 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     >
       <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
-          <Suspense fallback={<LayoutFallback />}>
-            <NavbarWithSession navAnchors={[...LANDING_NAV_ANCHORS]} showThemeToggle />
-            <div className="flex-1">{children}</div>
-          </Suspense>
-          <Footer
-            topics={[...FOOTER_TOPICS]}
-            contactEmail={process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'alice@example.com'}
-            contactLabel="Entrar em contato"
-          />
-          <Toaster position="bottom-right" closeButton={false} />
-          <ClientAnalytics />
+          {/* Depois do script do next-themes: aplica preferências antes do primeiro paint */}
+          <script dangerouslySetInnerHTML={{ __html: PREFERENCES_INIT_SCRIPT }} />
+          <PreferencesProvider>
+            <Suspense fallback={<LayoutFallback />}>
+              <NavbarWithSession showThemeToggle />
+              <div className="flex-1">{children}</div>
+            </Suspense>
+            <Footer
+              topics={[...FOOTER_TOPICS]}
+              contactEmail={process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'alice@example.com'}
+              contactLabel="Entrar em contato"
+            />
+            <Toaster position="bottom-right" closeButton={false} />
+            <ClientAnalytics />
+          </PreferencesProvider>
         </ThemeProvider>
       </body>
     </html>
