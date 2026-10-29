@@ -1,5 +1,5 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@/generated/prisma/client';
+import { Prisma, PrismaClient } from '@/generated/prisma/client';
 
 /** Re-export dos tipos gerados pelo Prisma (Constitution II — type safety). */
 export type { Comment, Like, Post, User } from '@/generated/prisma/client';
@@ -19,3 +19,7 @@ export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }
+
+/** Violação de constraint única (P2002) — ex.: slug repetido ou like duplicado em corrida */
+export const isUniqueViolation = (error: unknown) =>
+  error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';

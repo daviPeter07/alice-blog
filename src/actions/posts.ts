@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { prisma } from '@/lib/prisma';
+import { isUniqueViolation, prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { createPostSchema, updatePostSchema, postIdSchema } from '@/lib/schemas/post.schema';
 import type { ActionResult } from '@/lib/types';
@@ -33,10 +33,6 @@ export async function createPost(
 
   const { title, slug, excerpt, content, tags, status } = parsed.data;
   try {
-    const existing = await prisma.post.findUnique({ where: { slug } });
-    if (existing) {
-      return { success: false, error: 'Já existe um post com este slug.' };
-    }
     const post = await prisma.post.create({
       data: {
         title,
@@ -52,7 +48,10 @@ export async function createPost(
     revalidateTag('posts:list', 'max');
     revalidateTag(`post:${slug}`, 'max');
     return { success: true, data: post };
-  } catch {
+  } catch (error) {
+    if (isUniqueViolation(error)) {
+      return { success: false, error: 'Já existe um post com este slug.' };
+    }
     return { success: false, error: 'Erro ao criar post. Tente novamente.' };
   }
 }
@@ -94,12 +93,6 @@ export async function updatePost(
     if (!existing) {
       return { success: false, error: 'Post não encontrado.' };
     }
-    if (existing.slug !== slug) {
-      const slugTaken = await prisma.post.findUnique({ where: { slug } });
-      if (slugTaken) {
-        return { success: false, error: 'Já existe um post com este slug.' };
-      }
-    }
     const post = await prisma.post.update({
       where: { id: postId },
       data: {
@@ -116,7 +109,10 @@ export async function updatePost(
     revalidateTag(`post:${existing.slug}`, 'max');
     revalidateTag(`post:${slug}`, 'max');
     return { success: true, data: post };
-  } catch {
+  } catch (error) {
+    if (isUniqueViolation(error)) {
+      return { success: false, error: 'Já existe um post com este slug.' };
+    }
     return { success: false, error: 'Erro ao atualizar post. Tente novamente.' };
   }
 }
@@ -167,9 +163,17 @@ export async function publishPost(
   }
 
   try {
+    const existing = await prisma.post.findUnique({
+      where: { id: parsed.data.id },
+      select: { publishedAt: true },
+    });
+    if (!existing) {
+      return { success: false, error: 'Post não encontrado.' };
+    }
+    // Republicar mantém a data original, como em updatePost
     const post = await prisma.post.update({
       where: { id: parsed.data.id },
-      data: { status: 'PUBLISHED', publishedAt: new Date() },
+      data: { status: 'PUBLISHED', publishedAt: existing.publishedAt ?? new Date() },
     });
     revalidateTag('posts:list', 'max');
     revalidateTag(`post:${post.slug}`, 'max');
