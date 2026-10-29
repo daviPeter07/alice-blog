@@ -65,7 +65,10 @@ async function BlogContent({
 
 function BlogFallback() {
   return (
-    <section className="flex items-center justify-center min-h-[320px]" aria-label="Carregando artigos">
+    <section
+      className="flex items-center justify-center min-h-[320px]"
+      aria-label="Carregando artigos"
+    >
       <LoadingDots size="lg" className="text-muted-foreground" />
     </section>
   );

@@ -36,8 +36,12 @@ export function PostCard({
     >
       <article
         className="
-          relative flex flex-col h-[320px] rounded-2xl border border-border bg-card px-7 py-6
+          relative flex flex-col h-[320px] overflow-hidden rounded-2xl border border-border bg-card px-7 py-6
+          shadow-[0_1px_2px_0_rgba(62,39,35,0.06)]
           transition-all duration-300 ease-out
+          before:absolute before:inset-x-0 before:top-0 before:h-1 before:origin-left before:scale-x-0
+          before:bg-linear-to-r before:from-brand-green before:to-brand-brown-light
+          before:transition-transform before:duration-500 hover:before:scale-x-100
           hover:border-brand-green/30
           hover:shadow-[0_8px_32px_0_rgba(27,48,34,0.1)]
           hover:-translate-y-1

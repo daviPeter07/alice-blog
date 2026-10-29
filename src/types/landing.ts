@@ -12,6 +12,8 @@ export interface CategoryItem {
   /** Slug ou identificador para link (ex.: tag normalizada) */
   slug: string;
   label: string;
+  /** Quantidade de artigos com esta tag (opcional) */
+  count?: number;
 }
 
 /** Resultado de getRecentPosts — resumo de post para listagem/destaque */

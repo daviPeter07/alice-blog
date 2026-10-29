@@ -1,73 +1,64 @@
 import { Palette, PanelTop, BookOpen } from 'lucide-react';
 import { LandingSection } from '@/components/blog/landing-section';
+import { SectionHeader } from '@/components/blog/section-header';
+
+const OPTIONS = [
+  {
+    icon: Palette,
+    title: 'Paleta',
+    text: 'Modo claro, escuro ou automático conforme o horário do sistema.',
+  },
+  {
+    icon: PanelTop,
+    title: 'Navbar',
+    text: 'Exiba ou oculte links da navegação para deixar só o que importa.',
+  },
+  {
+    icon: BookOpen,
+    title: 'Leitura',
+    text: 'Tamanho da fonte, largura da coluna de texto e espaçamento entre linhas.',
+  },
+] as const;
 
 export function PersonalizarSection() {
-  const headerEl = (
-    <header className="mb-10 w-full">
-      <p className="reveal-item reveal-from-left reveal-delay-0 font-ui text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3 select-none">
-        personalizar
-      </p>
-      <h2
-        id="personalizar-heading"
-        className="reveal-item reveal-from-right reveal-delay-1 font-heading text-2xl sm:text-3xl font-semibold text-foreground leading-tight"
-      >
-        Personalizar layout
-      </h2>
-      <p className="reveal-item reveal-from-left reveal-delay-2 font-ui text-muted-foreground mt-2 leading-relaxed text-sm max-w-xl">
-        Ajuste paleta, navbar e layout de leitura ao seu gosto. Em breve você poderá salvar suas
-        preferências.
-      </p>
-    </header>
-  );
-
-  const contentEl = (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      <div
-        className="reveal-item reveal-from-right reveal-delay-3 group rounded-2xl border border-border bg-card p-6 min-h-[180px] flex flex-col
-              hover:border-brand-green/30 transition-all duration-300"
-      >
-        <div className="mb-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-brand-green/25 bg-brand-green/5 text-brand-green group-hover:border-brand-green/40 group-hover:bg-brand-green/10">
-          <Palette className="size-5" strokeWidth={1.5} aria-hidden />
-        </div>
-        <h3 className="font-heading text-lg font-semibold text-foreground mb-2">Paleta</h3>
-        <p className="font-ui text-sm text-muted-foreground leading-relaxed flex-1">
-          Modo claro, escuro ou automático conforme o horário do sistema. Em breve.
-        </p>
-      </div>
-
-      <div
-        className="reveal-item reveal-from-left reveal-delay-4 group rounded-2xl border border-border bg-card p-6 min-h-[180px] flex flex-col
-              hover:border-brand-green/30 transition-all duration-300"
-      >
-        <div className="mb-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-brand-green/25 bg-brand-green/5 text-brand-green group-hover:border-brand-green/40 group-hover:bg-brand-green/10">
-          <PanelTop className="size-5" strokeWidth={1.5} aria-hidden />
-        </div>
-        <h3 className="font-heading text-lg font-semibold text-foreground mb-2">Navbar</h3>
-        <p className="font-ui text-sm text-muted-foreground leading-relaxed flex-1">
-          Exiba ou oculte links da navegação. Em breve.
-        </p>
-      </div>
-
-      <div
-        className="reveal-item reveal-from-right reveal-delay-5 group rounded-2xl border border-border bg-card p-6 min-h-[180px] flex flex-col sm:col-span-2 lg:col-span-1
-              hover:border-brand-green/30 transition-all duration-300"
-      >
-        <div className="mb-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-brand-green/25 bg-brand-green/5 text-brand-green group-hover:border-brand-green/40 group-hover:bg-brand-green/10">
-          <BookOpen className="size-5" strokeWidth={1.5} aria-hidden />
-        </div>
-        <h3 className="font-heading text-lg font-semibold text-foreground mb-2">Leitura</h3>
-        <p className="font-ui text-sm text-muted-foreground leading-relaxed flex-1">
-          Tamanho da fonte, largura da coluna de texto e espaçamento entre linhas. Em breve.
-        </p>
-      </div>
-    </div>
-  );
-
   return (
-    <LandingSection variant="categories-alt" layout="wide" id="personalizar">
-      <section aria-labelledby="personalizar-heading" className="w-full flex flex-col">
-        {headerEl}
-        {contentEl}
+    <LandingSection variant="categories" layout="wide" id="personalizar">
+      <section aria-labelledby="personalizar-heading" className="flex w-full flex-col">
+        <SectionHeader
+          id="personalizar-heading"
+          eyebrow="personalizar"
+          title="Do seu jeito"
+          description="Ajuste paleta, navbar e layout de leitura ao seu gosto. Em breve você poderá salvar suas preferências."
+          align="center"
+        />
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {OPTIONS.map(({ icon: Icon, title, text }, i) => (
+            <div
+              key={title}
+              className={`reveal-item ${i % 2 === 0 ? 'reveal-from-right' : 'reveal-from-left'} reveal-delay-${i + 3} group relative flex min-h-[200px] flex-col overflow-hidden rounded-2xl border border-border bg-card p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-green/30 hover:shadow-[0_12px_32px_-12px_rgba(27,48,34,0.25)] ${i === 2 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
+            >
+              <div
+                className="absolute -right-10 -top-10 size-32 rounded-full bg-brand-green/5 transition-transform duration-500 group-hover:scale-125 theme-dark:bg-brand-green-light/10"
+                aria-hidden
+              />
+              <div className="relative mb-5 flex items-center justify-between">
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-brand-green text-white shadow-md">
+                  <Icon className="size-5" strokeWidth={1.75} aria-hidden />
+                </div>
+                <span className="rounded-full border border-brand-brown/20 bg-cafe-latte px-2.5 py-0.5 font-ui text-[11px] font-bold uppercase tracking-wider text-brand-brown theme-dark:bg-muted theme-dark:text-muted-foreground">
+                  Em breve
+                </span>
+              </div>
+              <h3 className="relative mb-2 font-heading text-xl font-semibold text-foreground">
+                {title}
+              </h3>
+              <p className="relative flex-1 font-ui text-sm leading-relaxed text-muted-foreground">
+                {text}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
     </LandingSection>
   );
