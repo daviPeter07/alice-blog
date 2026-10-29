@@ -1,8 +1,8 @@
 'use client';
 
-import { useTheme as useNextThemes } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useThemeMode } from '@/hooks/use-theme-mode';
 
 export interface ThemeToggleProps {
   className?: string;
@@ -13,7 +13,7 @@ export function ThemeToggle({
   className = '',
   ariaLabel = 'Alternar tema claro/escuro',
 }: ThemeToggleProps) {
-  const { resolvedTheme, setTheme } = useNextThemes();
+  const { resolvedTheme, setThemeMode } = useThemeMode();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -21,8 +21,9 @@ export function ThemeToggle({
     return () => cancelAnimationFrame(id);
   }, []);
 
+  // Alternar manualmente sai dos modos "sistema"/"automático"
   const toggleTheme = () => {
-    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+    setThemeMode(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
   // Evita hydration mismatch: servidor e primeiro paint do cliente renderizam o mesmo ícone.

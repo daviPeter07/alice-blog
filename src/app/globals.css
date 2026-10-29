@@ -46,6 +46,10 @@
   /* Fundo da área de leitura do artigo — editável pelo usuário (feature 004) */
   --article-read-bg: var(--card);
   --article-read-border: var(--border);
+  /* Preferências de leitura: sobrescritas por applyPreferences (src/lib/preferences.ts) */
+  --read-font-size: 1.125rem;
+  --read-line-height: 1.75;
+  --read-max-width: 56rem;
 }
 
 /* Tema light — vibe café (marrom claro → mais escuro) */
@@ -345,8 +349,11 @@ body {
    ------------------------------------------------------------------------- */
 .prose-alice {
   font-family: var(--font-body), Georgia, serif;
-  font-size: 1.125rem;
-  line-height: 1.75;
+  font-size: var(--read-font-size);
+  line-height: var(--read-line-height);
+  transition:
+    font-size 0.2s ease,
+    line-height 0.2s ease;
   color: var(--foreground);
 }
 
