@@ -2,7 +2,6 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
-import rehypeRaw from 'rehype-raw';
 import type { CreateCommentInput } from '@/lib/schemas/comment.schema';
 import type { ActionResult } from '@/lib/types';
 import { formatDate, getInitials, avatarHue } from '@/helpers';
@@ -81,9 +80,8 @@ export function CommentItem({
         </div>
 
         <div className="font-ui text-sm text-foreground/85 leading-relaxed prose prose-sm prose-alice prose-alice-comment max-w-none">
-          <ReactMarkdown remarkPlugins={[remarkBreaks]} rehypePlugins={[rehypeRaw]}>
-            {comment.body}
-          </ReactMarkdown>
+          {/* Sem rehype-raw: comentário é texto de qualquer usuário, HTML cru abriria XSS */}
+          <ReactMarkdown remarkPlugins={[remarkBreaks]}>{comment.body}</ReactMarkdown>
         </div>
 
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">

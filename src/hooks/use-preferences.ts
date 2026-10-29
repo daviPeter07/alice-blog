@@ -4,73 +4,66 @@ import { useCallback, useSyncExternalStore } from 'react';
 import {
   DEFAULT_PREFERENCES,
   PREFERENCES_STORAGE_KEY,
+  READING_SCALE,
   applyPreferences,
   parsePreferences,
   type Preferences,
 } from '@/lib/preferences';
 
 const listeners = new Set<() => void>();
-let cached: { raw: string | null; value: Preferences } | null = null;
-// Fallback quando o storage está bloqueado (ex.: modo privado): vale só nesta visita
-let memoryRaw: string | null = null;
+// Fonte da verdade em memória: o localStorage só persiste. Assim a escolha vale nesta
+// visita mesmo quando o storage está bloqueado ou cheio (modo privado, cota estourada).
+let current: Preferences | null = null;
 
-const readRaw = (): string | null => {
+const readStorage = (): Preferences => {
   try {
-    return localStorage.getItem(PREFERENCES_STORAGE_KEY) ?? memoryRaw;
+    const raw = localStorage.getItem(PREFERENCES_STORAGE_KEY);
+    return parsePreferences(raw ? JSON.parse(raw) : {});
   } catch {
-    return memoryRaw;
+    return DEFAULT_PREFERENCES;
   }
 };
 
-// Snapshot estável enquanto o JSON não muda (exigência do useSyncExternalStore)
-const getSnapshot = (): Preferences => {
-  const raw = readRaw();
-  if (cached && cached.raw === raw) return cached.value;
-  let parsed: unknown = {};
-  try {
-    parsed = raw ? JSON.parse(raw) : {};
-  } catch {
-    parsed = {};
-  }
-  cached = { raw, value: parsePreferences(parsed) };
-  return cached.value;
-};
+const getSnapshot = (): Preferences => (current ??= readStorage());
 
 const getServerSnapshot = () => DEFAULT_PREFERENCES;
 
+const setCurrent = (next: Preferences) => {
+  current = next;
+  applyPreferences(next, READING_SCALE);
+  listeners.forEach((l) => l());
+};
+
+// Um único listener de storage para todos os assinantes: outra aba mudou as preferências
+const onStorage = (e: StorageEvent) => {
+  if (e.key === PREFERENCES_STORAGE_KEY) setCurrent(readStorage());
+};
+
 const subscribe = (listener: () => void) => {
+  if (listeners.size === 0) window.addEventListener('storage', onStorage);
   listeners.add(listener);
-  const onStorage = (e: StorageEvent) => {
-    if (e.key === PREFERENCES_STORAGE_KEY) {
-      applyPreferences(getSnapshot());
-      listener();
-    }
-  };
-  window.addEventListener('storage', onStorage);
   return () => {
     listeners.delete(listener);
-    window.removeEventListener('storage', onStorage);
+    if (listeners.size === 0) window.removeEventListener('storage', onStorage);
   };
 };
 
+/**
+ * Preferências salvas neste navegador. Para trocar o tema ou restaurar o padrão,
+ * use useThemeMode — ele mantém o next-themes em sincronia.
+ */
 export const usePreferences = () => {
   const preferences = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const updatePreferences = useCallback((patch: Partial<Preferences>) => {
     const next = { ...getSnapshot(), ...patch };
-    const raw = JSON.stringify(next);
     try {
-      localStorage.setItem(PREFERENCES_STORAGE_KEY, raw);
+      localStorage.setItem(PREFERENCES_STORAGE_KEY, JSON.stringify(next));
     } catch {
-      memoryRaw = raw;
+      // Sem persistência: segue valendo em memória até recarregar
     }
-    applyPreferences(next);
-    listeners.forEach((l) => l());
+    setCurrent(next);
   }, []);
 
-  const resetPreferences = useCallback(() => {
-    updatePreferences(DEFAULT_PREFERENCES);
-  }, [updatePreferences]);
-
-  return { preferences, updatePreferences, resetPreferences };
+  return { preferences, updatePreferences };
 };

@@ -3,8 +3,8 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { PreferencesPanel, type PreferencesSection } from './preferences-panel';
 import { cn } from '@/lib/utils';
+import { PreferencesPanel, type PreferencesSection } from './preferences-panel';
 
 interface PreferencesDialogContextValue {
   openPreferences: (section?: PreferencesSection) => void;
@@ -61,7 +61,7 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
                 className="flex size-9 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 aria-label="Fechar"
               >
-                <X className="size-5" aria-hidden />
+                <X size={20} aria-hidden />
               </Dialog.Close>
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-6">
