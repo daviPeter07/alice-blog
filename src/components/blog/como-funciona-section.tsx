@@ -30,7 +30,7 @@ const STEPS = [
   {
     icon: SlidersHorizontal,
     title: 'Personalize',
-    text: 'Ajuste paleta, navbar e layout de leitura. Suas preferências serão salvas automaticamente. Em breve.',
+    text: 'Ajuste paleta, navbar e layout de leitura. Suas preferências ficam salvas automaticamente.',
   },
   {
     icon: Share2,
