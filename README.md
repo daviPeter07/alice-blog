@@ -142,9 +142,10 @@ specs/                # Especificações de features
 - **Curtir** — Like por post (fingerprint)
 - **Auth** — Login, registro, sessão por cookie
 - **Admin** — CRUD de posts (título, resumo, conteúdo, tags); publicação/rascunho
-- **Tema** — Tema claro/escuro (next-themes)
-- **Navbar** — Logo, âncoras, toggle tema, dropdown (logado: configurações/sair; não logado: Entre/Cadastre-se); menu hamburger no mobile
-- **Configurações** — Página base (feature 004)
+- **Tema** — Claro, escuro, sistema ou automático por horário (escuro das 18h às 6h)
+- **Personalização** — Painel (ícone na navbar, cards da landing ou `/settings`) com paleta, links visíveis da navbar e leitura (tamanho da fonte, largura da coluna, espaçamento entre linhas); salvo no `localStorage`, sem precisar de login
+- **Navbar** — Links com destaque da seção ativa, botões de personalizar e tema; logado: avatar com menu (configurações, personalizar, sair); não logado: Entrar / Criar conta; menu lateral abaixo de 1024px
+- **Configurações** — Dados da sessão + painel de personalização
 - **Loading** — `LoadingDots` padronizado em todos os fallbacks de Suspense
 
 ## Roadmap

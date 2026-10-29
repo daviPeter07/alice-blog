@@ -42,6 +42,8 @@ Env vars (see `.env.example`): `DATABASE_URL`, `SESSION_SECRET` (≥16 chars, re
 
 **Content rendering.** Posts and comments are Markdown with raw HTML allowed (`react-markdown` + `remark-breaks` + `rehype-raw`). Comments are threaded one level deep (`parentId` self-relation); editing is allowed for 5 minutes.
 
+**Reader preferences** (theme mode, hidden navbar links, reading font size/width/line height) live in `localStorage` (`alice-prefs`), not the DB. `src/lib/preferences.ts` holds the types, `NAV_ITEMS` (single source for navbar links) and `applyPreferences`, which sets `--read-*` CSS vars on `<html>` and injects a `<style>` hiding `[data-nav-key]` links. `applyPreferences` is serialized via `toString()` into `PREFERENCES_INIT_SCRIPT`, rendered in `layout.tsx` right after the next-themes script so prefs apply before first paint, so keep it self-contained (no imports or outer references). The "auto" theme mode (dark 18h–6h) is not a next-themes theme: the init script and `AutoThemeScheduler` (`theme-provider.tsx`) resolve it to `light`/`dark`. Change themes through `useThemeMode`, not `setTheme`, so the saved mode stays in sync. The panel is `PreferencesProvider`/`usePreferencesDialog` (`src/components/preferences/`); server components open it with `OpenPreferencesButton`.
+
 **Styling.** Tailwind v4 configured only through the `@theme` block in `src/app/globals.css` (no `tailwind.config`). Use the brand tokens (`brand-brown`, `brand-green`, `cloud-dancer`, …) rather than raw colors. shadcn-style primitives in `src/components/ui/` (`cn` in `src/lib/utils.ts`); light/dark via `next-themes`. Fonts via `next/font`, images via `next/image`.
 
 ## Conventions
