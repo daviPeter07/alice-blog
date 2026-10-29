@@ -14,15 +14,17 @@ import type { CategoryItem } from '@/types/landing';
 const PER_PAGE = 12; // 3 colunas × 4 linhas
 
 function getCategoriesFromPosts(posts: Awaited<ReturnType<typeof getRecentPosts>>): CategoryItem[] {
-  const tagSet = new Set<string>();
+  const counts = new Map<string, number>();
   for (const post of posts) {
     for (const tag of post.tags) {
-      if (tag.trim()) tagSet.add(tag.trim());
+      const label = tag.trim();
+      if (label) counts.set(label, (counts.get(label) ?? 0) + 1);
     }
   }
-  return Array.from(tagSet)
-    .sort((a, b) => a.localeCompare(b, 'pt-BR'))
-    .map((label) => ({ slug: label, label }));
+  // Mais frequentes primeiro: a seção destaca os primeiros N como "mais lidos"
+  return Array.from(counts, ([label, count]) => ({ slug: label, label, count })).sort(
+    (a, b) => b.count - a.count || a.label.localeCompare(b.label, 'pt-BR')
+  );
 }
 
 async function HomeCategoriesSection() {
@@ -63,11 +65,7 @@ async function FeaturedContent({ searchParams }: { searchParams: Promise<{ page?
   );
 }
 
-export default function HomePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ page?: string }>;
-}) {
+export default function HomePage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   return (
     <main className="flex flex-col min-h-[calc(100vh-3.5rem)]">
       <HeroSection />

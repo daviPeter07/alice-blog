@@ -6,17 +6,14 @@ export type LandingSectionLayout = 'text-left' | 'text-right' | 'center' | 'wide
 /* Vibe café: marrom mais claro (cream) e mais escuro (latte/mocha) */
 const variantClasses: Record<LandingSectionVariant, string> = {
   hero: 'bg-background',
-  featured:
-    'bg-cafe-latte theme-dark:bg-muted/40 py-20 sm:py-28 px-6 min-h-[min(80vh,900px)] flex flex-col justify-center',
-  categories:
-    'bg-background py-20 sm:py-28 px-6 min-h-[min(80vh,900px)] flex flex-col justify-center',
-  'categories-alt':
-    'bg-cafe-mocha theme-dark:bg-muted/40 py-20 sm:py-28 px-6 min-h-[min(80vh,900px)] flex flex-col justify-center',
-  footer: 'bg-background py-20 sm:py-28 px-6 min-h-[min(80vh,900px)] flex flex-col justify-center',
+  featured: 'relative overflow-hidden bg-cafe-latte theme-dark:bg-muted/40 py-20 sm:py-28',
+  categories: 'relative overflow-hidden bg-background py-20 sm:py-28',
+  'categories-alt': 'relative overflow-hidden bg-cafe-latte theme-dark:bg-muted/40 py-20 sm:py-28',
+  footer: 'relative overflow-hidden bg-background py-20 sm:py-28',
 };
 
 const layoutClasses: Record<LandingSectionLayout, string> = {
-  'text-left': 'grid md:grid-cols-[minmax(0,520px)_1fr] gap-12 md:gap-20 lg:gap-28 items-start',
+  'text-left': 'grid lg:grid-cols-[minmax(0,520px)_1fr] gap-0 lg:gap-20 xl:gap-28 items-start',
   'text-right':
     'grid md:grid-cols-[1fr_minmax(0,320px)] gap-8 md:gap-12 md:gap-16 items-start md:[&>*:first-child]:order-1 md:[&>*:last-child]:order-2',
   center: 'flex flex-col items-center text-center max-w-2xl mx-auto',

@@ -20,7 +20,16 @@ export interface TypewriterTextProps {
   className?: string;
   /** Tag HTML a renderizar */
   as?: 'h1' | 'h2' | 'span' | 'p';
+  /** Classe aplicada ao trecho que muda entre as frases (após o prefixo comum) */
+  highlightClassName?: string;
 }
+
+const commonPrefixLength = (texts: string[]) => {
+  if (texts.length < 2) return 0;
+  let i = 0;
+  while (texts.every((t) => i < t.length && t[i] === texts[0][i])) i++;
+  return i;
+};
 
 function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined') return false;
@@ -36,6 +45,7 @@ export function TypewriterText({
   pauseBeforeRestart = 2000,
   className = '',
   as: Tag = 'h1',
+  highlightClassName,
 }: TypewriterTextProps) {
   const texts = useMemo(
     () => (phrases.length > 0 ? phrases : singleText ? [singleText] : []),
@@ -102,6 +112,8 @@ export function TypewriterText({
   }, [textsKey, texts, speed, started, skipAnimation, loop, pauseBeforeRestart]);
 
   const longestText = texts.reduce((a, b) => (a.length >= b.length ? a : b), currentText);
+  // Sem destaque quando há uma frase só: o "trecho que muda" não existe
+  const highlightFrom = highlightClassName ? commonPrefixLength(texts) : 0;
   const isTyping = !skipAnimation && effectiveDisplayed.length < fullText.length;
 
   return (
@@ -114,7 +126,14 @@ export function TypewriterText({
         {longestText}
       </span>
       <span className="col-start-1 row-start-1 min-w-0 whitespace-pre" aria-live="polite">
-        {effectiveDisplayed}
+        {highlightFrom > 0 ? (
+          <>
+            {effectiveDisplayed.slice(0, highlightFrom)}
+            <span className={highlightClassName}>{effectiveDisplayed.slice(highlightFrom)}</span>
+          </>
+        ) : (
+          effectiveDisplayed
+        )}
         {isTyping && (
           <span
             className="inline-block w-[2px] h-[0.9em] bg-foreground/70 align-middle ml-0.5 animate-pulse"
